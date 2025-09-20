@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form - Empiras Vanguard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../css/payments.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="../../js/script.js" defer></script>
+    <script src="../js/payment-handler.js" defer></script>
+</head>
+<body data-role="student">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+
+    <main class="payment-form-page">
+        <div class="payment-form-container">
+            <!-- Payment Header -->
+            <div class="payment-header">
+                <h1>Make Payment</h1>
+                <p>Secure payment processing for your school fees</p>
+            </div>
+
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+                <h3>Payment Summary</h3>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span>Student ID:</span>
+                        <span id="student-id">ST2024001</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Student Name:</span>
+                        <span id="student-name">Thabo Mthembu</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>School:</span>
+                        <span id="school-name">Johannesburg High School</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total Amount:</span>
+                        <span id="total-payment">R 15,500.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form-section">
+                <form id="payment-form">
+                    <!-- Payment Method Selection -->
+                    <div class="payment-method-selection">
+                        <h3>Select Payment Method</h3>
+                        <div class="method-options">
+                            <label class="method-option active">
+                                <input type="radio" name="payment-method" value="card" checked>
+                                <div class="method-card">
+                                    <span class="method-icon">💳</span>
+                                    <span class="method-name">Credit/Debit Card</span>
+                                    <span class="method-desc">Visa, MasterCard, Amex</span>
+                                </div>
+                            </label>
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="eft">
+                                <div class="method-card">
+                                    <span class="method-icon">🏦</span>
+                                    <span class="method-name">Bank Transfer (EFT)</span>
+                                    <span class="method-desc">Direct bank transfer</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Form -->
+                    <div id="card-payment-form" class="payment-method-form">
+                        <h3>Card Details</h3>
+                        <div class="form-group">
+                            <label for="card-element">Card Information</label>
+                            <div id="card-element" class="card-element">
+                                <!-- Stripe Elements will create form elements here -->
+                            </div>
+                            <div id="card-errors" class="error-message"></div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cardholder-name">Cardholder Name</label>
+                                <input type="text" id="cardholder-name" placeholder="Full name as on card" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EFT Payment Form -->
+                    <div id="eft-payment-form" class="payment-method-form" style="display: none;">
+                        <h3>Bank Transfer Details</h3>
+                        <div class="eft-details">
+                            <div class="bank-info">
+                                <h4>Banking Details</h4>
+                                <div class="bank-detail">
+                                    <span>Bank:</span>
+                                    <span>Standard Bank</span>
+                                </div>
+                                <div class="bank-detail">
+                                    <span>Account Name:</span>
+                                    <span>Empiras Vanguard School</span>
+                                </div>
+                                <div class="bank-detail">
+                                    <span>Account Number:</span>
+                                    <span>1234567890</span>
+                                </div>
+                                <div class="bank-detail">
+                                    <span>Branch Code:</span>
+                                    <span>051001</span>
+                                </div>
+                                <div class="bank-detail">
+                                    <span>Reference:</span>
+                                    <span id="eft-reference">ST2024001-2024Q1</span>
+                                </div>
+                            </div>
+                            <div class="eft-amount">
+                                <h4>Amount to Transfer</h4>
+                                <div class="amount-display">R 15,500.00</div>
+                                <p class="eft-note">Please use the reference number when making the transfer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="terms-section">
+                        <label class="terms-checkbox">
+                            <input type="checkbox" id="terms-accepted" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" onclick="showTerms()">Terms and Conditions</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Payment Buttons -->
+                    <div class="payment-buttons">
+                        <button type="button" class="btn-secondary" onclick="goBack()">
+                            ← Back to Dashboard
+                        </button>
+                        <button type="submit" class="btn-primary" id="submit-payment">
+                            <span class="btn-text">Pay R 15,500.00</span>
+                            <span class="btn-loading" style="display: none;">Processing...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <div class="security-icon">🔒</div>
+                <div class="security-text">
+                    <h4>Secure Payment</h4>
+                    <p>Your payment information is encrypted and secure. We use industry-standard SSL encryption to protect your data.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Success Modal -->
+    <div id="payment-success-modal" class="modal">
+        <div class="modal-content success">
+            <div class="success-icon">✅</div>
+            <h2>Payment Successful!</h2>
+            <p>Your payment of <strong>R 15,500.00</strong> has been processed successfully.</p>
+            <div class="success-details">
+                <div class="detail-item">
+                    <span>Transaction ID:</span>
+                    <span id="transaction-id">TXN123456789</span>
+                </div>
+                <div class="detail-item">
+                    <span>Payment Method:</span>
+                    <span id="payment-method-used">Credit Card</span>
+                </div>
+                <div class="detail-item">
+                    <span>Date:</span>
+                    <span id="payment-date">15 March 2024</span>
+                </div>
+            </div>
+            <div class="success-actions">
+                <button class="btn-primary" onclick="downloadReceipt()">Download Receipt</button>
+                <button class="btn-secondary" onclick="goToDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Error Modal -->
+    <div id="payment-error-modal" class="modal">
+        <div class="modal-content error">
+            <div class="error-icon">❌</div>
+            <h2>Payment Failed</h2>
+            <p id="error-message">There was an error processing your payment. Please try again.</p>
+            <div class="error-actions">
+                <button class="btn-primary" onclick="retryPayment()">Try Again</button>
+                <button class="btn-secondary" onclick="goToDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

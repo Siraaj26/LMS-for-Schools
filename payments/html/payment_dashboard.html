@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Dashboard - Empiras Vanguard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../css/payments.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="../../js/script.js" defer></script>
+    <script src="../js/payment-dashboard.js" defer></script>
+</head>
+<body data-role="student">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+
+    <main class="payment-dashboard">
+        <!-- Payment Status Banner -->
+        <div class="payment-status-banner" id="payment-status-banner">
+            <div class="status-content">
+                <span class="status-icon">💰</span>
+                <div class="status-text">
+                    <h3>Payment Status</h3>
+                    <p id="payment-status-text">Checking payment status...</p>
+                </div>
+                <button class="status-action" id="payment-action-btn" onclick="handlePaymentAction()">
+                    Make Payment
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="payment-content">
+            <!-- Left Side - Payment Overview -->
+            <section class="payment-overview">
+                <h1>Payment Dashboard</h1>
+                
+                <!-- Current Balance -->
+                <div class="balance-card">
+                    <h3>Current Balance</h3>
+                    <div class="balance-amount" id="current-balance">
+                        R 0.00
+                    </div>
+                    <div class="balance-details">
+                        <span class="due-date">Due: <span id="due-date">31 March 2024</span></span>
+                        <span class="payment-status" id="payment-status-badge">Pending</span>
+                    </div>
+                </div>
+
+                <!-- Fee Breakdown -->
+                <div class="fee-breakdown">
+                    <h3>Fee Breakdown</h3>
+                    <div class="fee-list" id="fee-list">
+                        <!-- Fees will be populated by JavaScript -->
+                    </div>
+                    <div class="fee-total">
+                        <strong>Total: <span id="total-amount">R 0.00</span></strong>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn primary" onclick="openPaymentForm()">
+                        💳 Make Payment
+                    </button>
+                    <button class="action-btn secondary" onclick="viewPaymentHistory()">
+                        📋 Payment History
+                    </button>
+                    <button class="action-btn secondary" onclick="downloadInvoice()">
+                        📄 Download Invoice
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Side - Payment Methods & History -->
+            <section class="payment-sidebar">
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h3>Payment Methods</h3>
+                    <div class="method-list">
+                        <div class="payment-method active">
+                            <span class="method-icon">💳</span>
+                            <span class="method-name">Credit/Debit Card</span>
+                            <span class="method-status">Available</span>
+                        </div>
+                        <div class="payment-method">
+                            <span class="method-icon">🏦</span>
+                            <span class="method-name">Bank Transfer (EFT)</span>
+                            <span class="method-status">Available</span>
+                        </div>
+                        <div class="payment-method">
+                            <span class="method-icon">📱</span>
+                            <span class="method-name">Mobile Payment</span>
+                            <span class="method-status">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Payments -->
+                <div class="recent-payments">
+                    <h3>Recent Payments</h3>
+                    <div class="payment-list" id="recent-payments-list">
+                        <!-- Recent payments will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Payment Reminders -->
+                <div class="payment-reminders">
+                    <h3>Payment Reminders</h3>
+                    <div class="reminder-list">
+                        <div class="reminder">
+                            <span class="reminder-icon">⏰</span>
+                            <div class="reminder-content">
+                                <p>Next payment due in 5 days</p>
+                                <small>31 March 2024</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Payment Form Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentForm()">&times;</span>
+            <div id="payment-form-container">
+                <!-- Payment form will be loaded here -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!-- Fee Summary Component -->
+<!-- Reusable component for displaying fee breakdown and summary -->
+
+<div class="fee-summary" data-student-id="{{studentId}}">
+    <div class="fee-summary-header">
+        <h3 class="fee-title">{{title}}</h3>
+        <div class="fee-period">{{period}}</div>
+    </div>
+    
+    <div class="fee-breakdown">
+        <div class="fee-list">
+            {{#each fees}}
+            <div class="fee-item" data-fee-type="{{type}}">
+                <div class="fee-info">
+                    <span class="fee-name">{{name}}</span>
+                    <span class="fee-description">{{description}}</span>
+                </div>
+                <div class="fee-amount">
+                    <span class="amount">{{amount}}</span>
+                    <span class="status {{status}}">{{statusText}}</span>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        
+        <div class="fee-totals">
+            <div class="subtotal">
+                <span class="label">Subtotal:</span>
+                <span class="amount">{{subtotal}}</span>
+            </div>
+            <div class="discount" {{#unless discount}}style="display: none;"{{/unless}}>
+                <span class="label">Discount:</span>
+                <span class="amount discount-amount">-{{discount}}</span>
+            </div>
+            <div class="tax" {{#unless tax}}style="display: none;"{{/unless}}>
+                <span class="label">Tax (VAT):</span>
+                <span class="amount">{{tax}}</span>
+            </div>
+            <div class="total">
+                <span class="label">Total:</span>
+                <span class="amount total-amount">{{total}}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="fee-summary-footer">
+        <div class="payment-status">
+            <span class="status-label">Payment Status:</span>
+            <span class="status-badge {{paymentStatus}}">{{paymentStatusText}}</span>
+        </div>
+        <div class="due-date">
+            <span class="label">Due Date:</span>
+            <span class="value">{{dueDate}}</span>
+        </div>
+    </div>
+    
+    <div class="fee-actions">
+        <button class="action-btn primary" onclick="makePayment()">
+            💳 Make Payment
+        </button>
+        <button class="action-btn secondary" onclick="downloadInvoice()">
+            📄 Download Invoice
+        </button>
+        <button class="action-btn secondary" onclick="viewPaymentPlan()">
+            📅 Payment Plan
+        </button>
+    </div>
+</div>
+
+<!-- Fee Summary CSS -->
+<style>
+.fee-summary {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.fee-summary-header {
+    background: linear-gradient(135deg, #50778f 0%, #6b8fa3 100%);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.fee-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.fee-period {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.fee-breakdown {
+    padding: 1.5rem;
+}
+
+.fee-list {
+    margin-bottom: 1.5rem;
+}
+
+.fee-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.fee-item:hover {
+    background-color: #f8f9fa;
+    margin: 0 -1.5rem;
+    padding: 1rem 1.5rem;
+}
+
+.fee-item:last-child {
+    border-bottom: none;
+}
+
+.fee-info {
+    flex: 1;
+}
+
+.fee-name {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.fee-description {
+    display: block;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.fee-amount {
+    text-align: right;
+}
+
+.fee-amount .amount {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.fee-amount .status {
+    display: block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.fee-amount .status.paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.fee-amount .status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.fee-amount .status.overdue {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.fee-amount .status.waived {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.fee-totals {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.fee-totals > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.fee-totals .label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.fee-totals .amount {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.fee-totals .subtotal {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.fee-totals .discount .amount {
+    color: #28a745;
+}
+
+.fee-totals .total {
+    border-top: 2px solid #50778f;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.fee-totals .total .amount {
+    color: #50778f;
+    font-size: 1.2rem;
+}
+
+.fee-summary-footer {
+    background: #f8f9fa;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.payment-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-label {
+    color: #6c757d;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.paid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.overdue {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.due-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.due-date .label {
+    font-weight: 500;
+}
+
+.due-date .value {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.fee-actions {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.action-btn.primary {
+    background: #50778f;
+    color: white;
+    flex: 1;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.action-btn.primary:hover {
+    background: #3d5a6b;
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+    background: #f8f9fa;
+    color: #50778f;
+    border: 2px solid #50778f;
+    flex: 1;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.action-btn.secondary:hover {
+    background: #50778f;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .fee-summary-header {
+        padding: 1rem;
+    }
+    
+    .fee-breakdown {
+        padding: 1rem;
+    }
+    
+    .fee-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .fee-amount {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .fee-summary-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .fee-actions {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        flex: none;
+        width: 100%;
+    }
+}
+
+/* Animation for fee updates */
+.fee-item.updating {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.fee-item.updating::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #50778f;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Highlight overdue fees */
+.fee-item.overdue {
+    border-left: 4px solid #dc3545;
+    background-color: #fff5f5;
+}
+
+.fee-item.overdue .fee-name {
+    color: #dc3545;
+}
+
+/* Highlight paid fees */
+.fee-item.paid {
+    border-left: 4px solid #28a745;
+    background-color: #f8fff8;
+}
+
+.fee-item.paid .fee-name {
+    color: #28a745;
+}
+</style>
+
+<!-- Fee Summary JavaScript -->
+<script>
+// Fee Summary Component JavaScript
+class FeeSummary {
+    constructor(feeData) {
+        this.data = feeData;
+        this.element = null;
+    }
+
+    render() {
+        const template = document.querySelector('.fee-summary');
+        if (!template) return null;
+
+        this.element = template.cloneNode(true);
+        this.populateData();
+        this.setupEventListeners();
+        
+        return this.element;
+    }
+
+    populateData() {
+        if (!this.element) return;
+
+        // Set student ID
+        this.element.setAttribute('data-student-id', this.data.studentId);
+
+        // Update header
+        const title = this.element.querySelector('.fee-title');
+        const period = this.element.querySelector('.fee-period');
+
+        if (title) {
+            title.textContent = this.data.title || 'Fee Summary';
+        }
+
+        if (period) {
+            period.textContent = this.data.period || 'Current Term';
+        }
+
+        // Update fee list
+        this.updateFeeList();
+
+        // Update totals
+        this.updateTotals();
+
+        // Update footer
+        this.updateFooter();
+    }
+
+    updateFeeList() {
+        const feeList = this.element.querySelector('.fee-list');
+        if (!feeList || !this.data.fees) return;
+
+        feeList.innerHTML = this.data.fees.map(fee => `
+            <div class="fee-item ${fee.status}" data-fee-type="${fee.type}">
+                <div class="fee-info">
+                    <span class="fee-name">${fee.name}</span>
+                    <span class="fee-description">${fee.description || ''}</span>
+                </div>
+                <div class="fee-amount">
+                    <span class="amount">${this.formatZAR(fee.amount)}</span>
+                    <span class="status ${fee.status}">${fee.statusText || fee.status}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    updateTotals() {
+        const subtotal = this.element.querySelector('.subtotal .amount');
+        const discount = this.element.querySelector('.discount .amount');
+        const tax = this.element.querySelector('.tax .amount');
+        const total = this.element.querySelector('.total .amount');
+
+        if (subtotal) {
+            subtotal.textContent = this.formatZAR(this.data.subtotal || 0);
+        }
+
+        if (discount && this.data.discount) {
+            discount.textContent = this.formatZAR(this.data.discount);
+            this.element.querySelector('.discount').style.display = 'flex';
+        }
+
+        if (tax && this.data.tax) {
+            tax.textContent = this.formatZAR(this.data.tax);
+            this.element.querySelector('.tax').style.display = 'flex';
+        }
+
+        if (total) {
+            total.textContent = this.formatZAR(this.data.total || 0);
+        }
+    }
+
+    updateFooter() {
+        const paymentStatus = this.element.querySelector('.status-badge');
+        const dueDate = this.element.querySelector('.due-date .value');
+
+        if (paymentStatus) {
+            paymentStatus.textContent = this.data.paymentStatusText || this.data.paymentStatus;
+            paymentStatus.className = `status-badge ${this.data.paymentStatus}`;
+        }
+
+        if (dueDate) {
+            dueDate.textContent = this.data.dueDate || 'N/A';
+        }
+    }
+
+    setupEventListeners() {
+        // Make payment button
+        const makePaymentBtn = this.element.querySelector('.action-btn.primary');
+        if (makePaymentBtn) {
+            makePaymentBtn.addEventListener('click', () => {
+                this.makePayment();
+            });
+        }
+
+        // Download invoice button
+        const downloadInvoiceBtn = this.element.querySelector('.action-btn.secondary');
+        if (downloadInvoiceBtn) {
+            downloadInvoiceBtn.addEventListener('click', () => {
+                this.downloadInvoice();
+            });
+        }
+
+        // Payment plan button
+        const paymentPlanBtn = this.element.querySelector('.action-btn.secondary:nth-child(3)');
+        if (paymentPlanBtn) {
+            paymentPlanBtn.addEventListener('click', () => {
+                this.viewPaymentPlan();
+            });
+        }
+    }
+
+    makePayment() {
+        // Emit custom event or call global function
+        const event = new CustomEvent('feeSummaryMakePayment', {
+            detail: { 
+                studentId: this.data.studentId, 
+                totalAmount: this.data.total,
+                fees: this.data.fees
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    downloadInvoice() {
+        // Emit custom event or call global function
+        const event = new CustomEvent('feeSummaryDownloadInvoice', {
+            detail: { 
+                studentId: this.data.studentId, 
+                fees: this.data.fees,
+                total: this.data.total
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    viewPaymentPlan() {
+        // Emit custom event or call global function
+        const event = new CustomEvent('feeSummaryViewPaymentPlan', {
+            detail: { 
+                studentId: this.data.studentId, 
+                fees: this.data.fees
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    updateFeeStatus(feeType, newStatus) {
+        const feeItem = this.element.querySelector(`[data-fee-type="${feeType}"]`);
+        if (!feeItem) return;
+
+        feeItem.classList.remove('paid', 'pending', 'overdue');
+        feeItem.classList.add(newStatus);
+
+        const statusElement = feeItem.querySelector('.status');
+        if (statusElement) {
+            statusElement.textContent = newStatus;
+            statusElement.className = `status ${newStatus}`;
+        }
+    }
+
+    setLoading(loading) {
+        if (this.element) {
+            if (loading) {
+                this.element.classList.add('loading');
+            } else {
+                this.element.classList.remove('loading');
+            }
+        }
+    }
+
+    formatZAR(amountInCents) {
+        const amount = amountInCents / 100;
+        return new Intl.NumberFormat('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR'
+        }).format(amount);
+    }
+}
+
+// Global functions for HTML onclick handlers
+function makePayment() {
+    // This would be handled by the parent component
+    console.log('Make payment clicked');
+}
+
+function downloadInvoice() {
+    // This would be handled by the parent component
+    console.log('Download invoice clicked');
+}
+
+function viewPaymentPlan() {
+    // This would be handled by the parent component
+    console.log('View payment plan clicked');
+}
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = FeeSummary;
+}
+</script>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Test - South African Context</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../css/payments.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="../../js/script.js" defer></script>
+    <script src="../js/payment-handler.js" defer></script>
+    <script src="../js/payment-test.js" defer></script>
+</head>
+<body data-role="student">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+
+    <main class="payment-test-page">
+        <div class="test-container">
+            <!-- Test Header -->
+            <div class="test-header">
+                <h1>🧪 Payment System Test</h1>
+                <p>Test payment functionality with South African test data</p>
+                <div class="test-status">
+                    <span class="status-indicator" id="test-status">Ready</span>
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="test-controls">
+                <div class="control-group">
+                    <label for="test-scenario">Test Scenario:</label>
+                    <select id="test-scenario" onchange="loadTestScenario()">
+                        <option value="successful-payment">✅ Successful Payment</option>
+                        <option value="failed-payment">❌ Failed Payment</option>
+                        <option value="insufficient-funds">💰 Insufficient Funds</option>
+                        <option value="3d-secure">🔐 3D Secure Required</option>
+                        <option value="eft-payment">🏦 EFT Payment</option>
+                        <option value="overdue-payment">⏰ Overdue Payment</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <button class="btn-primary" onclick="runTest()">Run Test</button>
+                    <button class="btn-secondary" onclick="resetTest()">Reset</button>
+                </div>
+            </div>
+
+            <!-- Test Data Display -->
+            <div class="test-data-section">
+                <h3>Test Data</h3>
+                <div class="test-data-grid">
+                    <div class="data-card">
+                        <h4>Student Information</h4>
+                        <div class="data-item">
+                            <span class="label">Name:</span>
+                            <span class="value" id="student-name">Thabo Mthembu</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Student ID:</span>
+                            <span class="value" id="student-id">ST2024001</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">School:</span>
+                            <span class="value" id="school-name">Johannesburg High School</span>
+                        </div>
+                    </div>
+                    
+                    <div class="data-card">
+                        <h4>Payment Information</h4>
+                        <div class="data-item">
+                            <span class="label">Amount:</span>
+                            <span class="value" id="payment-amount">R 156.00</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Currency:</span>
+                            <span class="value" id="payment-currency">ZAR</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">Reference:</span>
+                            <span class="value" id="payment-reference">ST2024001-2024Q1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="data-card">
+                        <h4>Test Cards</h4>
+                        <div class="test-cards">
+                            <div class="test-card" onclick="selectTestCard('4242424242424242')">
+                                <span class="card-icon">💳</span>
+                                <span class="card-number">4242 4242 4242 4242</span>
+                                <span class="card-desc">Successful Payment</span>
+                            </div>
+                            <div class="test-card" onclick="selectTestCard('4000000000000002')">
+                                <span class="card-icon">❌</span>
+                                <span class="card-number">4000 0000 0000 0002</span>
+                                <span class="card-desc">Insufficient Funds</span>
+                            </div>
+                            <div class="test-card" onclick="selectTestCard('4000000000003220')">
+                                <span class="card-icon">🔐</span>
+                                <span class="card-number">4000 0000 0000 3220</span>
+                                <span class="card-desc">3D Secure Required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-form-section">
+                <h3>Payment Form</h3>
+                <div class="payment-form-container">
+                    <form id="test-payment-form">
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry-date">Expiry Date</label>
+                                <input type="text" id="expiry-date" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardholder-name">Cardholder Name</label>
+                            <input type="text" id="cardholder-name" placeholder="Full name as on card">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="your@email.com">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="fillTestData()">
+                                Fill Test Data
+                            </button>
+                            <button type="submit" class="btn-primary" id="submit-test-payment">
+                                Test Payment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="test-results-section">
+                <h3>Test Results</h3>
+                <div class="test-results" id="test-results">
+                    <div class="no-results">
+                        <span class="icon">🧪</span>
+                        <p>No tests run yet. Click "Run Test" to start testing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Log -->
+            <div class="test-log-section">
+                <h3>Test Log</h3>
+                <div class="test-log" id="test-log">
+                    <div class="log-entry">
+                        <span class="timestamp">[00:00:00]</span>
+                        <span class="message">Payment test system initialized</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="testSuccessfulPayment()">
+                    ✅ Test Success
+                </button>
+                <button class="action-btn" onclick="testFailedPayment()">
+                    ❌ Test Failure
+                </button>
+                <button class="action-btn" onclick="testEFTPayment()">
+                    🏦 Test EFT
+                </button>
+                <button class="action-btn" onclick="testPaymentGating()">
+                    🚫 Test Payment Gating
+                </button>
+                <button class="action-btn" onclick="clearResults()">
+                    🗑️ Clear Results
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Test Results Modal -->
+    <div id="test-results-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTestResults()">&times;</span>
+            <div class="test-results-content" id="test-results-content">
+                <!-- Test results will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Test CSS -->
+    <style>
+    .payment-test-page {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .test-header {
+        background: linear-gradient(135deg, #50778f 0%, #6b8fa3 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(80, 119, 143, 0.3);
+    }
+
+    .test-header h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .test-header p {
+        margin: 0 0 1rem 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .test-status {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .test-controls {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 2rem;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        min-width: 200px;
+    }
+
+    .control-group label {
+        color: #495057;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .control-group select {
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: white;
+    }
+
+    .test-data-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .test-data-section h3 {
+        color: #50778f;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .test-data-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .data-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .data-card h4 {
+        color: #2c3e50;
+        margin: 0 0 1rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .data-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .data-item:last-child {
+        border-bottom: none;
+    }
+
+    .data-item .label {
+        color: #6c757d;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .data-item .value {
+        color: #2c3e50;
+        font-weight: 600;
+        font-family: 'Courier New', monospace;
+    }
+
+    .test-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .test-card {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .test-card:hover {
+        border-color: #50778f;
+        background: #f8f9fa;
+    }
+
+    .test-card.selected {
+        border-color: #50778f;
+        background: #e3f2fd;
+    }
+
+    .card-icon {
+        font-size: 1.5rem;
+    }
+
+    .card-number {
+        font-family: 'Courier New', monospace;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .card-desc {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .payment-form-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .payment-form-section h3 {
+        color: #50778f;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .payment-form-container {
+        max-width: 600px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #495057;
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #50778f;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+    }
+
+    .test-results-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .test-results-section h3 {
+        color: #50778f;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .test-results {
+        min-height: 200px;
+        border: 2px dashed #e9ecef;
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .no-results {
+        color: #6c757d;
+    }
+
+    .no-results .icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    .test-log-section {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .test-log-section h3 {
+        color: #50778f;
+        margin: 0 0 1.5rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .test-log {
+        background: #2c3e50;
+        color: #ecf0f1;
+        border-radius: 8px;
+        padding: 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .log-entry {
+        margin-bottom: 0.5rem;
+    }
+
+    .log-entry .timestamp {
+        color: #95a5a6;
+    }
+
+    .log-entry .message {
+        color: #ecf0f1;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .action-btn {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #50778f;
+        background: white;
+        color: #50778f;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+        background: #50778f;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Test result styles */
+    .test-result {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #28a745;
+    }
+
+    .test-result.failed {
+        border-left-color: #dc3545;
+        background: #fff5f5;
+    }
+
+    .test-result.pending {
+        border-left-color: #ffc107;
+        background: #fffbf0;
+    }
+
+    .test-result h4 {
+        margin: 0 0 0.5rem 0;
+        color: #2c3e50;
+    }
+
+    .test-result .result-details {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .test-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .control-group {
+            min-width: auto;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .quick-actions {
+            flex-direction: column;
+        }
+
+        .action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+    </style>
+</body>
+</html>

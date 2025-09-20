@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History - Empiras Vanguard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../css/payments.css">
+    <script src="../../js/script.js" defer></script>
+    <script src="../js/payment-history.js" defer></script>
+</head>
+<body data-role="student">
+    <!-- Navbar -->
+    <header id="navbar"></header>
+
+    <main class="payment-history-page">
+        <div class="history-container">
+            <!-- Header -->
+            <div class="history-header">
+                <h1>Payment History</h1>
+                <div class="header-actions">
+                    <button class="btn-secondary" onclick="exportHistory()">
+                        📊 Export History
+                    </button>
+                    <button class="btn-primary" onclick="goToPaymentForm()">
+                        💳 Make Payment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <h3>Total Paid</h3>
+                        <div class="card-amount" id="total-paid">R 45,500.00</div>
+                        <p class="card-period">This Academic Year</p>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon">📅</div>
+                    <div class="card-content">
+                        <h3>Last Payment</h3>
+                        <div class="card-amount" id="last-payment">R 15,500.00</div>
+                        <p class="card-period">15 March 2024</p>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-content">
+                        <h3>Next Due</h3>
+                        <div class="card-amount" id="next-due">R 15,500.00</div>
+                        <p class="card-period">31 March 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="history-filters">
+                <div class="filter-group">
+                    <label for="date-filter">Date Range:</label>
+                    <select id="date-filter" onchange="filterHistory()">
+                        <option value="all">All Time</option>
+                        <option value="this-year">This Year</option>
+                        <option value="this-term">This Term</option>
+                        <option value="last-3-months">Last 3 Months</option>
+                        <option value="last-month">Last Month</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter">Status:</label>
+                    <select id="status-filter" onchange="filterHistory()">
+                        <option value="all">All Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search-input">Search:</label>
+                    <input type="text" id="search-input" placeholder="Search by reference, amount..." onkeyup="searchHistory()">
+                </div>
+            </div>
+
+            <!-- Payment History Table -->
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reference</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-history-tbody">
+                        <!-- Payment history will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" onclick="previousPage()" id="prev-btn" disabled>
+                    ← Previous
+                </button>
+                <div class="page-numbers" id="page-numbers">
+                    <!-- Page numbers will be generated by JavaScript -->
+                </div>
+                <button class="page-btn" onclick="nextPage()" id="next-btn">
+                    Next →
+                </button>
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" id="no-results" style="display: none;">
+                <div class="no-results-icon">🔍</div>
+                <h3>No payments found</h3>
+                <p>No payments match your current filters. Try adjusting your search criteria.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Details Modal -->
+    <div id="payment-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentDetails()">&times;</span>
+            <div class="payment-details">
+                <h2>Payment Details</h2>
+                <div class="details-content" id="payment-details-content">
+                    <!-- Payment details will be populated by JavaScript -->
+                </div>
+                <div class="details-actions">
+                    <button class="btn-secondary" onclick="downloadReceipt()">Download Receipt</button>
+                    <button class="btn-primary" onclick="closePaymentDetails()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeExportModal()">&times;</span>
+            <div class="export-options">
+                <h2>Export Payment History</h2>
+                <div class="export-formats">
+                    <label class="format-option">
+                        <input type="radio" name="export-format" value="pdf" checked>
+                        <div class="format-card">
+                            <span class="format-icon">📄</span>
+                            <span class="format-name">PDF</span>
+                            <span class="format-desc">Printable format</span>
+                        </div>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="export-format" value="csv">
+                        <div class="format-card">
+                            <span class="format-icon">📊</span>
+                            <span class="format-name">CSV</span>
+                            <span class="format-desc">Spreadsheet format</span>
+                        </div>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="export-format" value="excel">
+                        <div class="format-card">
+                            <span class="format-icon">📈</span>
+                            <span class="format-name">Excel</span>
+                            <span class="format-desc">Excel spreadsheet</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="export-actions">
+                    <button class="btn-secondary" onclick="closeExportModal()">Cancel</button>
+                    <button class="btn-primary" onclick="downloadExport()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
