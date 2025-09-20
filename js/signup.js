@@ -1,8 +1,9 @@
-// Simple signup form handler for students only
-document.getElementById('signupForm').addEventListener('submit', async function(e) {
+document.addEventListener('DOMContentLoaded', function() {
+    const signupForm = document.getElementById('signupForm');
+    
+    signupForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Get form values
     var fullName = document.getElementById('studentFullName').value;
     var email = document.getElementById('studentEmail').value;
     var password = document.getElementById('studentPassword').value;
@@ -15,75 +16,67 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     var parentEmail = document.getElementById('parentEmail').value;
     var parentPhone = document.getElementById('parentPhoneNumber').value;
     
-    // Check if passwords match
     if (password !== confirmPassword) {
         alert('Passwords do not match!');
         return;
     }
     
-    // Check if all required fields are filled
     if (!fullName || !email || !password || !currentGrade || !phoneNumber || !location || !targetUniversity || !parentName || !parentEmail || !parentPhone) {
         alert('Please fill in all required fields!');
         return;
     }
     
     try {
-        // Create student account with Supabase
-        const { data, error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    full_name: fullName,
-                    user_type: 'student'
-                }
-            }
-        });
-        
-        if (error) {
-            alert('Sign up failed: ' + error.message);
+        // Check if student email already exists
+        if (window.authDB.userExists(email)) {
+            alert('Student email already exists! Please use a different email.');
             return;
         }
         
-        if (data.user) {
-            // Insert student data into student_login table
-            await supabaseClient
-                .from('student_login')
-                .insert([
-                    {
-                        full_name: fullName,
-                        email: email,
-                        password: password,
-                        user_type: 'student',
-                        parent_email: parentEmail,
-                        phone_number: phoneNumber,
-                        current_grade: currentGrade,
-                        location: location,
-                        target_university: targetUniversity
-                    }
-                ]);
-            
-            // Insert parent data into parent_login table
-            await supabaseClient
-                .from('parent_login')
-                .insert([
-                    {
-                        full_name: parentName,
-                        parent_email: parentEmail,
-                        phone_number: parentPhone,
-                        password: 'temp_password_' + Date.now(),
-                        user_type: 'parent',
-                        student_email: email
-                    }
-                ]);
-            
-            alert('Student account created successfully! Welcome, ' + fullName);
-            
-            // Redirect to student dashboard
-            window.location.href = 'student/student_dash.html';
+        // Create student account
+        const studentData = {
+            email: email,
+            password: password,
+            user_type: 'student',
+            full_name: fullName,
+            parent_email: parentEmail,
+            phone_number: phoneNumber,
+            current_grade: currentGrade,
+            location: location,
+            target_university: targetUniversity
+        };
+        
+        const studentUser = window.authDB.createUser(studentData);
+        console.log('Student created successfully:', studentUser);
+        
+        // Try to create parent account
+        try {
+            if (window.authDB.userExists(parentEmail)) {
+                alert('Student account created! Parent email already exists - they can sign in with existing credentials.');
+            } else {
+                const parentPassword = 'temp_password_' + Date.now();
+                const parentData = {
+                    email: parentEmail,
+                    password: parentPassword,
+                    user_type: 'parent',
+                    full_name: parentName,
+                    phone_number: parentPhone,
+                    student_email: email
+                };
+                
+                const parentUser = window.authDB.createUser(parentData);
+                console.log('Parent created successfully:', parentUser);
+                alert('Student and parent accounts created successfully! Welcome, ' + fullName + '. Parent can sign in with their email and temporary password.');
+            }
+        } catch (parentError) {
+            console.error('Parent creation error:', parentError);
+            alert('Student account created! Parent account creation failed.');
         }
+        
+        // Redirect to student dashboard
+        window.location.href = 'student/student_dash.html';
     } catch (error) {
-        console.error('Error:', error);
         alert('Something went wrong. Please try again.');
     }
+    });
 });
