@@ -880,7 +880,7 @@ section {
 }
 
 .footer {
-  background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%);
+  background: linear-gradient(135deg, #1d1d1f 0%, #2c2c2e 50%, #48484a 100%);
   color: white;
   padding: 60px 0 20px;
   position: relative;
@@ -894,8 +894,8 @@ section {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 70%, rgba(0, 122, 255, 0.1), transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(88, 86, 214, 0.1), transparent 50%);
   pointer-events: none;
 }
 
@@ -905,10 +905,8 @@ section {
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
+  text-align: center;
+  padding: 40px 0;
 }
 
 .footer-section h3,
@@ -919,12 +917,11 @@ section {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.footer-title {
+.footer-content h3 {
   font-size: 24px;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .footer-description {
@@ -936,7 +933,9 @@ section {
 
 .footer-social {
   display: flex;
-  gap: 16px;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px 0 30px 0;
 }
 
 .social-link {
@@ -955,6 +954,30 @@ section {
   background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 24px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.social-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
 }
 
 .footer-links {
@@ -1026,7 +1049,8 @@ section {
   padding-top: 30px;
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
-  font-weight: 500;
+  font-weight: 400;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
