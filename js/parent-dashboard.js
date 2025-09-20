@@ -3,53 +3,72 @@
 
 class ParentDashboard {
     constructor() {
-        this.childId = 'ST2024001';
-        this.childName = 'Thabo Mthembu';
+        this.currentUser = null;
+        this.childData = null;
         this.paymentStatus = 'pending';
-        this.childData = {};
         
         this.init();
     }
 
     init() {
+        this.getCurrentUser();
         this.loadChildData();
         this.setupEventListeners();
         this.updateDashboard();
     }
 
+    getCurrentUser() {
+        // Get current parent user from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('user') || localStorage.getItem('currentUserEmail');
+        
+        if (userEmail && window.authDB) {
+            this.currentUser = window.authDB.getUserByEmail(userEmail);
+            console.log('Parent user:', this.currentUser);
+        }
+    }
+
     loadChildData() {
-        // Load child data from localStorage or API
-        // For demo purposes, we'll use sample data
-        this.childData = {
-            id: this.childId,
-            name: this.childName,
-            grade: 10,
-            school: 'Johannesburg High School',
-            attendance: 95,
-            academicProgress: [
+        if (!this.currentUser) return;
+
+        // Get child data from database
+        this.childData = window.authDB.getStudentByParentEmail(this.currentUser.email);
+        
+        if (!this.childData) {
+            console.log('No child found for parent');
+            return;
+        }
+
+        // Initialize default data if not present
+        if (!this.childData.academic_progress) {
+            this.childData.academic_progress = [
                 { subject: 'Mathematics', grade: 78, trend: '+5%', teacher: 'Ms. Johnson' },
                 { subject: 'Science', grade: 82, trend: '+3%', teacher: 'Mr. Smith' },
                 { subject: 'English', grade: 75, trend: '+2%', teacher: 'Ms. Brown' },
                 { subject: 'Geography', grade: 80, trend: '+4%', teacher: 'Mr. Davis' }
-            ],
-            skills: [
+            ];
+        }
+
+        if (!this.childData.skills) {
+            this.childData.skills = [
                 { name: 'Problem Solving', level: 85, status: 'Advanced' },
                 { name: 'Communication', level: 70, status: 'Intermediate' },
                 { name: 'Teamwork', level: 90, status: 'Advanced' },
                 { name: 'Critical Thinking', level: 75, status: 'Intermediate' }
-            ],
-            recentActivities: [
+            ];
+        }
+
+        if (!this.childData.activities) {
+            this.childData.activities = [
                 { icon: '📝', text: 'Math assignment submitted', time: '2 hours ago' },
                 { icon: '🏆', text: 'Earned "Problem Solver" badge', time: '1 day ago' },
                 { icon: '📊', text: 'Progress report updated', time: '3 days ago' },
                 { icon: '💬', text: 'Teacher message received', time: '1 week ago' }
-            ],
-            upcomingEvents: [
-                { date: '15', month: 'Mar', title: 'Parent-Teacher Meeting', time: '2:00 PM - 3:00 PM' },
-                { date: '20', month: 'Mar', title: 'Science Fair', time: '9:00 AM - 2:00 PM' },
-                { date: '25', month: 'Mar', title: 'Sports Day', time: '8:00 AM - 4:00 PM' }
-            ]
-        };
+            ];
+        }
+
+        // Set payment status
+        this.paymentStatus = this.childData.payment_status || 'pending';
     }
 
     setupEventListeners() {
@@ -171,7 +190,10 @@ class ParentDashboard {
         const paymentDue = document.querySelector('.payment-due');
         const paymentStatusBadge = document.querySelector('.payment-status-badge');
 
-        if (paymentAmount) paymentAmount.textContent = 'R 156.00';
+        if (paymentAmount) {
+            const amount = this.childData?.payment_amount || '156.00';
+            paymentAmount.textContent = `R ${amount}`;
+        }
         if (paymentDue) paymentDue.textContent = 'Due: 31 March 2024';
         if (paymentStatusBadge) {
             paymentStatusBadge.textContent = this.paymentStatus.charAt(0).toUpperCase() + this.paymentStatus.slice(1);
@@ -181,8 +203,30 @@ class ParentDashboard {
 
     makePayment() {
         console.log('Making payment');
-        // Navigate to payment form
-        window.location.href = '../payments/html/payment_form.html';
+        
+        // Simulate payment processing
+        if (confirm('Are you sure you want to make a payment of R 156.00?')) {
+            // Update payment status in database
+            if (this.childData && window.authDB) {
+                const updatedStudent = window.authDB.updatePaymentStatus(this.childData.id, 'paid', '156.00');
+                if (updatedStudent) {
+                    this.paymentStatus = 'paid';
+                    this.childData.payment_status = 'paid';
+                    
+                    // Add activity
+                    window.authDB.addActivity(this.childData.id, {
+                        icon: '💰',
+                        text: 'Payment made successfully',
+                        time: 'Just now'
+                    });
+                    
+                    // Refresh dashboard
+                    this.updateDashboard();
+                    
+                    alert('Payment successful! Status updated.');
+                }
+            }
+        }
     }
 
     contactTeacher() {

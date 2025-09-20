@@ -22,11 +22,7 @@ document.getElementById('signinForm').addEventListener('submit', async function(
         }
         
         const user = authResult.user;
-        console.log('Sign in successful:', user);
         
-        alert('Sign in successful! Welcome, ' + user.full_name);
-        
-        // Store user email for dashboard personalization
         localStorage.setItem('currentUserEmail', user.email);
         
         // Redirect based on user type

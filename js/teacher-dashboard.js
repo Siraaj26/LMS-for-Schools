@@ -3,6 +3,7 @@
 
 class TeacherDashboard {
     constructor() {
+        this.currentUser = null;
         this.currentClass = null;
         this.students = [];
         this.assignments = [];
@@ -11,23 +12,44 @@ class TeacherDashboard {
     }
 
     init() {
+        this.getCurrentUser();
         this.loadTeacherData();
         this.setupEventListeners();
         this.updateDashboard();
     }
 
-    loadTeacherData() {
-        // Load teacher data from localStorage or API
-        // For demo purposes, we'll use sample data
-        this.students = [
-            { id: 'ST001', name: 'Thabo Mthembu', grade: 78, status: 'on-track' },
-            { id: 'ST002', name: 'Sarah Johnson', grade: 85, status: 'on-track' },
-            { id: 'ST003', name: 'Michael Brown', grade: 65, status: 'needs-attention' },
-            { id: 'ST004', name: 'Lisa Davis', grade: 92, status: 'on-track' },
-            { id: 'ST005', name: 'David Wilson', grade: 45, status: 'at-risk' }
-        ];
+    getCurrentUser() {
+        // Get current teacher user from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('user') || localStorage.getItem('currentUserEmail');
+        
+        if (userEmail && window.authDB) {
+            this.currentUser = window.authDB.getUserByEmail(userEmail);
+            console.log('Teacher user:', this.currentUser);
+        }
+    }
 
-        this.assignments = [
+    loadTeacherData() {
+        if (!this.currentUser) return;
+
+        // Load students from database
+        this.students = window.authDB.getStudentsByTeacher(this.currentUser.email);
+        
+        // Initialize default student data if not present
+        this.students.forEach(student => {
+            if (!student.academic_progress) {
+                student.academic_progress = [];
+            }
+            if (!student.skills) {
+                student.skills = [];
+            }
+            if (!student.activities) {
+                student.activities = [];
+            }
+        });
+
+        // Load assignments from teacher data
+        this.assignments = this.currentUser.assignments || [
             { id: 'A001', title: 'Algebra Quiz', class: 'MATH10A', dueDate: '2024-03-20', status: 'graded' },
             { id: 'A002', title: 'Geometry Test', class: 'MATH11B', dueDate: '2024-03-22', status: 'pending' },
             { id: 'A003', title: 'Calculus Assignment', class: 'MATH12A', dueDate: '2024-03-25', status: 'pending' }

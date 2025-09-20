@@ -46,35 +46,31 @@ document.addEventListener('DOMContentLoaded', function() {
             target_university: targetUniversity
         };
         
-        const studentUser = window.authDB.createUser(studentData);
-        console.log('Student created successfully:', studentUser);
-        
-        // Try to create parent account
-        try {
-            if (window.authDB.userExists(parentEmail)) {
-                alert('Student account created! Parent email already exists - they can sign in with existing credentials.');
-            } else {
-                const parentPassword = 'temp_password_' + Date.now();
-                const parentData = {
-                    email: parentEmail,
-                    password: parentPassword,
-                    user_type: 'parent',
-                    full_name: parentName,
-                    phone_number: parentPhone,
-                    student_email: email
-                };
-                
-                const parentUser = window.authDB.createUser(parentData);
-                console.log('Parent created successfully:', parentUser);
-                alert('Student and parent accounts created successfully! Welcome, ' + fullName + '. Parent can sign in with their email and temporary password.');
+            const studentUser = window.authDB.createUser(studentData);
+            
+            // Try to create parent account
+            try {
+                if (window.authDB.userExists(parentEmail)) {
+                    // Parent exists, continue
+                } else {
+                    const parentPassword = 'temp_password_' + Date.now();
+                    const parentData = {
+                        email: parentEmail,
+                        password: parentPassword,
+                        user_type: 'parent',
+                        full_name: parentName,
+                        phone_number: parentPhone,
+                        student_email: email
+                    };
+                    
+                    const parentUser = window.authDB.createUser(parentData);
+                }
+            } catch (parentError) {
+                console.error('Parent creation error:', parentError);
             }
-        } catch (parentError) {
-            console.error('Parent creation error:', parentError);
-            alert('Student account created! Parent account creation failed.');
-        }
-        
-        // Redirect to student dashboard
-        window.location.href = 'student/student_dash.html';
+            
+            // Redirect to student dashboard
+            window.location.href = 'student/student_dash.html?user=' + encodeURIComponent(email);
     } catch (error) {
         alert('Something went wrong. Please try again.');
     }
