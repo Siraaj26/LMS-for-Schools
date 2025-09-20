@@ -2,9 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empiras Vanguard</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/script.js" defer></script>
 </head>
-<body>
+<body data-role="student"> <!-- data attribute to identify user role in js (student) -->
 
+    <!-- Navbar (component to be inserted here) -->
+    <header id="navbar"></header>
+
+    <main class="dashboard">
+        <!-- Left side (2/3 width) -->
+        <section class="left-side">
+            <h1>Welcome, Student!</h1>
+
+            <!-- Small cards -->
+            <div class="small-cards">
+                <div class="card">Announcements</div>
+                <div class="card">Assignments Due: 3</div>
+            </div>
+
+            <!-- Big cards (2x2 grid) -->
+            <div class="big-cards">
+                <div class="card big">🎓 Academics</div>
+                <div class="card big">🗣️ Soft Skills</div>
+                <div class="card big">⚽ Extracurricular</div>
+                <div class="card big">🌍 Community</div>
+            </div>
+        </section>
+
+        <!-- Right side (1/3 width) -->
+        <section class="right-panel">
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="progress-circle">
+                    🏅
+                    <p>50 pts → Next Badge</p>
+                </div>
+            </div>
+
+            <!-- Calendar (component) -->
+            <div id="calendar"></div>
+
+            <!-- To-Do List -->
+            <div class="todo-list">
+                <h3>📝 To-Do</h3>
+                <ul>
+                    <li><input type="checkbox" id="task1"><label for="task1">Finish Maths Assignment</label></li>
+                    <li><input type="checkbox" id="task2"><label for="task2">Read Chapter 4</label></li>
+                </ul>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
