@@ -1,13 +1,10 @@
-// Simple sign in form handler
-document.getElementById('signinForm').addEventListener('submit', function(e) {
+// Simple sign in form handler with Supabase
+document.getElementById('signinForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Get form values
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
-    
-    console.log('Email entered:', email);
-    console.log('Password entered:', password);
     
     // Check if fields are filled
     if (!email || !password) {
@@ -15,61 +12,80 @@ document.getElementById('signinForm').addEventListener('submit', function(e) {
         return;
     }
     
-    // Check user credentials
-    var userInfo = checkUserCredentials(email, password);
-    console.log('User info found:', userInfo);
-    
-    if (userInfo) {
-        alert('Sign in successful! Welcome, ' + userInfo.name + ' (' + userInfo.type + ')');
+    try {
+        // Try to sign in with Supabase
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
         
-        // Redirect based on user type
-        if (userInfo.type === 'student') {
-            window.location.href = 'student/student_dash.html';
-        } else if (userInfo.type === 'parent') {
-            window.location.href = 'parent/parent_dash.html';
-        } else if (userInfo.type === 'teacher') {
-            window.location.href = 'teacher/teacher_dash.html';
+        if (error) {
+            alert('Sign in failed: ' + error.message);
+            return;
         }
-    } else {
-        alert('Invalid email or password! Please check your credentials.');
+        
+        if (data.user) {
+            // Get user type from database
+            var userType = await getUserType(email);
+            
+            alert('Sign in successful! Welcome, ' + data.user.email);
+            
+            // Redirect based on user type
+            if (userType === 'student') {
+                window.location.href = 'student/student_dash.html';
+            } else if (userType === 'parent') {
+                window.location.href = 'parent/parent_dash.html';
+            } else if (userType === 'teacher') {
+                window.location.href = 'teacher/teacher_dash.html';
+            } else {
+                window.location.href = 'student/student_dash.html'; // default
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
     }
 });
 
-// Function to check user credentials against test data
-function checkUserCredentials(email, password) {
-    // Test users data
-    var testUsers = [
-        {
-            email: 'student@test.com',
-            password: 'password123',
-            name: 'John Student',
-            type: 'student'
-        },
-        {
-            email: 'parent@test.com',
-            password: 'password123',
-            name: 'Jane Parent',
-            type: 'parent'
-        },
-        {
-            email: 'teacher@test.com',
-            password: 'password123',
-            name: 'Mike Teacher',
-            type: 'teacher'
+// Simple function to get user type from database
+async function getUserType(email) {
+    try {
+        // Check student table
+        const { data: studentData } = await supabaseClient
+            .from('student_login')
+            .select('user_type')
+            .eq('email', email)
+            .single();
+            
+        if (studentData) {
+            return studentData.user_type;
         }
-    ];
-    
-    console.log('Checking credentials against:', testUsers);
-    
-    // Check if credentials match any test user
-    for (var i = 0; i < testUsers.length; i++) {
-        console.log('Comparing:', email, '==', testUsers[i].email, ':', email === testUsers[i].email);
-        console.log('Comparing:', password, '==', testUsers[i].password, ':', password === testUsers[i].password);
         
-        if (testUsers[i].email === email && testUsers[i].password === password) {
-            return testUsers[i];
+        // Check parent table
+        const { data: parentData } = await supabaseClient
+            .from('parent_login')
+            .select('user_type')
+            .eq('parent_email', email)
+            .single();
+            
+        if (parentData) {
+            return parentData.user_type;
         }
+        
+        // Check teacher table
+        const { data: teacherData } = await supabaseClient
+            .from('admin_login')
+            .select('user_type')
+            .eq('email', email)
+            .single();
+            
+        if (teacherData) {
+            return teacherData.user_type;
+        }
+        
+        return 'student'; // default
+    } catch (error) {
+        console.error('Error getting user type:', error);
+        return 'student'; // default
     }
-    
-    return null;
 }
