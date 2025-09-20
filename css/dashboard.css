@@ -44,7 +44,7 @@ main.dashboard {
   border-radius: 14px;
   box-shadow: none;
   flex: 1;
-  min-width: 120px;
+  width: 15vw;
   min-height: 120px;
   display: flex;
   align-items: center;
@@ -86,31 +86,63 @@ main.dashboard {
 }
 
 .progress-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #f7fafd;
-  border-radius: 18px;
-  box-shadow: none;
-  padding: 2rem 1rem 1rem 1rem;
-  border: 1.5px solid #a3cae9;
-}
-
-.progress-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a3cae9 60%, #50778f 100%);
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  background: #f7fafd;
+  border-radius: 20px;
   box-shadow: none;
+  padding: 0;
+  border: 1.5px solid #a3cae9;
+}
+
+.progress-circle {
+  --progress: 60; /* Set progress percent here (0-100) */
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background:
+    conic-gradient( /* Syntax= conic-gradient(from <angle>, <color-stop1>, <color2> <start-angle> <end-angle>, ...);*/
+      #50778f calc(var(--progress) * 1%),
+      #a3cae9 0 100%
+    );
   position: relative;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+}
+
+.progress-emoji {
+  grid-row: 1;
+  grid-column: 1;
+  font-size: 2.3rem;
+  z-index: 2;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.progress-circle::before { /* Inner circle to create the ring effect */
+  content: '';
+  position: absolute;
+  top: 12px; /*12px away from top and left edges*/
+  left: 12px;
+  width: 86px;
+  height: 86px;
+  background: #f7fafd;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.progress-circle > * { /* Ensure text,emojis, etc is above the inner circle */
+  position: relative;
+  z-index: 2;
 }
 
 .progress-circle p {
@@ -118,6 +150,7 @@ main.dashboard {
   font-size: 1rem;
   font-weight: 500;
   margin: 0.5rem 0 0 0;
+  text-align: center;
 }
 
 #calendar {
@@ -149,7 +182,7 @@ main.dashboard {
   padding: 0;
   margin: 0;
 }
-
+    margin-bottom: 1rem;
 .todo-list li {
   margin-bottom: 0.75rem;
   display: flex;
@@ -177,5 +210,7 @@ main.dashboard {
   }
   .small-cards {
     flex-direction: column;
+  }
+}
   }
 }
