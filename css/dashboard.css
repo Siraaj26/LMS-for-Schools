@@ -1,4 +1,4 @@
-/* Dashboard Layout - Improved for full-width, white background, and correct color palette */
+/* Dashboard Layout */
 body {
   background: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
@@ -6,22 +6,7 @@ body {
   padding: 0;
 }
 
-#navbar {
-  width: 100%;
-  background: #50778f;
-  color: #fff;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-
-main.dashboplease, main.dashboard {
+main.dashboard {
   display: flex;
   flex-direction: row;
   gap: 2.5rem;
@@ -177,7 +162,7 @@ main.dashboplease, main.dashboard {
 }
 
 @media (max-width: 1100px) {
-  main.dashboplease, main.dashboard {
+  main.dashboard {
     flex-direction: column;
     gap: 1.5rem;
     padding: 2rem 2vw;
