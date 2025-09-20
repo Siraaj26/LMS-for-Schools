@@ -1,5 +1,10 @@
 // Navbar JavaScript Functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize navbar functionality after components are loaded
+    setTimeout(initializeNavbar, 100);
+});
+
+function initializeNavbar() {
     // Mobile menu toggle functionality
     const mobileToggle = document.getElementById('mobileToggle');
     const navLinks = document.getElementById('navLinks');
@@ -17,6 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const dropdown = document.getElementById('dropdown');
 
     if (profileDropdown && dropdown) {
+        // Toggle dropdown on click
+        profileDropdown.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isVisible = dropdown.style.opacity === '1';
+
+            if (isVisible) {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.transform = 'translateY(-10px)';
+            } else {
+                dropdown.style.opacity = '1';
+                dropdown.style.visibility = 'visible';
+                dropdown.style.transform = 'translateY(0)';
+            }
+        });
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             if (!profileDropdown.contains(event.target)) {
@@ -37,7 +58,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinksElements = document.querySelectorAll('.nav-link');
 
     navLinksElements.forEach(link => {
-        if (link.getAttribute('href') && currentPage.includes(link.getAttribute('href').replace('../', ''))) {
+        // Special handling for student dashboard home link
+        if (link.id === 'homeLink' && currentPage.includes('student_dash.html')) {
+            link.classList.add('active');
+            link.style.background = 'rgba(255, 255, 255, 0.2)';
+            link.style.color = 'white';
+        } else if (link.getAttribute('href') && currentPage.includes(link.getAttribute('href').replace('../', ''))) {
             link.classList.add('active');
             link.style.background = 'rgba(255, 255, 255, 0.2)';
             link.style.color = 'white';
@@ -51,55 +77,14 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-
             if (targetElement) {
                 targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                    behavior: 'smooth'
                 });
             }
         });
     });
-
-    // Add scroll effect to navbar
-    let lastScrollTop = 0;
-    const navbar = document.querySelector('.navbar');
-
-    if (navbar) {
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (scrollTop > 100) {
-                navbar.style.background = 'rgba(30, 58, 138, 0.95)';
-                navbar.style.backdropFilter = 'blur(20px)';
-            } else {
-                navbar.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
-                navbar.style.backdropFilter = 'blur(10px)';
-            }
-
-            lastScrollTop = scrollTop;
-        });
-    }
-
-    // Search functionality (if search input exists)
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            // Add your search logic here
-            console.log('Searching for:', searchTerm);
-        });
-    }
-
-    // Notification handling
-    const notificationBell = document.querySelector('.notification-bell');
-    if (notificationBell) {
-        notificationBell.addEventListener('click', function() {
-            // Add notification logic here
-            console.log('Notifications clicked');
-        });
-    }
-});
+}
 
 // Utility function to update user avatar
 function updateUserAvatar(avatarUrl) {

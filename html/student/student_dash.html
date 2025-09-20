@@ -6,7 +6,14 @@
     <title>Empiras Vanguard</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/navbar.css">
+    <link rel="stylesheet" href="../../css/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="../../js/script.js" defer></script>
+    <script src="../../js/navbar.js" defer></script>
+    <script src="../../js/footer.js" defer></script>
+    <script src="../../js/student-calendar.js" defer></script>
+    
 </head>
 <body data-role="student"> <!-- data attribute to identify user role in js (student) -->
 
@@ -43,8 +50,36 @@
                 <p>50 pts → Next Badge</p>
             </div>
 
-            <!-- Calendar (component) -->
-            <div id="calendar"></div>
+            <!-- Calendar -->
+            <div id="calendar">
+                <div class="calendar-header">
+                    <h2 id="month-year">September 2025</h2>
+                    <div class="calendar-nav">
+                        <button id="prev">‹</button>
+                        <button id="next">›</button>
+                    </div>
+                </div>
+                <div class="calendar" id="calendar-days"></div>
+            </div>
+            
+            <!-- Event Modal -->
+            <div id="eventModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Add Event</h3>
+                    <div class="form-group">
+                        <input type="text" id="eventTitle" placeholder="Event title" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="eventDate" class="form-input">
+                    </div>
+                    <div class="form-actions">
+                        <button id="saveEvent" class="btn-primary">Save</button>
+                        <button id="deleteEvent" class="btn-danger">Delete</button>
+                        <button id="cancelEvent" class="btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- To-Do List -->
             <div class="todo-list">
@@ -58,5 +93,39 @@
     </main>
     <!-- Footer (component to be inserted here)  -->
     <footer id="footer"></footer>
+
+    <script>
+        // Component loader function
+        async function loadComponent(componentPath, targetElementId) {
+            try {
+                const response = await fetch(componentPath);
+                const html = await response.text();
+
+                // Extract just the body content from the component
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const bodyContent = doc.body.innerHTML;
+
+                document.getElementById(targetElementId).innerHTML = bodyContent;
+
+                // Initialize navbar functionality after navbar is loaded
+                if (targetElementId === 'navbar') {
+                    setTimeout(() => {
+                        if (typeof initializeNavbar === 'function') {
+                            initializeNavbar();
+                        }
+                    }, 50);
+                }
+            } catch (error) {
+                console.error(`Error loading component ${componentPath}:`, error);
+            }
+        }
+
+        // Load components when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('../components/navbar.html', 'navbar');
+            loadComponent('../components/footer.html', 'footer');
+        });
+    </script>
 </body>
 </html>
