@@ -1,8 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empiras Navigation</title>
+    <link rel="stylesheet" href="../../css/navbar.css">
+</head>
+<body>
+
 <nav class="navbar">
-    <a href="../index.html">Home</a>
-    <a href="../learn.html">Learn</a>
-    <a href="../leaderboard.html">Leaderboard</a>
-    <a href="../profile.html">Profile</a>
+    <!-- Logo Section -->
+    <div class="nav-logo">
+        <img src="../../images/Empiras_Logo-Blue.png" alt="Empiras Logo" class="logo">
+        <span class="brand-name">Empiras</span>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="nav-links" id="navLinks">
+        <a href="../index.html" class="nav-link">Home</a>
+        <a href="../askme.html" class="nav-link">AskMe!</a>
+        <a href="../inbox.html" class="nav-link">Inbox</a>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="profile" id="profileDropdown">
+        <img src="../../images/avatar.jpg" alt="User Avatar" id="userAvatar" class="avatar">
+        <span class="username">Student</span>
+        <div class="dropdown-arrow">▼</div>
+        <div class="dropdown" id="dropdown">
+            <a href="../profile-picture.html">Profile Picture</a>
+            <a href="../personal-info.html">Personal Info</a>
+            <a href="../parent-info.html">Parent/Guardian Info</a>
+            <a href="../academic-goals.html">Academic Goals</a>
+            <a href="../reports.html">Reports</a>
+            <a href="../finances.html">Finances</a>
+            <a href="../settings.html">Settings</a>
+        </div>
+    </div>
 </nav>
 
 <script src="../../js/navbar.js"></script>
+</body>
+</html>

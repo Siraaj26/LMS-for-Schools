@@ -1,233 +1,135 @@
-// PathFinder Navbar JavaScript Functionality
-console.log("Navbar JS loaded.");
+// Navbar JavaScript Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle functionality
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
 
-class NavbarManager {
-    constructor() {
-        this.init();
+    if (mobileToggle && navLinks) {
+        mobileToggle.addEventListener('click', function() {
+            // Toggle mobile menu
+            navLinks.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+        });
     }
 
-    init() {
-        this.highlightActivePage();
-        this.addMobileToggle();
-        this.addSmoothScrolling();
-        this.handleUserAuthState();
-        this.addNavigationListeners();
-    }
+    // Profile dropdown functionality
+    const profileDropdown = document.getElementById('profileDropdown');
+    const dropdown = document.getElementById('dropdown');
 
-    // Highlight the current active page in navigation
-    highlightActivePage() {
-        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        const navLinks = document.querySelectorAll('.navbar a');
-
-        navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-                link.classList.add('active');
+    if (profileDropdown && dropdown) {
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!profileDropdown.contains(event.target)) {
+                dropdown.style.opacity = '0';
+                dropdown.style.visibility = 'hidden';
+                dropdown.style.transform = 'translateY(-10px)';
             }
         });
-    }
 
-    // Add mobile hamburger menu functionality
-    addMobileToggle() {
-        const navbar = document.querySelector('.navbar');
-        if (!navbar) return;
-
-        // Create mobile toggle button
-        const mobileToggle = document.createElement('button');
-        mobileToggle.className = 'mobile-toggle';
-        mobileToggle.innerHTML = '☰';
-        mobileToggle.style.display = 'none';
-
-        // Insert toggle button at the beginning of navbar
-        navbar.insertBefore(mobileToggle, navbar.firstChild);
-
-        // Toggle mobile menu
-        mobileToggle.addEventListener('click', () => {
-            navbar.classList.toggle('mobile-open');
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navbar.contains(e.target)) {
-                navbar.classList.remove('mobile-open');
-            }
+        // Prevent dropdown from closing when clicking inside it
+        dropdown.addEventListener('click', function(event) {
+            event.stopPropagation();
         });
     }
 
-    // Add smooth scrolling for internal links
-    addSmoothScrolling() {
-        const navLinks = document.querySelectorAll('.navbar a[href^="#"]');
+    // Active page highlighting
+    const currentPage = window.location.pathname;
+    const navLinksElements = document.querySelectorAll('.nav-link');
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    }
-
-    // Handle user authentication state display
-    handleUserAuthState() {
-        // Check if user is logged in (you can integrate with Supabase here)
-        const isLoggedIn = this.checkAuthStatus();
-        const navbar = document.querySelector('.navbar');
-
-        if (!navbar) return;
-
-        if (isLoggedIn) {
-            // Add user menu or profile indicator
-            this.addUserMenu();
-        } else {
-            // Add login/register buttons
-            this.addAuthButtons();
+    navLinksElements.forEach(link => {
+        if (link.getAttribute('href') && currentPage.includes(link.getAttribute('href').replace('../', ''))) {
+            link.classList.add('active');
+            link.style.background = 'rgba(255, 255, 255, 0.2)';
+            link.style.color = 'white';
         }
-    }
+    });
 
-    checkAuthStatus() {
-        // Placeholder - integrate with your Supabase auth
-        // return supabase.auth.getUser() !== null;
-        return localStorage.getItem('pathfinder_user') !== null;
-    }
+    // Smooth scrolling for anchor links
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
 
-    addUserMenu() {
-        const navbar = document.querySelector('.navbar');
-        const userMenu = document.createElement('div');
-        userMenu.className = 'user-menu';
-        userMenu.innerHTML = `
-            <button class="user-profile-btn">👤 Profile</button>
-            <div class="dropdown-menu">
-                <a href="profile.html">My Profile</a>
-                <a href="settings.html">Settings</a>
-                <a href="#" onclick="navbarManager.logout()">Logout</a>
-            </div>
-        `;
-        navbar.appendChild(userMenu);
-
-        // Toggle dropdown
-        const profileBtn = userMenu.querySelector('.user-profile-btn');
-        profileBtn.addEventListener('click', () => {
-            userMenu.classList.toggle('dropdown-open');
-        });
-    }
-
-    addAuthButtons() {
-        const navbar = document.querySelector('.navbar');
-        const authButtons = document.createElement('div');
-        authButtons.className = 'auth-buttons';
-        authButtons.innerHTML = `
-            <a href="login.html" class="login-btn">Login</a>
-            <a href="register.html" class="register-btn">Sign Up</a>
-        `;
-        navbar.appendChild(authButtons);
-    }
-
-    // Navigation event listeners
-    addNavigationListeners() {
-        const navLinks = document.querySelectorAll('.navbar a');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Add loading state for page transitions
-                if (!link.getAttribute('href').startsWith('#')) {
-                    this.showLoadingState();
-                }
-
-                // Track navigation analytics (if needed)
-                this.trackNavigation(link.getAttribute('href'));
-            });
-        });
-    }
-
-    showLoadingState() {
-        // Add a subtle loading indicator
-        const navbar = document.querySelector('.navbar');
-        navbar.classList.add('loading');
-
-        // Remove loading state after a short delay
-        setTimeout(() => {
-            navbar.classList.remove('loading');
-        }, 500);
-    }
-
-    trackNavigation(href) {
-        // Track page navigation for analytics
-        console.log(`Navigating to: ${href}`);
-        // You can integrate with Google Analytics or other tracking here
-    }
-
-    // Utility methods
-    logout() {
-        localStorage.removeItem('pathfinder_user');
-        window.location.href = 'index.html';
-    }
-
-    // Update navigation based on user progress (for learning paths)
-    updateProgressIndicators() {
-        const navLinks = document.querySelectorAll('.navbar a');
-        const userProgress = this.getUserProgress();
-
-        navLinks.forEach(link => {
-            const page = link.getAttribute('href');
-            if (userProgress[page]) {
-                link.classList.add('completed');
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         });
-    }
+    });
 
-    getUserProgress() {
-        // Placeholder - get user progress from localStorage or Supabase
-        return JSON.parse(localStorage.getItem('user_progress') || '{}');
-    }
+    // Add scroll effect to navbar
+    let lastScrollTop = 0;
+    const navbar = document.querySelector('.navbar');
 
-    // Search functionality
-    addSearchFeature() {
-        const navbar = document.querySelector('.navbar');
-        const searchContainer = document.createElement('div');
-        searchContainer.className = 'navbar-search';
-        searchContainer.innerHTML = `
-            <input type="text" placeholder="Search courses..." class="search-input">
-            <button class="search-btn">🔍</button>
-        `;
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        navbar.appendChild(searchContainer);
-
-        const searchInput = searchContainer.querySelector('.search-input');
-        const searchBtn = searchContainer.querySelector('.search-btn');
-
-        searchBtn.addEventListener('click', () => {
-            this.performSearch(searchInput.value);
-        });
-
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.performSearch(searchInput.value);
+            if (scrollTop > 100) {
+                navbar.style.background = 'rgba(30, 58, 138, 0.95)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)';
+                navbar.style.backdropFilter = 'blur(10px)';
             }
+
+            lastScrollTop = scrollTop;
         });
     }
 
-    performSearch(query) {
-        if (query.trim()) {
-            // Redirect to search results or filter current page
-            console.log(`Searching for: ${query}`);
-            // window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-        }
+    // Search functionality (if search input exists)
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // Add your search logic here
+            console.log('Searching for:', searchTerm);
+        });
+    }
+
+    // Notification handling
+    const notificationBell = document.querySelector('.notification-bell');
+    if (notificationBell) {
+        notificationBell.addEventListener('click', function() {
+            // Add notification logic here
+            console.log('Notifications clicked');
+        });
+    }
+});
+
+// Utility function to update user avatar
+function updateUserAvatar(avatarUrl) {
+    const userAvatar = document.getElementById('userAvatar');
+    if (userAvatar && avatarUrl) {
+        userAvatar.src = avatarUrl;
     }
 }
 
-// Initialize navbar when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.navbarManager = new NavbarManager();
-});
+// Utility function to update username
+function updateUsername(username) {
+    const usernameElement = document.querySelector('.username');
+    if (usernameElement && username) {
+        usernameElement.textContent = username;
+    }
+}
 
-// Export for use in other scripts
+// Function to handle logout
+function handleLogout() {
+    // Add logout logic here
+    console.log('Logging out...');
+    // Example: redirect to login page
+    // window.location.href = '../login.html';
+}
+
+// Export functions for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = NavbarManager;
+    module.exports = {
+        updateUserAvatar,
+        updateUsername,
+        handleLogout
+    };
 }
