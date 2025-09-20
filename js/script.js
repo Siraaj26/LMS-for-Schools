@@ -1,25 +1,25 @@
-function loadNavbar() {
-    const path = window.location.pathname.includes('/html/') ? 'components/navbar.html' : 'html/components/navbar.html';
-    
-    fetch(path)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('navbar').innerHTML = data;
-            initializeNavbar();
-        })
-        .catch(error => console.error('Error loading the navbar:', error));
-}
+    // function loadNavbar() {
+    //     const path = window.location.pathname.includes('/html/') ? 'components/navbar.html' : 'html/components/navbar.html';
+        
+    //     fetch(path)
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             document.getElementById('navbar').innerHTML = data;
+    //             initializeNavbar();
+    //         })
+    //         .catch(error => console.error('Error loading the navbar:', error));
+    // }
 
-function loadFooter(){
-    const path = window.location.pathname.includes('/html/') ? 'components/footer.html' : 'html/components/footer.html';
-    
-    fetch(path)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading the footer:', error));
-}
+    function loadFooter(){
+        const path = window.location.pathname.includes('/html/') ? 'components/footer.html' : 'html/components/footer.html';
+        
+        fetch(path)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading the footer:', error));
+    }
 
 function initializeNavbar() {
     const navLinks = document.querySelectorAll('.nav-link');
