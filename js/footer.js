@@ -1,4 +1,4 @@
-// Footer JavaScript - Simplified Version
+// Footer JavaScript - Fixed to allow actual navigation
 document.addEventListener('DOMContentLoaded', function() {
     // Social media link interactions
     const socialLinks = document.querySelectorAll('.footer-links a');
@@ -7,22 +7,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const platforms = ['Instagram', 'Facebook', 'Twitter', 'LinkedIn'];
         const platform = platforms[index];
 
-        // Add click tracking
+        // Add click tracking but allow navigation
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log(`Clicked on ${platform} social link`);
+            // Don't prevent default - allow navigation to occur
+            console.log(`Navigating to ${platform} social link`);
 
-            // Show click feedback
+            // Show quick feedback before navigation
             showSocialClickFeedback(this, platform);
 
-            // In a real app, you would redirect to actual social media pages
-            // window.open('https://instagram.com/yourpage', '_blank');
+            // Optional: Add analytics tracking here
+            // trackSocialClick(platform);
         });
 
         // Add tooltip on hover
         link.setAttribute('title', `Follow us on ${platform}`);
 
-        // Add hover sound effect (optional)
+        // Add hover effects
         link.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-5px) scale(1.1) rotate(5deg)';
         });
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createFloatingBackToTop();
 });
 
-// Show feedback when social media link is clicked
+// Show quick feedback when social media link is clicked (doesn't prevent navigation)
 function showSocialClickFeedback(element, platform) {
     // Create ripple effect
     const ripple = document.createElement('div');
@@ -92,8 +92,8 @@ function showSocialClickFeedback(element, platform) {
     element.style.position = 'relative';
     element.appendChild(ripple);
 
-    // Show message
-    showMessage(`Opening ${platform}...`, 'info');
+    // Show brief message (shorter duration since user is navigating away)
+    showMessage(`Opening ${platform}...`, 'info', 1000);
 
     // Remove ripple after animation
     setTimeout(() => {
@@ -198,8 +198,8 @@ function createFloatingBackToTop() {
     });
 }
 
-// Show message to user
-function showMessage(message, type = 'info') {
+// Show message to user (modified to accept duration parameter)
+function showMessage(message, type = 'info', duration = 3000) {
     // Remove existing messages
     const existingMessage = document.querySelector('.footer-message');
     if (existingMessage) {
@@ -252,7 +252,7 @@ function showMessage(message, type = 'info') {
         messageElement.style.transform = 'translateX(0)';
     }, 100);
 
-    // Auto remove after 3 seconds
+    // Auto remove after specified duration
     setTimeout(() => {
         messageElement.style.transform = 'translateX(100%)';
         setTimeout(() => {
@@ -260,7 +260,7 @@ function showMessage(message, type = 'info') {
                 messageElement.remove();
             }
         }, 300);
-    }, 3000);
+    }, duration);
 }
 
 // Add CSS animations for ripple effect
