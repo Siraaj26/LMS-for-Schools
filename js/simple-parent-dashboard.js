@@ -140,7 +140,6 @@ function makePayment() {
             // Force refresh the entire dashboard
             setTimeout(() => {
                 updateParentDashboard();
-                alert('Payment successful! Dashboard updated.');
             }, 100);
         }
     }
@@ -148,7 +147,35 @@ function makePayment() {
 
 // Simple function to contact teacher
 function contactTeacher() {
-    alert('Contact Teacher feature would open here.\nThis would send a message to your child\'s teacher.');
+    if (!childData) {
+        alert('No child data found');
+        return;
+    }
+    
+    // Create a simple contact form
+    const teacherEmail = 'teacher@empirasglobalacademy.com'; // Default teacher email
+    const subject = `Message from ${currentParent.full_name} - ${childData.full_name}`;
+    const message = prompt('Enter your message to the teacher:');
+    
+    if (message) {
+        // In a real app, this would send an email
+        // For now, we'll add it as an activity
+        if (!childData.activities) {
+            childData.activities = [];
+        }
+        
+        childData.activities.unshift({
+            icon: '💬',
+            text: `Message sent to teacher: "${message.substring(0, 50)}..."`,
+            time: 'Just now'
+        });
+        
+        // Update the dashboard
+        updateRecentActivities();
+        
+        // Show success (console only, no popup)
+        console.log('Message sent to teacher:', message);
+    }
 }
 
 // Simple function to view child profile
