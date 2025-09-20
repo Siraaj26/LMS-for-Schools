@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Your Account</title>
+    <title>Empiras Vanguard - Create Your Account</title>
     <link rel="stylesheet" href="../css/signup.css">
 </head>
 <body>
     <div class="signup-container">
         <div class="signup-form">
-            <h1>Create Your Account</h1>
+            <h1>Empiras Vanguard</h1>
             <p class="subtitle">Please provide your information to create your student account.</p>
             
             <form id="signupForm">
                 <div class="form-section">
-                    <h2>Student Information</h2>
+                    <h2>Account Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="userType">I am a *</label>
+                        <select id="userType" name="userType">
+                            <option value="">Select your role</option>
+                            <option value="student">Student</option>
+                            <option value="parent">Parent/Guardian</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
                     
                     <div class="form-group">
                         <label for="studentFullName">Full Name *</label>

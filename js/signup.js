@@ -3,33 +3,41 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     // Get form values
-    var studentName = document.getElementById('studentFullName').value;
-    var studentEmail = document.getElementById('studentEmail').value;
-    var studentPassword = document.getElementById('studentPassword').value;
+    var userType = document.getElementById('userType').value;
+    var fullName = document.getElementById('studentFullName').value;
+    var email = document.getElementById('studentEmail').value;
+    var password = document.getElementById('studentPassword').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
-    var currentGrade = document.getElementById('currentGrade').value;
-    var phoneNumber = document.getElementById('phoneNumber').value;
-    var location = document.getElementById('location').value;
-    var targetUniversity = document.getElementById('targetUniversity').value;
-    var parentName = document.getElementById('parentFullName').value;
-    var parentEmail = document.getElementById('parentEmail').value;
-    var parentPhone = document.getElementById('parentPhoneNumber').value;
+    
+    // Check if user type is selected
+    if (!userType) {
+        alert('Please select your role!');
+        return;
+    }
     
     // Check if passwords match
-    if (studentPassword !== confirmPassword) {
+    if (password !== confirmPassword) {
         alert('Passwords do not match!');
         return;
     }
     
-    // Check if all fields are filled
-    if (!studentName || !studentEmail || !studentPassword || !currentGrade || !phoneNumber || !location || !targetUniversity || !parentName || !parentEmail || !parentPhone) {
-        alert('Please fill in all fields!');
+    // Check if all required fields are filled
+    if (!fullName || !email || !password) {
+        alert('Please fill in all required fields!');
         return;
     }
     
-    // Show success message
-    alert('Account created successfully!');
+    // Show success message with user type
+    alert('Account created successfully as ' + userType + '! Welcome, ' + fullName);
     
-    // Go back to main page
-    window.location.href = '../html/index.html';
+    // Redirect to appropriate dashboard
+    if (userType === 'student') {
+        window.location.href = 'student/student_dash.html';
+    } else if (userType === 'parent') {
+        window.location.href = 'parent/parent_dash.html';
+    } else if (userType === 'teacher') {
+        window.location.href = 'teacher/teacher_dash.html';
+    } else {
+        window.location.href = 'index.html';
+    }
 });
