@@ -1,45 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Simple Calendar</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; }
-    .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; max-width: 300px; margin: auto; }
-    .day { padding: 10px; border: 1px solid #ccc; }
-    .today { background: lightblue; font-weight: bold; }
-  </style>
+  <link rel="stylesheet" href="../css/calender.css">
 </head>
 <body>
-  <h2 id="monthYear"></h2>
+  <h2 id="month-year"></h2>
   <div class="calendar" id="calendar"></div>
 
-  <script>
-    const monthYear = document.getElementById("monthYear");
-    const calendar = document.getElementById("calendar");
+  <script src="../js/calendar.js"></script><div class="controls">
+    <br>
+  <button id="prev">← Prev</button>
+  <button id="next">Next →</button>
+</div>
 
-    function loadCalendar(date = new Date()) {
-      calendar.innerHTML = "";
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      monthYear.textContent = date.toLocaleString("default", { month: "long" }) + " " + year;
+<h2 id="month-year"></h2>
+<div class="calendar" id="calendar"></div>
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      // Add empty slots before first day
-      for (let i = 0; i < firstDay; i++) {
-        calendar.innerHTML += `<div class="day"></div>`;
-      }
-
-      // Add actual days
-      for (let d = 1; d <= daysInMonth; d++) {
-        const isToday = d === new Date().getDate() && month === new Date().getMonth();
-        calendar.innerHTML += `<div class="day ${isToday ? "today" : ""}">${d}</div>`;
-      }
-    }
-
-    loadCalendar();
-  </script>
 </body>
 </html>
