@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+    // Get the important parts of the page we need to interact with
     const calendar = document.getElementById('calendar');
     const monthYear = document.getElementById('month-year');
     const prevBtn = document.getElementById('prev');
@@ -11,35 +11,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteBtn = document.getElementById('deleteEvent');
     const eventTitle = document.getElementById('eventTitle');
     const eventDate = document.getElementById('eventDate');
-    const eventTime = document.getElementById('eventTime');
-    const eventDescription = document.getElementById('eventDescription');
+  
 
-    // State
-    let currentDate = new Date();
-    let currentYear = currentDate.getFullYear();
-    let currentMonth = currentDate.getMonth();
-    let events = JSON.parse(localStorage.getItem('calendarEvents')) || [];
-    let selectedDate = null;
-    let selectedEvent = null;
+    let currentDate = new Date(); // Today’s date
+    let currentYear = currentDate.getFullYear(); // Current year
+    let currentMonth = currentDate.getMonth(); // Current month
+    let events = JSON.parse(localStorage.getItem('calendarEvents')) || []; // Get saved events from the browser (or an empty array if none)
+    let selectedDate = null; // Store the selected date for a new event
+    let selectedEvent = null; // Store the event that is being edited
 
-    // Constants
-    const months = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+  
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Initialize the calendar
+    // Start by setting up the calendar
     function initCalendar() {
-        renderCalendar();
-        setupEventListeners();
+        renderCalendar(); // Render the calendar
+        setupEventListeners(); // Set up button clicks and modal actions
     }
 
+    // Function to render the calendar
     function renderCalendar() {
-    
-        calendar.innerHTML = '';
-        monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+        calendar.innerHTML = ''; // Clear any old content from the calendar
+        monthYear.textContent = `${months[currentMonth]} ${currentYear}`; // Set the current month/year at the top
+
+        // Get the first day of the month and how many days the month has
         const firstDay = new Date(currentYear, currentMonth, 1).getDay();
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-        
+
+        // Add the days of the week (Sun, Mon, Tue, etc.)
         days.forEach(day => {
             const dayHeader = document.createElement('div');
             dayHeader.className = 'day-header';
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             calendar.appendChild(dayHeader);
         });
 
-        // Add empty cells for days from the previous month
+        // Add empty cells for the days from the previous month (if the first day isn't Sunday)
         for (let i = 0; i < firstDay; i++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'day other-month';
@@ -56,63 +57,56 @@ document.addEventListener('DOMContentLoaded', function() {
             calendar.appendChild(dayElement);
         }
 
-        // Add days of the current month
-        const today = new Date();
-        const isCurrentMonth = today.getFullYear() === currentYear && today.getMonth() === currentMonth;
-
+        // Add the days of the current month
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'day';
-            
-            // Check if this is today
-            if (isCurrentMonth && day === today.getDate()) {
+
+            // Highlight today's date
+            const today = new Date();
+            if (today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === day) {
                 dayElement.classList.add('today');
             }
-            
-            // Create day number element
+
+            // Show the day number
             const dayNumber = document.createElement('div');
             dayNumber.className = 'day-number';
             dayNumber.textContent = day;
-            
-            // Create event list container
+
+            // Create a place to show events for the day
             const eventList = document.createElement('div');
             eventList.className = 'event-list';
-            
-            // Add events for this day
+
+            // Find events for this day
             const dateKey = formatDate(new Date(currentYear, currentMonth, day));
             const dayEvents = getEventsForDate(dateKey);
-            
-            if (dayEvents.length > 0) {
-                dayElement.classList.add('has-events');
-                dayEvents.forEach(event => {
-                    const eventElement = document.createElement('div');
-                    eventElement.className = 'event-item';
-                    eventElement.textContent = event.title;
-                    eventElement.title = `${event.title}${event.time ? ' at ' + event.time : ''}${event.description ? '\n' + event.description : ''}`;
-                    eventElement.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        openEditEventModal(event);
-                    });
-                    eventList.appendChild(eventElement);
-                });
-            }
-            
+
+            // If there are events, display them
+            dayEvents.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-item';
+                eventElement.textContent = event.title;
+                eventElement.addEventListener('click', () => openEditEventModal(event));
+                eventList.appendChild(eventElement);
+            });
+
             dayElement.appendChild(dayNumber);
             dayElement.appendChild(eventList);
-            
-            // Add click event to create new event
-            dayElement.addEventListener('click', () => {
-                const date = new Date(currentYear, currentMonth, day);
-                openNewEventModal(date);
-            });
-            
+
+            // Clicking a day opens the modal to add a new event
+            dayElement.addEventListener('click', () => openNewEventModal(new Date(currentYear, currentMonth, day)));
+
             calendar.appendChild(dayElement);
         }
     }
 
-    // Event handlers
+    // Get events for a specific day
+    function getEventsForDate(date) {
+        return events.filter(event => event.date === date);
+    }
+
+    // Set up the button actions (next, previous, modal, etc.)
     function setupEventListeners() {
-        // Navigation
         prevBtn.addEventListener('click', () => {
             currentMonth--;
             if (currentMonth < 0) {
@@ -131,24 +125,13 @@ document.addEventListener('DOMContentLoaded', function() {
             renderCalendar();
         });
 
-        // Modal controls
         closeBtn.addEventListener('click', closeModal);
         cancelBtn.addEventListener('click', closeModal);
-        
-        // Save event
         saveBtn.addEventListener('click', saveEvent);
-        
-        // Delete event
         deleteBtn.addEventListener('click', deleteEvent);
-      
-    
     }
 
-    // Event management
-    function getEventsForDate(date) {
-        return events.filter(event => event.date === date);
-    }
-
+    // Save or update an event
     function saveEvent() {
         if (!eventTitle.value.trim()) {
             alert('Please enter a title for the event');
@@ -159,16 +142,11 @@ document.addEventListener('DOMContentLoaded', function() {
             id: selectedEvent ? selectedEvent.id : Date.now(),
             title: eventTitle.value.trim(),
             date: eventDate.value,
-            time: eventTime.value,
-            description: eventDescription.value.trim()
         };
 
         if (selectedEvent) {
-            // Update existing event
             const index = events.findIndex(e => e.id === selectedEvent.id);
-            if (index !== -1) {
-                events[index] = event;
-            }
+            events[index] = event;
         } else {
             // Add new event
             events.push(event);
@@ -179,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal();
     }
 
+    // Delete an event
     function deleteEvent() {
         if (selectedEvent && confirm()) {
             events = events.filter(event => event.id !== selectedEvent.id);
@@ -188,50 +167,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Save events to local storage so they stay after refreshing
     function saveEvents() {
         localStorage.setItem('calendarEvents', JSON.stringify(events));
     }
 
-    // Modal functions
+    // Open the modal to add a new event
     function openNewEventModal(date) {
         selectedEvent = null;
         selectedDate = date;
-        
-        // Set default values
         eventTitle.value = '';
         eventDate.value = formatDate(date);
-        eventTime.value = '';
-        eventDescription.value = '';
-        
-        // Show/hide delete button
-        deleteBtn.style.display = 'none';
-        
-        // Show modal
-        modal.style.display = 'flex';
+        deleteBtn.style.display = 'none'; // Hide delete button for new events
+        modal.style.display = 'flex'; // Show the modal
     }
 
     function openEditEventModal(event) {
         selectedEvent = event;
-        
-        // Fill form with event data
         eventTitle.value = event.title;
         eventDate.value = event.date;
-        eventTime.value = event.time || '';
-        eventDescription.value = event.description || '';
-        
-        // Show delete button
-        deleteBtn.style.display = 'block';
-        
-        // Show modal
-        modal.style.display = 'flex';
+        deleteBtn.style.display = 'block'; // Show delete button for editing events
+        modal.style.display = 'flex'; // Show the modal
     }
-
     function closeModal() {
         modal.style.display = 'none';
         selectedEvent = null;
     }
 
-    // Helper functions
+    // Format date as YYYY-MM-DD
     function formatDate(date) {
         const d = new Date(date);
         let month = '' + (d.getMonth() + 1);
@@ -243,6 +206,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return [year, month, day].join('-');
     }
-
     initCalendar();
 });
