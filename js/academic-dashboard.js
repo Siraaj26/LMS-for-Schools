@@ -1,7 +1,7 @@
 
 const academicGoals = [
-  { goal: "Achieve 85%+ in Mathematics", status: "In Progress", progress: "70%" },
-  { goal: "Complete all Science assignments", status: "Completed", progress: "100%" },
+  { goal: "Achieve 85% in Mathematics", status: "In Progress", progress: "70%" },
+  { goal: "Completed all Science assignments", status: "Completed", progress: "100%" },
   { goal: "Read 5 literature books", status: "In Progress", progress: "40%" }
 ];
 
