@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../css/dashboard.css">
     <link rel="stylesheet" href="../../css/dashboard-edit.css">
     <link rel="stylesheet" href="../../css/teacher.css">
+    <link rel="stylesheet" href="../../css/assignment-modal.css">
     <script src="../../database.js"></script>
     <script src="../../js/dashboard-numbers.js"></script>
     <script src="../../js/simple-teacher-dashboard.js"></script>
@@ -27,11 +28,11 @@
                 </div>
                 <div class="teacher-details">
                     <h1>Welcome, Ms. Sarah Johnson</h1>
-                    <p>Mathematics Teacher • Grade 10-12</p>
+                    <p>Mathematics & English Teacher • Grade 10-12</p>
                     <div class="teacher-stats">
-                        <span class="stat">Classes: 5</span>
-                        <span class="stat">Students: 142</span>
-                        <span class="stat">Subjects: 3</span>
+                        <span class="stat">Classes: 7</span>
+                        <span class="stat">Students: 201</span>
+                        <span class="stat">Subjects: 2</span>
                     </div>
                 </div>
             </div>
@@ -39,9 +40,12 @@
                 <button class="action-btn primary" onclick="createAssignment()">
                     📝 New Assignment
                 </button>
-                        <button class="action-btn secondary" onclick="viewCalendar()">
-                            📅 Calendar
-                        </button>
+                <button class="action-btn secondary" onclick="showAssignments()">
+                    📋 View Assignments
+                </button>
+                <button class="action-btn secondary" onclick="viewCalendar()">
+                    📅 Calendar
+                </button>
             </div>
         </div>
 
@@ -201,6 +205,66 @@
                                 <div class="progress-fill" style="width: 85%"></div>
                             </div>
                             <span class="progress-text">Class Progress: 85%</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card" onclick="viewClass('ENG10A')">
+                        <div class="class-header">
+                            <div class="class-icon">📚</div>
+                            <div class="class-info">
+                                <h3>English Grade 10A</h3>
+                                <span class="class-code">ENG10A</span>
+                            </div>
+                        </div>
+                        <div class="class-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Students</span>
+                                <span class="stat-value">30</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Assignments</span>
+                                <span class="stat-value">3</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg Grade</span>
+                                <span class="stat-value">76%</span>
+                            </div>
+                        </div>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 76%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 76%</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card" onclick="viewClass('ENG11B')">
+                        <div class="class-header">
+                            <div class="class-icon">✍️</div>
+                            <div class="class-info">
+                                <h3>English Literature 11B</h3>
+                                <span class="class-code">ENG11B</span>
+                            </div>
+                        </div>
+                        <div class="class-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Students</span>
+                                <span class="stat-value">28</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Assignments</span>
+                                <span class="stat-value">2</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg Grade</span>
+                                <span class="stat-value">79%</span>
+                            </div>
+                        </div>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 79%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 79%</span>
                         </div>
                     </div>
                 </div>
@@ -378,5 +442,41 @@
             </section>
         </div>
     </main>
+
+    <!-- Assignment Creation Modal -->
+    <div id="assignmentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Assignment & Subject</h3>
+                <button class="close" onclick="closeAssignmentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Assignment Title:</label>
+                    <input type="text" id="assignmentTitle" placeholder="Enter assignment title">
+                </div>
+                
+                <div class="form-group">
+                    <label>Subject/Class:</label>
+                    <input type="text" id="assignmentClass" placeholder="e.g., Science Grade 9, History 11, Art 10">
+                    <small style="color: #666; font-size: 0.8rem;">Type a new subject or class name</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Due Date:</label>
+                    <input type="date" id="assignmentDueDate">
+                </div>
+                
+                <div class="form-group">
+                    <label>Points:</label>
+                    <input type="number" id="assignmentPoints" placeholder="100">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeAssignmentModal()">Cancel</button>
+                <button onclick="saveAssignment()">Create</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

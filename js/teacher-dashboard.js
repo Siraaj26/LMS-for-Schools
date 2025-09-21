@@ -202,10 +202,120 @@ class TeacherDashboard {
     }
 
     createAssignment() {
-        console.log('Creating new assignment');
-        // In a real app, this would open an assignment creation form
-        alert('Creating new assignment - This would open the assignment creation form');
+        this.openAssignmentModal();
     }
+
+    openAssignmentModal() {
+        const modal = document.getElementById('assignmentModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            // Set default due date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('assignmentDueDate').value = tomorrow.toISOString().split('T')[0];
+        }
+    }
+
+    closeAssignmentModal() {
+        const modal = document.getElementById('assignmentModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.getElementById('assignmentForm').reset();
+        }
+    }
+
+    saveAssignment() {
+        const title = document.getElementById('assignmentTitle').value;
+        const className = document.getElementById('assignmentClass').value;
+        const dueDate = document.getElementById('assignmentDueDate').value;
+        const points = document.getElementById('assignmentPoints').value;
+
+        if (!title || !className || !dueDate || !points) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        // Check if this is a new class
+        const existingClass = document.querySelector(`[onclick="viewClass('${className}')"]`);
+        
+        if (!existingClass) {
+            // Create new class card
+            this.createNewClass(className, title);
+        }
+
+        const assignment = {
+            title: title,
+            class: className,
+            dueDate: dueDate,
+            points: points,
+            status: 'pending'
+        };
+
+        this.assignments.push(assignment);
+        this.closeAssignmentModal();
+        alert('Assignment created!');
+    }
+
+    createNewClass(className, assignmentTitle) {
+        // Create class code from className
+        const classCode = className.replace(/\s+/g, '').toUpperCase();
+        
+        // Generate random stats
+        const students = Math.floor(Math.random() * 20) + 20; // 20-40 students
+        const avgGrade = Math.floor(Math.random() * 20) + 70; // 70-90%
+        
+        // Create new class card HTML
+        const newClassCard = `
+            <div class="class-card" onclick="viewClass('${classCode}')">
+                <div class="class-header">
+                    <div class="class-icon">📝</div>
+                    <div class="class-info">
+                        <h3>${className}</h3>
+                        <span class="class-code">${classCode}</span>
+                    </div>
+                </div>
+                <div class="class-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Students</span>
+                        <span class="stat-value">${students}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Assignments</span>
+                        <span class="stat-value">1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg Grade</span>
+                        <span class="stat-value">${avgGrade}%</span>
+                    </div>
+                </div>
+                <div class="class-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${avgGrade}%"></div>
+                    </div>
+                    <span class="progress-text">Class Progress: ${avgGrade}%</span>
+                </div>
+            </div>
+        `;
+        
+        // Add to dashboard
+        const classCards = document.querySelector('.class-cards');
+        if (classCards) {
+            classCards.insertAdjacentHTML('beforeend', newClassCard);
+        }
+    }
+
+    showAssignments() {
+        let message = "Assignments:\n";
+        if (this.assignments.length === 0) {
+            message += "No assignments created yet.";
+        } else {
+            this.assignments.forEach((assignment, index) => {
+                message += `${index + 1}. ${assignment.title} - ${assignment.class} (Due: ${assignment.dueDate})\n`;
+            });
+        }
+        alert(message);
+    }
+
 
     viewReports() {
         console.log('Viewing reports');
@@ -307,6 +417,30 @@ function communicate() {
 function viewCalendar() {
     if (window.teacherDashboard) {
         window.teacherDashboard.viewCalendar();
+    }
+}
+
+function openAssignmentModal() {
+    if (window.teacherDashboard) {
+        window.teacherDashboard.openAssignmentModal();
+    }
+}
+
+function closeAssignmentModal() {
+    if (window.teacherDashboard) {
+        window.teacherDashboard.closeAssignmentModal();
+    }
+}
+
+function saveAssignment() {
+    if (window.teacherDashboard) {
+        window.teacherDashboard.saveAssignment();
+    }
+}
+
+function showAssignments() {
+    if (window.teacherDashboard) {
+        window.teacherDashboard.showAssignments();
     }
 }
 
