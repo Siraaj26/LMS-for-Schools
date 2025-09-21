@@ -33,11 +33,11 @@
                         <img src="../../images/avatar.jpg" alt="Student Avatar">
                     </div>
                     <div class="student-details">
-                        <h1>Welcome, Thabo!</h1>
+                        <h1>Welcome, Stacy Swanepoel!</h1>
                         <p>Grade 10 • Student ID: ST2024001</p>
                         <div class="student-stats">
-                            <span class="stat">Attendance: 95%</span>
-                            <span class="stat">School: Johannesburg High</span>
+                            <!-- <span class="stat">Attendance: 95%</span> -->
+                            <span class="stat">Location: Johannesburg</span>
                             <span class="stat">Last Login: Today</span>
                         </div>
                     </div>
@@ -47,25 +47,32 @@
                 </div>
             </div>
 
-            <!-- Quick Overview -->
-            <div class="quick-overview">
-                <h2>Quick Overview</h2>
-                <div class="small-cards">
-                    <div class="card small-card announcements">
-                        <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span>
-                        <span class="small-card-number">4</span>
-                        <span class="small-card-label">Announcements</span>
-                        <!-- <button class="btn-add" onclick="window.dashboardNumbers.addAnnouncement(1, 'New Announcement', 'Content')">+</button> -->
-                    </div>
-                    <div class="card small-card assignments">
-                        <span class="small-card-icon"><i class="fa-solid fa-book"></i></span>
-                        <span class="small-card-number">3</span>
-                        <span class="small-card-label">Assignments Due</span>
+            <!-- Main Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Quick Overview -->
+                <div  >
+                    <h2>Quick Overview</h2>
+                    <div class="small-cards">
+                        <div class="card small-card announcements">
+                            <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span>
+                            <span class="small-card-number">4</span>
+                            <span class="small-card-label"><a href="/html/inbox.html">Announcements</a></span>
+                        </div>
+                        <div class="card small-card assignments">
+                            <span class="small-card-icon"><i class="fa-solid fa-book"></i></span>
+                            <span class="small-card-number">3</span>
+                            <span class="small-card-label">Assignments Due</span>
+                        </div>
+                        <div class="card small-card rewards" onclick="window.location.href='/html/rewards.html'" style="cursor: pointer;">
+                            <span class="small-card-icon"><i class="fa-solid fa-trophy"></i></span>
+                            <span class="small-card-number">1000</span>
+                            <span class="small-card-label">Reward Points</span>
+                            <p class="progress-text">1000 pts → Next Badge</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Big cards (2x2 grid) -->
+                <!-- Main Content Cards (2x2 grid) -->
             <div class="big-cards">
                 <div class="card big">
                     <div class="card-header">
@@ -148,18 +155,11 @@
                     </div>
                 </div>
             </div>
+            </div>
         </section>
 
         <!-- Right side (1/3 width) -->
         <section class="right-panel">
-            <!-- Progress -->
-            <div class="progress-section">
-                <div class="progress-circle">
-                    <span class="progress-emoji">🏅</span>
-                </div>
-                <p>1 000 pts → Next Badge</p>
-                <p><a href="/html/rewards.html">🏆 Rewards</a> </p>
-            </div>
 
             <!-- Calendar -->
             <div id="calendar">
