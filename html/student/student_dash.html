@@ -23,19 +23,38 @@
     <main class="dashboard">
         <!-- Left side (2/3 width) -->
         <section class="left-side">
-            <h1>Welcome, Student!</h1>
-
-            <!-- Small cards -->
-            <div class="small-cards">
-                <div class="card small-card announcements">
-                    <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span> <!--fa icon for announcements-->
-                    <span class="small-card-number">4</span>
-                    <span class="small-card-label">Announcements</span>
+            <div class="student-header">
+                <div class="student-info">
+                    <div class="student-avatar">
+                        <img src="../../images/avatar.jpg" alt="Student Avatar">
+                    </div>
+                    <div class="student-details">
+                        <h1>Welcome, Thabo!</h1>
+                        <p>Grade 10 • Student ID: ST2024001</p>
+                        <div class="student-stats">
+                            <span class="stat">Attendance: 95%</span>
+                            <span class="stat">School: Johannesburg High</span>
+                            <span class="stat">Last Login: Today</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card small-card assignments">
-                    <span class="small-card-icon"><i class="fa-solid fa-book"></i></span>
-                    <span class="small-card-number">3</span>
-                    <span class="small-card-label">Assignments Due</span>
+                <div class="student-actions">
+                    <button class="action-btn primary">View Profile</button>
+                </div>
+            </div>
+            <div class="quick-overview">
+                <h2>Quick Overview</h2>
+                <div class="small-cards">
+                    <div class="card small-card announcements">
+                        <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span>
+                        <span class="small-card-number">4</span>
+                        <span class="small-card-label">Announcements</span>
+                    </div>
+                    <div class="card small-card assignments">
+                        <span class="small-card-icon"><i class="fa-solid fa-book"></i></span>
+                        <span class="small-card-number">3</span>
+                        <span class="small-card-label">Assignments Due</span>
+                    </div>
                 </div>
             </div>
 
@@ -149,8 +168,10 @@
             <!-- Event Modal -->
             <div id="eventModal" class="modal">
                 <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h3>Add Event</h3>
+                    <div class="modal-header">
+                        <h3>Add Event</h3>
+                        <span class="close">&times;</span>
+                    </div>
                     <div class="form-group">
                         <input type="text" id="eventTitle" placeholder="Event title" class="form-input">
                     </div>
@@ -158,9 +179,9 @@
                         <input type="date" id="eventDate" class="form-input">
                     </div>
                     <div class="form-actions">
-                        <button id="saveEvent" class="btn-primary">Save</button>
-                        <button id="deleteEvent" class="btn-danger">Delete</button>
-                        <button id="cancelEvent" class="btn-secondary">Cancel</button>
+                        <button id="saveEvent" class="btn-primary"><i class="fa fa-check"></i> Save</button>
+                        <button id="deleteEvent" class="btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cancelEvent" class="btn-secondary"><i class="fa fa-times"></i> Cancel</button>
                     </div>
                 </div>
             </div>
