@@ -19,17 +19,17 @@
     <main class="teacher-dashboard">
         <!-- Teacher Header -->
         <div class="teacher-header">
-            <div class="teacher-info">
+                <div class="teacher-info">
                 <div class="teacher-avatar">
                     <img src="../../images/avatar.jpg" alt="Teacher Avatar">
                 </div>
                 <div class="teacher-details">
-                    <h1 id="teacher-welcome">Welcome, Teacher!</h1>
+                    <h1>Welcome, Ms. Sarah Johnson</h1>
                     <p>Mathematics Teacher • Grade 10-12</p>
                     <div class="teacher-stats">
-                        <span class="stat">Classes: 3</span>
-                        <span class="stat">Students: 89</span>
-                        <span class="stat">Subjects: 2</span>
+                        <span class="stat">Classes: 5</span>
+                        <span class="stat">Students: 142</span>
+                        <span class="stat">Subjects: 3</span>
                     </div>
                 </div>
             </div>
@@ -37,9 +37,9 @@
                 <button class="action-btn primary" onclick="createAssignment()">
                     📝 New Assignment
                 </button>
-                <button class="action-btn secondary" onclick="viewReports()">
-                    📊 Reports
-                </button>
+                        <button class="action-btn secondary" onclick="viewCalendar()">
+                            📅 Calendar
+                        </button>
             </div>
         </div>
 
@@ -51,10 +51,73 @@
                 
                 <!-- Class Cards -->
                 <div class="class-cards">
-                    <div class="class-card">
+                    <div class="class-card" onclick="viewClass('MATH8A')">
                         <div class="class-header">
-                            <h3>Mathematics Grade 10A</h3>
-                            <span class="class-code">MATH10A</span>
+                            <div class="class-icon">🔢</div>
+                            <div class="class-info">
+                                <h3>Mathematics Grade 8A</h3>
+                                <span class="class-code">MATH8A</span>
+                            </div>
+                        </div>
+                        <div class="class-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Students</span>
+                                <span class="stat-value">28</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Assignments</span>
+                                <span class="stat-value">6</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg Grade</span>
+                                <span class="stat-value">72%</span>
+                            </div>
+                        </div>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 72%</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card" onclick="viewClass('MATH9B')">
+                        <div class="class-header">
+                            <div class="class-icon">📐</div>
+                            <div class="class-info">
+                                <h3>Mathematics Grade 9B</h3>
+                                <span class="class-code">MATH9B</span>
+                            </div>
+                        </div>
+                        <div class="class-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Students</span>
+                                <span class="stat-value">31</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Assignments</span>
+                                <span class="stat-value">5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Avg Grade</span>
+                                <span class="stat-value">75%</span>
+                            </div>
+                        </div>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 75%</span>
+                        </div>
+                    </div>
+
+                    <div class="class-card" onclick="viewClass('MATH10A')">
+                        <div class="class-header">
+                            <div class="class-icon">📊</div>
+                            <div class="class-info">
+                                <h3>Mathematics Grade 10A</h3>
+                                <span class="class-code">MATH10A</span>
+                            </div>
                         </div>
                         <div class="class-stats">
                             <div class="stat-item">
@@ -63,28 +126,33 @@
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Assignments</span>
-                                <span class="stat-value">5</span>
+                                <span class="stat-value">4</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Avg Grade</span>
                                 <span class="stat-value">78%</span>
                             </div>
                         </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH10A')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH10A')">Grade</button>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 78%</span>
                         </div>
                     </div>
 
-                    <div class="class-card">
+                    <div class="class-card" onclick="viewClass('MATH11B')">
                         <div class="class-header">
-                            <h3>Mathematics Grade 11B</h3>
-                            <span class="class-code">MATH11B</span>
+                            <div class="class-icon">🧮</div>
+                            <div class="class-info">
+                                <h3>Mathematics Grade 11B</h3>
+                                <span class="class-code">MATH11B</span>
+                            </div>
                         </div>
                         <div class="class-stats">
                             <div class="stat-item">
                                 <span class="stat-label">Students</span>
-                                <span class="stat-value">28</span>
+                                <span class="stat-value">29</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Assignments</span>
@@ -95,21 +163,26 @@
                                 <span class="stat-value">82%</span>
                             </div>
                         </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH11B')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH11B')">Grade</button>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 82%</span>
                         </div>
                     </div>
 
-                    <div class="class-card">
+                    <div class="class-card" onclick="viewClass('MATH12A')">
                         <div class="class-header">
-                            <h3>Advanced Mathematics 12</h3>
-                            <span class="class-code">MATH12A</span>
+                            <div class="class-icon">🎯</div>
+                            <div class="class-info">
+                                <h3>Advanced Mathematics 12</h3>
+                                <span class="class-code">MATH12A</span>
+                            </div>
                         </div>
                         <div class="class-stats">
                             <div class="stat-item">
                                 <span class="stat-label">Students</span>
-                                <span class="stat-value">29</span>
+                                <span class="stat-value">22</span>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Assignments</span>
@@ -120,9 +193,11 @@
                                 <span class="stat-value">85%</span>
                             </div>
                         </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH12A')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH12A')">Grade</button>
+                        <div class="class-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <span class="progress-text">Class Progress: 85%</span>
                         </div>
                     </div>
                 </div>
@@ -220,6 +295,53 @@
                     </div>
                 </div> -->
 
+                <!-- Calendar -->
+                <div class="calendar-section">
+                    <h3>📅 Upcoming Events</h3>
+                    <div class="calendar-events">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Grade 8 Math Test</p>
+                                <small>9:00 AM - 10:30 AM</small>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">18</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Parent-Teacher Meeting</p>
+                                <small>2:00 PM - 4:00 PM</small>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">22</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Grade 12 Assignment Due</p>
+                                <small>All Day</small>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">25</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Math Department Meeting</p>
+                                <small>3:00 PM - 4:30 PM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Quick Tools -->
                 <div class="quick-tools">
                     <h3>Quick Tools</h3>
@@ -244,9 +366,9 @@
                             <span class="tool-icon">💬</span>
                             <span class="tool-name">Message</span>
                         </button>
-                        <button class="tool-btn" onclick="viewPayments()">
-                            <span class="tool-icon">💰</span>
-                            <span class="tool-name">Payments</span>
+                        <button class="tool-btn" onclick="viewCalendar()">
+                            <span class="tool-icon">📅</span>
+                            <span class="tool-name">Calendar</span>
                         </button>
                     </div>
                 </div>
