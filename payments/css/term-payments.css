@@ -151,7 +151,7 @@
 
 .term-status.paid {
     background: #d4edda;
-    color: #155724;
+    color: #239c3f;
 }
 
 .term-status.overdue {
@@ -317,7 +317,7 @@
 }
 
 .access-restrictions h2 {
-    color: #dc3545;
+    color: #c51e2f;
     margin: 0 0 1.5rem 0;
     font-size: 1.5rem;
     font-weight: 600;
@@ -335,12 +335,12 @@
 
 .restriction-icon {
     font-size: 2rem;
-    color: #dc3545;
+    color: #c51e2f;
     margin-top: 0.25rem;
 }
 
 .restriction-content h3 {
-    color: #dc3545;
+    color: #c51e2f;
     margin: 0 0 1rem 0;
     font-size: 1.2rem;
     font-weight: 600;
@@ -364,7 +364,7 @@
 }
 
 .status-overdue {
-    color: #dc3545;
+    color: #c51e2f;
     font-weight: 600;
 }
 
