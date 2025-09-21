@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academics</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/dashboard.css">
+  <link rel="stylesheet" href="../../css/academic.css">
+  <script src="../../js/script.js" defer></script>
+  <script src="../../js/academic-dashboard.js" defer></script>
+</head>
+<body data-role="academic">  
+
+  <header id="navbar"></header>
+  
+
+  <main class="academic-dashboard">
+
+    <div class="academic-header">
+      <div class="academic-info">
+        <h1>Academics</h1>
+        <div class="academic-stats">
+          <span class="stat">Subjects: 2</span>
+          <span class="stat">Hours Spent: 168</span>
+        </div>
+      </div>
+      <div class="academic-actions">
+        <button class="action-btn primary" onclick="createAssignment()">
+          Add New +
+        </button>
+      </div>
+    </div>
+
+
+    <div class="academic-content">
+      <section class="class-overview">
+        <div class="class-cards">
+
+          <div class="class-card">
+            <div class="class-header">
+              <h2>Courses</h2>
+              <span class="class-code">In Progress</span>
+            </div>
+            <div class="class-stats">
+              <div class="stat-item"><span class="stat-label">Enrolled</span><span class="stat-value"> 5</span></div>
+              <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value"> 2</span></div>
+            </div>
+            <div class="class-actions">
+              <button class="btn-small" onclick="viewCourses()">View</button>
+              <button class="btn-small secondary" onclick="manageCourses()">
+                <img src="../../images/edit.png" alt="Edit">
+              </button>
+            </div>
+          </div>
+
+          <!-- Reports -->
+          <div class="class-card">
+            <div class="class-header">
+              <h2>Reports</h2>
+              <span class="class-code">Latest</span>
+            </div>
+            <div class="class-stats">
+              <div class="stat-item"><span class="stat-label">Average Grade</span><span class="stat-value"> 82%</span></div>
+              <div class="stat-item"><span class="stat-label">Assignments Graded</span><span class="stat-value"> 18</span></div>
+            </div>
+            <div class="class-actions">
+              <button class="btn-small" onclick="viewReports()">View</button>
+              <button class="btn-small secondary" onclick="downloadReport()">
+                <img src="../../images/download.png" alt="Download">
+              </button>
+            </div>
+          </div>
+
+          <!-- Academic Goals -->
+          <div class="class-card">
+            <div class="class-header">
+              <h2>Academic Goals</h2>
+              <span class="class-code">Active</span>
+            </div>
+            <div class="class-stats">
+              <div class="stat-item"><span class="stat-label">Goals Set</span><span class="stat-value"> 3</span></div>
+              <div class="stat-item"><span class="stat-label">Completed</span><span class="stat-value"> 1</span></div>
+            </div>
+            <div class="class-actions">
+              <button class="btn-small" onclick="viewGoals()">View</button>
+              <button class="btn-small secondary" onclick="addGoal()">
+                <img src="../../images/add.png" alt="Add">
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    
+      <section id="academic-goals-report" class="academic-section">
+        <h2>Academic Goals Report</h2>
+        <div id="goals-report-content">
+        
+        </div>
+      </section>
+    
+      <section id="curriculum-section" class="academic-section">
+        <h2>Curriculum / Courses</h2>
+        <div id="curriculum-content">
+        
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
