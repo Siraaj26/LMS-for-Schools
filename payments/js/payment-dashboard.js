@@ -23,7 +23,7 @@ class PaymentDashboard {
         this.paymentHistory = [
             {
                 id: 'PAY001',
-                date: '2024-03-15',
+                date: '2025-03-15',
                 reference: 'ST2024001-2024Q1',
                 description: 'Term 1 Tuition Fee',
                 amount: 15000, // R150.00 in cents
@@ -33,7 +33,7 @@ class PaymentDashboard {
             },
             {
                 id: 'PAY002',
-                date: '2024-02-28',
+                date: '2025-02-28',
                 reference: 'ST2024001-2024Q1',
                 description: 'Activity Fee - Sports',
                 amount: 500, // R5.00 in cents
@@ -43,7 +43,7 @@ class PaymentDashboard {
             },
             {
                 id: 'PAY003',
-                date: '2024-01-15',
+                date: '2025-01-15',
                 reference: 'ST2024001-2023Q4',
                 description: 'Term 4 Tuition Fee',
                 amount: 15000, // R150.00 in cents
@@ -53,7 +53,7 @@ class PaymentDashboard {
             },
             {
                 id: 'PAY004',
-                date: '2024-03-20',
+                date: '2025-03-20',
                 reference: 'ST2024001-2024Q1',
                 description: 'Late Payment Fee',
                 amount: 100, // R1.00 in cents

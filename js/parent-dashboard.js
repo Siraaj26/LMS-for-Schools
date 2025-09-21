@@ -3,9 +3,10 @@
 
 class ParentDashboard {
     constructor() {
-        this.currentUser = null;
-        this.childData = null;
+        this.childId = 'ST2024001';
+        this.childName = 'Thabo Mthembu';
         this.paymentStatus = 'pending';
+        this.childData = {};
         
         this.init();
     }
@@ -29,46 +30,38 @@ class ParentDashboard {
     }
 
     loadChildData() {
-        if (!this.currentUser) return;
-
-        // Get child data from database
-        this.childData = window.authDB.getStudentByParentEmail(this.currentUser.email);
-        
-        if (!this.childData) {
-            console.log('No child found for parent');
-            return;
-        }
-
-        // Initialize default data if not present
-        if (!this.childData.academic_progress) {
-            this.childData.academic_progress = [
+        // Load child data from localStorage or API
+        // For demo purposes, we'll use sample data
+        this.childData = {
+            id: this.childId,
+            name: this.childName,
+            grade: 10,
+            school: 'Johannesburg High School',
+            attendance: 95,
+            academicProgress: [
                 { subject: 'Mathematics', grade: 78, trend: '+5%', teacher: 'Ms. Johnson' },
                 { subject: 'Science', grade: 82, trend: '+3%', teacher: 'Mr. Smith' },
                 { subject: 'English', grade: 75, trend: '+2%', teacher: 'Ms. Brown' },
                 { subject: 'Geography', grade: 80, trend: '+4%', teacher: 'Mr. Davis' }
-            ];
-        }
-
-        if (!this.childData.skills) {
-            this.childData.skills = [
+            ],
+            skills: [
                 { name: 'Problem Solving', level: 85, status: 'Advanced' },
                 { name: 'Communication', level: 70, status: 'Intermediate' },
                 { name: 'Teamwork', level: 90, status: 'Advanced' },
                 { name: 'Critical Thinking', level: 75, status: 'Intermediate' }
-            ];
-        }
-
-        if (!this.childData.activities) {
-            this.childData.activities = [
+            ],
+            recentActivities: [
                 { icon: '📝', text: 'Math assignment submitted', time: '2 hours ago' },
                 { icon: '🏆', text: 'Earned "Problem Solver" badge', time: '1 day ago' },
                 { icon: '📊', text: 'Progress report updated', time: '3 days ago' },
                 { icon: '💬', text: 'Teacher message received', time: '1 week ago' }
-            ];
-        }
-
-        // Set payment status
-        this.paymentStatus = this.childData.payment_status || 'pending';
+            ],
+            upcomingEvents: [
+                { date: '15', month: 'Mar', title: 'Parent-Teacher Meeting', time: '2:00 PM - 3:00 PM' },
+                { date: '20', month: 'Mar', title: 'Science Fair', time: '9:00 AM - 2:00 PM' },
+                { date: '25', month: 'Mar', title: 'Sports Day', time: '8:00 AM - 4:00 PM' }
+            ]
+        };
     }
 
     setupEventListeners() {
@@ -90,20 +83,41 @@ class ParentDashboard {
         this.updatePaymentStatus();
     }
 
+    switchChild(childId) {
+        this.currentChild = childId;
+        
+        // Update tab states
+        document.querySelectorAll('.child-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(`${childId}-tab`).classList.add('active');
+        
+        // Update dashboard with new child data
+        this.updateDashboard();
+    }
+
     updateChildSummary() {
+        const currentChildData = this.childData[this.currentChild];
         const childName = document.querySelector('.child-details h3');
         const childInfo = document.querySelector('.child-details p');
         const attendance = document.querySelector('.attendance');
+        const childAvatar = document.querySelector('.child-avatar img');
+        const childAvatarContainer = document.querySelector('.child-avatar');
 
-        if (childName) childName.textContent = this.childData.name;
-        if (childInfo) childInfo.textContent = `Grade ${this.childData.grade} • Student ID: ${this.childData.id}`;
-        if (attendance) attendance.textContent = `Attendance: ${this.childData.attendance}%`;
+        if (childName) childName.textContent = currentChildData.name;
+        if (childInfo) childInfo.textContent = `Grade ${currentChildData.grade} • Student ID: ${currentChildData.id}`;
+        if (attendance) attendance.textContent = `Attendance: ${currentChildData.attendance}%`;
+        if (childAvatar && currentChildData.avatar) childAvatar.src = currentChildData.avatar;
+        if (childAvatarContainer) {
+            childAvatarContainer.setAttribute('data-tooltip', `${currentChildData.name} - Grade ${currentChildData.grade} Student`);
+        }
     }
 
     updateAcademicProgress() {
         const subjectCards = document.querySelectorAll('.subject-card');
+        const currentChildData = this.childData[this.currentChild];
         
-        this.childData.academicProgress.forEach((subject, index) => {
+        currentChildData.academicProgress.forEach((subject, index) => {
             if (subjectCards[index]) {
                 const card = subjectCards[index];
                 
@@ -128,8 +142,9 @@ class ParentDashboard {
 
     updateSkillsDevelopment() {
         const skillCards = document.querySelectorAll('.skill-card');
+        const currentChildData = this.childData[this.currentChild];
         
-        this.childData.skills.forEach((skill, index) => {
+        currentChildData.skills.forEach((skill, index) => {
             if (skillCards[index]) {
                 const card = skillCards[index];
                 
@@ -156,7 +171,8 @@ class ParentDashboard {
         const activityList = document.querySelector('.activity-list');
         if (!activityList) return;
 
-        activityList.innerHTML = this.childData.recentActivities.map(activity => `
+        const currentChildData = this.childData[this.currentChild];
+        activityList.innerHTML = currentChildData.recentActivities.map(activity => `
             <div class="activity-item">
                 <div class="activity-icon">${activity.icon}</div>
                 <div class="activity-content">
@@ -189,6 +205,7 @@ class ParentDashboard {
         const paymentAmount = document.querySelector('.payment-amount');
         const paymentDue = document.querySelector('.payment-due');
         const paymentStatusBadge = document.querySelector('.payment-status-badge');
+        const currentChildData = this.children[this.currentChild];
 
         if (paymentAmount) {
             const amount = this.childData?.payment_amount || '156.00';
@@ -196,8 +213,8 @@ class ParentDashboard {
         }
         if (paymentDue) paymentDue.textContent = 'Due: 31 March 2024';
         if (paymentStatusBadge) {
-            paymentStatusBadge.textContent = this.paymentStatus.charAt(0).toUpperCase() + this.paymentStatus.slice(1);
-            paymentStatusBadge.className = `payment-status-badge ${this.paymentStatus}`;
+            paymentStatusBadge.textContent = currentChildData.paymentStatus.charAt(0).toUpperCase() + currentChildData.paymentStatus.slice(1);
+            paymentStatusBadge.className = `payment-status-badge ${currentChildData.paymentStatus}`;
         }
     }
 
@@ -317,6 +334,12 @@ function viewCalendar() {
 function viewAssignments() {
     if (window.parentDashboard) {
         window.parentDashboard.viewAssignments();
+    }
+}
+
+function switchChild(childId) {
+    if (window.parentDashboard) {
+        window.parentDashboard.switchChild(childId);
     }
 }
 
