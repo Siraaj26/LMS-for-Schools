@@ -231,10 +231,10 @@ class TeacherDashboard {
         alert('Communication - This would open the messaging interface');
     }
 
-    viewPayments() {
-        console.log('Viewing payment information');
-        // Navigate to payment dashboard
-        window.location.href = '../payments/html/payment_dashboard.html';
+    viewCalendar() {
+        console.log('Viewing calendar');
+        // In a real app, this would open a full calendar view
+        alert('Calendar - This would open the full calendar interface');
     }
 
     handleToolClick(toolName) {
@@ -254,8 +254,8 @@ class TeacherDashboard {
             case 'message':
                 this.communicate();
                 break;
-            case 'payments':
-                this.viewPayments();
+            case 'calendar':
+                this.viewCalendar();
                 break;
         }
     }
@@ -304,9 +304,9 @@ function communicate() {
     }
 }
 
-function viewPayments() {
+function viewCalendar() {
     if (window.teacherDashboard) {
-        window.teacherDashboard.viewPayments();
+        window.teacherDashboard.viewCalendar();
     }
 }
 

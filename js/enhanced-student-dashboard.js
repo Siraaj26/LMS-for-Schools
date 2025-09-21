@@ -1,369 +1,210 @@
 // Enhanced Student Dashboard JavaScript
-// Integrates payment system with student dashboard
-
-class EnhancedStudentDashboard {
+class StudentDashboard {
     constructor() {
-        this.paymentStatus = 'pending';
-        this.skills = [];
-        this.badges = [];
-        this.assignments = [];
+        this.studentData = {
+            name: 'Thabo Mthembu',
+            grade: 10,
+            studentId: 'ST2024001',
+            attendance: 95,
+            points: 1250,
+            badges: 8,
+            averageGrade: 78,
+            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face'
+        };
         
         this.init();
     }
 
     init() {
-        this.loadStudentData();
         this.setupEventListeners();
         this.updateDashboard();
-        this.checkPaymentStatus();
-    }
-
-    loadStudentData() {
-        // Load student data from localStorage or API
-        this.skills = [
-            { name: 'Problem Solving', level: 85, status: 'Advanced' },
-            { name: 'Communication', level: 70, status: 'Intermediate' },
-            { name: 'Teamwork', level: 90, status: 'Advanced' },
-            { name: 'Critical Thinking', level: 75, status: 'Intermediate' },
-            { name: 'Leadership', level: 60, status: 'Developing' }
-        ];
-
-        this.badges = [
-            { name: 'Problem Solver', icon: '🎯', earned: true, date: '2024-03-10' },
-            { name: 'Communicator', icon: '💬', earned: true, date: '2024-03-05' },
-            { name: 'Leader', icon: '🏆', earned: false, progress: 60 }
-        ];
-
-        this.assignments = [
-            { id: 'A001', title: 'Math Assignment', subject: 'Mathematics', dueDate: '2024-03-20', status: 'pending' },
-            { id: 'A002', title: 'Science Project', subject: 'Science', dueDate: '2024-03-22', status: 'in-progress' },
-            { id: 'A003', title: 'English Essay', subject: 'English', dueDate: '2024-03-25', status: 'pending' }
-        ];
     }
 
     setupEventListeners() {
+        // Todo list checkboxes
+        document.querySelectorAll('.todo-list input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                this.handleTodoToggle(e.target);
+            });
+        });
+
         // Card click handlers
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', (e) => {
-                const cardType = this.getCardType(card);
-                this.handleCardClick(cardType);
+                this.handleCardClick(e.currentTarget);
             });
         });
-
-        // Payment action handler
-        const paymentActionBtn = document.getElementById('payment-action-btn');
-        if (paymentActionBtn) {
-            paymentActionBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handlePaymentAction();
-            });
-        }
     }
 
     updateDashboard() {
-        this.updateSkillsProgress();
-        this.updateBadgeProgress();
-        this.updatePaymentWidget();
-        this.updateCardContent();
+        this.updateStudentInfo();
+        this.updateSmallCards();
+        this.updateBigCards();
     }
 
-    checkPaymentStatus() {
-        // Check payment status from localStorage or API
-        const paymentStatus = localStorage.getItem('paymentStatus') || 'pending';
-        this.paymentStatus = paymentStatus;
+    updateStudentInfo() {
+        const nameElement = document.querySelector('.student-info h1');
+        const infoElement = document.querySelector('.student-info p');
+        const avatarElement = document.querySelector('.student-avatar img');
+        const statsElements = document.querySelectorAll('.student-stats .stat');
+
+        if (nameElement) nameElement.textContent = `Welcome, ${this.studentData.name.split(' ')[0]}!`;
+        if (infoElement) infoElement.textContent = `Grade ${this.studentData.grade} • Student ID: ${this.studentData.studentId}`;
+        if (avatarElement) avatarElement.src = this.studentData.avatar;
+
+        if (statsElements.length >= 3) {
+            statsElements[0].textContent = `Attendance: ${this.studentData.attendance}%`;
+            statsElements[1].textContent = `Points: ${this.studentData.points.toLocaleString()}`;
+            statsElements[2].textContent = `Badges: ${this.studentData.badges}`;
+        }
+    }
+
+    updateSmallCards() {
+        const cards = document.querySelectorAll('.small-cards .card');
         
-        this.updatePaymentBanner();
-        this.updatePaymentWidget();
-    }
+        if (cards.length >= 3) {
+            // Announcements card
+            const announcementsContent = cards[0].querySelector('.card-content p');
+            if (announcementsContent) announcementsContent.textContent = '3 new messages';
 
-    updatePaymentBanner() {
-        const banner = document.getElementById('payment-status-banner');
-        const statusText = document.getElementById('payment-status-text');
-        const actionBtn = document.getElementById('payment-action-btn');
+            // Assignments card
+            const assignmentsContent = cards[1].querySelector('.card-content p');
+            if (assignmentsContent) assignmentsContent.textContent = '3 pending';
 
-        if (!banner) return;
-
-        // Show banner if payment is pending or overdue
-        if (this.paymentStatus === 'pending' || this.paymentStatus === 'overdue') {
-            banner.style.display = 'block';
-            banner.className = `payment-status-banner ${this.paymentStatus}`;
-
-            if (statusText) {
-                switch (this.paymentStatus) {
-                    case 'pending':
-                        statusText.textContent = 'Payment pending. Please complete your payment to continue.';
-                        break;
-                    case 'overdue':
-                        statusText.textContent = 'Payment overdue. Access restricted until payment is made.';
-                        break;
-                }
-            }
-
-            if (actionBtn) {
-                actionBtn.textContent = 'Make Payment';
-                actionBtn.onclick = () => this.openPaymentForm();
-            }
-        } else {
-            banner.style.display = 'none';
+            // Grades card
+            const gradesContent = cards[2].querySelector('.card-content p');
+            if (gradesContent) gradesContent.textContent = `Math: 78%`;
         }
     }
 
-    updatePaymentWidget() {
-        const paymentAmount = document.querySelector('.payment-amount');
-        const paymentDue = document.querySelector('.payment-due');
-        const paymentStatusBadge = document.querySelector('.payment-status-badge');
-        const paymentBtn = document.querySelector('.payment-btn-small');
-
-        if (paymentAmount) paymentAmount.textContent = 'R 156.00';
-        if (paymentDue) paymentDue.textContent = 'Due: 31 March 2024';
+    updateBigCards() {
+        const bigCards = document.querySelectorAll('.big-cards .card.big');
         
-        if (paymentStatusBadge) {
-            paymentStatusBadge.textContent = this.paymentStatus.charAt(0).toUpperCase() + this.paymentStatus.slice(1);
-            paymentStatusBadge.className = `payment-status-badge ${this.paymentStatus}`;
-        }
+        if (bigCards.length >= 4) {
+            // Academics card
+            const academicsContent = bigCards[0].querySelector('.card-content p');
+            const academicsProgress = bigCards[0].querySelector('.progress-fill');
+            if (academicsContent) academicsContent.textContent = `Average: ${this.studentData.averageGrade}%`;
+            if (academicsProgress) academicsProgress.style.width = `${this.studentData.averageGrade}%`;
 
-        if (paymentBtn) {
-            paymentBtn.onclick = () => this.openPaymentForm();
+            // Soft Skills card
+            const skillsContent = bigCards[1].querySelector('.card-content p');
+            if (skillsContent) skillsContent.textContent = '5 skills tracked';
+
+            // Extracurricular card
+            const extracurricularContent = bigCards[2].querySelector('.card-content p');
+            if (extracurricularContent) extracurricularContent.textContent = '3 activities';
+
+            // Community card
+            const communityContent = bigCards[3].querySelector('.card-content p');
+            if (communityContent) communityContent.textContent = 'Service hours: 25';
         }
     }
 
-    updateSkillsProgress() {
-        const skillItems = document.querySelectorAll('.skill-item');
+    handleTodoToggle(checkbox) {
+        const taskId = checkbox.id;
+        this.updatePoints(checkbox.checked ? 10 : -10);
+    }
+
+    handleCardClick(card) {
+        const cardText = card.textContent.toLowerCase();
         
-        skillItems.forEach((item, index) => {
-            if (this.skills[index]) {
-                const skill = this.skills[index];
-                const skillBar = item.querySelector('.skill-fill');
-                const skillValue = item.querySelector('.skill-value');
-                
-                if (skillBar) skillBar.style.width = `${skill.level}%`;
-                if (skillValue) skillValue.textContent = `${skill.level}%`;
-            }
-        });
-    }
-
-    updateBadgeProgress() {
-        const badgeItems = document.querySelectorAll('.badge-item');
-        
-        badgeItems.forEach((item, index) => {
-            if (this.badges[index]) {
-                const badge = this.badges[index];
-                const badgeIcon = item.querySelector('.badge-icon');
-                const badgeName = item.querySelector('.badge-name');
-                
-                if (badgeIcon) badgeIcon.textContent = badge.icon;
-                if (badgeName) badgeName.textContent = badge.name;
-                
-                // Update badge status
-                if (badge.earned) {
-                    item.classList.add('earned');
-                    item.classList.remove('next');
-                } else {
-                    item.classList.add('next');
-                    item.classList.remove('earned');
-                }
-            }
-        });
-    }
-
-    updateCardContent() {
-        // Update small cards
-        const announcementCard = document.querySelector('.small-cards .card:first-child');
-        if (announcementCard) {
-            const content = announcementCard.querySelector('.card-content');
-            if (content) {
-                content.innerHTML = `
-                    <h4>Announcements</h4>
-                    <p>3 new messages</p>
-                `;
-            }
-        }
-
-        const assignmentCard = document.querySelector('.small-cards .card:last-child');
-        if (assignmentCard) {
-            const content = assignmentCard.querySelector('.card-content');
-            if (content) {
-                const pendingCount = this.assignments.filter(a => a.status === 'pending').length;
-                content.innerHTML = `
-                    <h4>Assignments Due</h4>
-                    <p>${pendingCount} pending</p>
-                `;
-            }
-        }
-
-        // Update big cards with progress
-        this.updateBigCard('academics', 'Average: 78%', 78);
-        this.updateBigCard('soft-skills', '5 skills tracked', null, ['Problem Solving', 'Communication']);
-        this.updateBigCard('extracurricular', '3 activities', null, null, ['Football', 'Debate']);
-        this.updateBigCard('community', 'Service hours: 25', null, null, null, ['Volunteer', 'Mentor']);
-    }
-
-    updateBigCard(type, description, progress, skills, activities, community) {
-        const card = document.querySelector(`.big-cards .card.big[onclick*="${type}"]`);
-        if (!card) return;
-
-        const content = card.querySelector('.card-content');
-        if (!content) return;
-
-        let html = `<h3>${this.getCardTitle(type)}</h3><p>${description}</p>`;
-        
-        if (progress !== null) {
-            html += `<div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>`;
-        }
-        
-        if (skills) {
-            html += `<div class="skills-preview">${skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('')}</div>`;
-        }
-        
-        if (activities) {
-            html += `<div class="activity-preview">${activities.map(activity => `<span class="activity-item">${activity}</span>`).join('')}</div>`;
-        }
-        
-        if (community) {
-            html += `<div class="community-preview">${community.map(item => `<span class="community-item">${item}</span>`).join('')}</div>`;
-        }
-
-        content.innerHTML = html;
-    }
-
-    getCardTitle(type) {
-        const titles = {
-            'academics': 'Academics',
-            'soft-skills': 'Soft Skills',
-            'extracurricular': 'Extracurricular',
-            'community': 'Community'
-        };
-        return titles[type] || type;
-    }
-
-    getCardType(card) {
-        if (card.classList.contains('big')) {
-            const onclick = card.getAttribute('onclick');
-            if (onclick.includes('viewAcademics')) return 'academics';
-            if (onclick.includes('viewSoftSkills')) return 'soft-skills';
-            if (onclick.includes('viewExtracurricular')) return 'extracurricular';
-            if (onclick.includes('viewCommunity')) return 'community';
-        } else {
-            if (card.onclick && card.onclick.toString().includes('viewAnnouncements')) return 'announcements';
-            if (card.onclick && card.onclick.toString().includes('viewAssignments')) return 'assignments';
-        }
-        return 'unknown';
-    }
-
-    handleCardClick(cardType) {
-        switch (cardType) {
-            case 'academics':
-                this.viewAcademics();
-                break;
-            case 'soft-skills':
-                this.viewSoftSkills();
-                break;
-            case 'extracurricular':
-                this.viewExtracurricular();
-                break;
-            case 'community':
-                this.viewCommunity();
-                break;
-            case 'announcements':
-                this.viewAnnouncements();
-                break;
-            case 'assignments':
-                this.viewAssignments();
-                break;
+        if (cardText.includes('announcements')) {
+            this.viewAnnouncements();
+        } else if (cardText.includes('assignments')) {
+            this.viewAssignments();
+        } else if (cardText.includes('grades')) {
+            this.viewGrades();
+        } else if (cardText.includes('academics')) {
+            this.viewAcademics();
+        } else if (cardText.includes('soft skills')) {
+            this.viewSoftSkills();
+        } else if (cardText.includes('extracurricular')) {
+            this.viewExtracurricular();
+        } else if (cardText.includes('community')) {
+            this.viewCommunity();
         }
     }
 
-    handlePaymentAction() {
-        this.openPaymentForm();
-    }
-
-    openPaymentForm() {
-        window.location.href = '../payments/html/payment_form.html';
+    updatePoints(points) {
+        this.studentData.points += points;
+        this.updateStudentInfo();
     }
 
     // Navigation functions
-    viewAcademics() {
-        console.log('Viewing academics');
-        alert('Academics - This would show detailed academic progress and grades');
-    }
-
-    viewSoftSkills() {
-        console.log('Viewing soft skills');
-        alert('Soft Skills - This would show detailed skills tracking and development');
-    }
-
-    viewExtracurricular() {
-        console.log('Viewing extracurricular activities');
-        alert('Extracurricular - This would show activities and achievements');
-    }
-
-    viewCommunity() {
-        console.log('Viewing community involvement');
-        alert('Community - This would show community service and volunteer work');
-    }
-
     viewAnnouncements() {
-        console.log('Viewing announcements');
-        alert('Announcements - This would show school announcements and messages');
+        alert('📢 Announcements:\n\n• School assembly tomorrow at 8:00 AM\n• Science fair registration opens next week\n• New library hours: 7:00 AM - 6:00 PM');
     }
 
     viewAssignments() {
-        console.log('Viewing assignments');
-        alert('Assignments - This would show current assignments and due dates');
+        alert('📝 Assignments Due:\n\n• Math: Quadratic Equations (Due: March 16)\n• English: Essay on Climate Change (Due: March 18)\n• Science: Lab Report (Due: March 20)');
+    }
+
+    viewGrades() {
+        alert('📊 Recent Grades:\n\n• Mathematics: 78% (Test 3)\n• Science: 82% (Lab Report)\n• English: 75% (Essay)\n• Geography: 80% (Project)');
+    }
+
+    viewAcademics() {
+        alert('🎓 Academic Progress:\n\n• Overall Average: 78%\n• Trending: +3% this term\n• Strongest Subject: Science (82%)\n• Needs Improvement: English (75%)');
+    }
+
+    viewSoftSkills() {
+        alert('🗣️ Soft Skills Development:\n\n• Problem Solving: Advanced (85%)\n• Communication: Intermediate (70%)\n• Teamwork: Advanced (90%)\n• Critical Thinking: Intermediate (75%)');
+    }
+
+    viewExtracurricular() {
+        alert('⚽ Extracurricular Activities:\n\n• Football Team (Captain)\n• Debate Club (Active member)\n• Student Council (Representative)\n• Community Service (25 hours)');
+    }
+
+    viewCommunity() {
+        alert('🌍 Community Involvement:\n\n• Volunteer at local food bank\n• Mentor younger students\n• Environmental club member\n• Total service hours: 25');
     }
 }
 
-// Global functions for HTML onclick handlers
-function handlePaymentAction() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.handlePaymentAction();
-    }
-}
-
-function openPaymentForm() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.openPaymentForm();
-    }
-}
-
-function viewAcademics() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewAcademics();
-    }
-}
-
-function viewSoftSkills() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewSoftSkills();
-    }
-}
-
-function viewExtracurricular() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewExtracurricular();
-    }
-}
-
-function viewCommunity() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewCommunity();
-    }
-}
-
+// Global functions for onclick handlers
 function viewAnnouncements() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewAnnouncements();
+    if (window.studentDashboard) {
+        window.studentDashboard.viewAnnouncements();
     }
 }
 
 function viewAssignments() {
-    if (window.enhancedStudentDashboard) {
-        window.enhancedStudentDashboard.viewAssignments();
+    if (window.studentDashboard) {
+        window.studentDashboard.viewAssignments();
     }
 }
 
-// Initialize enhanced student dashboard when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.enhancedStudentDashboard = new EnhancedStudentDashboard();
-});
+function viewGrades() {
+    if (window.studentDashboard) {
+        window.studentDashboard.viewGrades();
+    }
+}
 
+function viewAcademics() {
+    if (window.studentDashboard) {
+        window.studentDashboard.viewAcademics();
+    }
+}
+
+function viewSoftSkills() {
+    if (window.studentDashboard) {
+        window.studentDashboard.viewSoftSkills();
+    }
+}
+
+function viewExtracurricular() {
+    if (window.studentDashboard) {
+        window.studentDashboard.viewExtracurricular();
+    }
+}
+
+function viewCommunity() {
+    if (window.studentDashboard) {
+        window.studentDashboard.viewCommunity();
+    }
+}
+
+// Initialize dashboard when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.studentDashboard = new StudentDashboard();
+});

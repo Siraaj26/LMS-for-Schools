@@ -1,23 +1,25 @@
 /* Parent Dashboard CSS */
 
 .parent-dashboard {
-    background: #f8f9fa;
+    background: #e9ecee;
     min-height: 100vh;
-    padding: 2rem;
+    padding: 2.5rem 4vw;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .parent-header {
     background: linear-gradient(135deg, #50778f 0%, #6b8fa3 100%);
     color: white;
-    border-radius: 12px;
+    border-radius: 18px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(80, 119, 143, 0.3);
+    box-shadow: 0 4px 12px rgba(80, 119, 143, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    border: 1.5px solid #a3cae9;
 }
 
 .parent-info {
@@ -115,17 +117,66 @@
 
 .child-overview h2 {
     color: #50778f;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-.child-summary {
+.child-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.child-tab {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #a3cae9;
     background: white;
-    border-radius: 12px;
+    color: #50778f;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.child-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(80, 119, 143, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.child-tab:hover::before {
+    left: 100%;
+}
+
+.child-tab:hover {
+    background: #f7fafd;
+    border-color: #50778f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(80, 119, 143, 0.15);
+}
+
+.child-tab.active {
+    background: #50778f;
+    color: white;
+    border-color: #50778f;
+    box-shadow: 0 2px 8px rgba(80, 119, 143, 0.3);
+}
+
+.child-summary {
+    background: #f7fafd;
+    border-radius: 18px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    box-shadow: none;
+    border: 1.5px solid #a3cae9;
     margin-bottom: 2rem;
     display: flex;
     justify-content: space-between;
@@ -145,13 +196,68 @@
     height: 60px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #50778f;
+    border: 3px solid #50778f;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(80, 119, 143, 0.2);
+}
+
+.child-avatar:hover {
+    transform: scale(1.1);
+    border-color: #3d5a6b;
+    box-shadow: 0 4px 12px rgba(80, 119, 143, 0.3);
 }
 
 .child-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: brightness(1.1) contrast(1.1);
+    transition: all 0.3s ease;
+}
+
+.child-avatar:hover img {
+    filter: brightness(1.2) contrast(1.2);
+}
+
+.child-avatar::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2c3e50;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.child-avatar::before {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-bottom-color: #2c3e50;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.child-avatar:hover::after,
+.child-avatar:hover::before {
+    opacity: 1;
+    visibility: visible;
 }
 
 .child-details h3 {
@@ -191,51 +297,67 @@
     font-size: 0.9rem;
 }
 
-.child-actions {
+.child-progress {
     display: flex;
-    gap: 0.75rem;
-}
-
-.btn-small {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
-.btn-small:not(.secondary) {
-    background: #50778f;
-    color: white;
+.progress-circle-small {
+    --progress: 78;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #50778f calc(var(--progress) * 1%),
+        #a3cae9 0 100%
+    );
+    position: relative;
+    display: grid;
+    place-items: center;
 }
 
-.btn-small:not(.secondary):hover {
-    background: #3d5a6b;
+.progress-emoji {
+    font-size: 1.5rem;
+    z-index: 2;
 }
 
-.btn-small.secondary {
-    background: #f8f9fa;
+.progress-circle-small::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 48px;
+    height: 48px;
+    background: #f7fafd;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.progress-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.progress-label {
+    color: #6c757d;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.progress-value {
     color: #50778f;
-    border: 1px solid #50778f;
-}
-
-.btn-small.secondary:hover {
-    background: #50778f;
-    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
 .academic-progress {
-    background: white;
-    border-radius: 12px;
+    background: #f7fafd;
+    border-radius: 18px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    box-shadow: none;
+    border: 1.5px solid #a3cae9;
     margin-bottom: 2rem;
 }
 
@@ -253,16 +375,18 @@
 }
 
 .subject-card {
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: white;
+    border-radius: 12px;
     padding: 1rem;
-    border: 1px solid #e9ecef;
+    border: 1px solid #a3cae9;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .subject-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(80, 119, 143, 0.15);
+    border-color: #50778f;
 }
 
 .subject-header {
@@ -302,11 +426,11 @@
 }
 
 .skills-development {
-    background: white;
-    border-radius: 12px;
+    background: #f7fafd;
+    border-radius: 18px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    box-shadow: none;
+    border: 1.5px solid #a3cae9;
     margin-bottom: 2rem;
 }
 
@@ -324,17 +448,19 @@
 }
 
 .skill-card {
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: white;
+    border-radius: 12px;
     padding: 1rem;
-    border: 1px solid #e9ecef;
+    border: 1px solid #a3cae9;
     text-align: center;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .skill-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(80, 119, 143, 0.15);
+    border-color: #50778f;
 }
 
 .skill-icon {
@@ -392,11 +518,11 @@
 .recent-activities,
 .upcoming-events,
 .quick-actions {
-    background: white;
-    border-radius: 12px;
+    background: #f7fafd;
+    border-radius: 18px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e9ecef;
+    box-shadow: none;
+    border: 1.5px solid #a3cae9;
 }
 
 .payment-status h3,
@@ -410,10 +536,10 @@
 }
 
 .payment-card {
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: white;
+    border-radius: 12px;
     padding: 1rem;
-    border: 1px solid #e9ecef;
+    border: 1px solid #a3cae9;
 }
 
 .payment-header {
@@ -567,9 +693,9 @@
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
+    background: white;
+    border: 1px solid #a3cae9;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
@@ -580,6 +706,7 @@
     background: #50778f;
     color: white;
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(80, 119, 143, 0.15);
 }
 
 .btn-icon {
