@@ -1,23 +1,110 @@
 // Enhanced Student Dashboard JavaScript
 class StudentDashboard {
     constructor() {
-        this.studentData = {
-            name: 'Thabo Mthembu',
-            grade: 10,
-            studentId: 'ST2024001',
-            attendance: 95,
-            points: 1250,
-            badges: 8,
-            averageGrade: 78,
-            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face'
-        };
-        
+        this.studentData = null;
+        this.gradesData = null;
         this.init();
     }
 
-    init() {
+    async init() {
+        this.setPaymentsLoading(true);
+        // Get logged-in user's email (set this in localStorage on login)
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            this.setPaymentsError('No user email found. Please sign in again.');
+            this.setPaymentsLoading(false);
+            return;
+        }
+        // Fetch student data
+        const { data: student, error: studentError } = await supabaseClient
+            .from('student_login')
+            .select('*')
+            .eq('email', userEmail)
+            .single();
+        if (studentError || !student) {
+            console.error('Error fetching student:', studentError);
+            this.setPaymentsError('Could not load student data.');
+            this.setPaymentsLoading(false);
+            return;
+        }
+        this.studentData = student;
+        // Fetch grades data
+        const { data: grades, error: gradesError } = await supabaseClient
+            .from('grades')
+            .select('*')
+            .eq('student_id', student.id);
+        if (gradesError) {
+            console.error('Error fetching grades:', gradesError);
+            this.gradesData = [];
+        } else {
+            this.gradesData = grades;
+        }
+        // Fetch payments data
+        let payments = [];
+        let paymentsError = null;
+        try {
+            const result = await supabaseClient
+                .from('payments')
+                .select('*')
+                .eq('student_id', student.id);
+            payments = result.data;
+            paymentsError = result.error;
+        } catch (err) {
+            paymentsError = err;
+        }
+        if (paymentsError) {
+            console.error('Error fetching payments:', paymentsError);
+            this.paymentsData = [];
+            this.setPaymentsError('Could not load payment data. Please try again later.');
+        } else {
+            this.paymentsData = payments;
+            this.setPaymentsError('');
+        }
+        this.setPaymentsLoading(false);
         this.setupEventListeners();
         this.updateDashboard();
+        this.updatePaymentsTable();
+    }
+
+    setPaymentsLoading(isLoading) {
+        const spinner = document.getElementById('payments-loading');
+        const table = document.getElementById('payments-table');
+        if (spinner) spinner.style.display = isLoading ? 'flex' : 'none';
+        if (table) table.style.opacity = isLoading ? 0.5 : 1;
+    }
+
+    setPaymentsError(message) {
+        const errorDiv = document.getElementById('payments-error');
+        if (!errorDiv) return;
+        if (message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        } else {
+            errorDiv.textContent = '';
+            errorDiv.style.display = 'none';
+        }
+    }
+
+    updatePaymentsTable() {
+        const table = document.getElementById('payments-table');
+        if (!table || !this.paymentsData) return;
+        const tbody = table.querySelector('tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        if (this.paymentsData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">No payment records found.</td></tr>';
+            return;
+        }
+        this.paymentsData.forEach(payment => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${payment.term}</td>
+                <td>R ${payment.amount}</td>
+                <td>${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}</td>
+                <td>${payment.payment_date ? payment.payment_date : '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
     }
 
     setupEventListeners() {
@@ -43,25 +130,26 @@ class StudentDashboard {
     }
 
     updateStudentInfo() {
+        if (!this.studentData) return;
         const nameElement = document.querySelector('.student-info h1');
         const infoElement = document.querySelector('.student-info p');
         const avatarElement = document.querySelector('.student-avatar img');
         const statsElements = document.querySelectorAll('.student-stats .stat');
 
-        if (nameElement) nameElement.textContent = `Welcome, ${this.studentData.name.split(' ')[0]}!`;
-        if (infoElement) infoElement.textContent = `Grade ${this.studentData.grade} • Student ID: ${this.studentData.studentId}`;
-        if (avatarElement) avatarElement.src = this.studentData.avatar;
+        if (nameElement) nameElement.textContent = `Welcome, ${this.studentData.full_name.split(' ')[0]}!`;
+        if (infoElement) infoElement.textContent = `Grade ${this.studentData.current_grade || ''} • Student ID: ${this.studentData.id}`;
+        if (avatarElement) avatarElement.src = this.studentData.avatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face';
 
+        // Example stats: attendance, points, badges (customize as needed)
         if (statsElements.length >= 3) {
-            statsElements[0].textContent = `Attendance: ${this.studentData.attendance}%`;
-            statsElements[1].textContent = `Points: ${this.studentData.points.toLocaleString()}`;
-            statsElements[2].textContent = `Badges: ${this.studentData.badges}`;
+            statsElements[0].textContent = `Attendance: 95%`;
+            statsElements[1].textContent = `Points: 0`;
+            statsElements[2].textContent = `Badges: 0`;
         }
     }
 
     updateSmallCards() {
         const cards = document.querySelectorAll('.small-cards .card');
-        
         if (cards.length >= 3) {
             // Announcements card
             const announcementsContent = cards[0].querySelector('.card-content p');
@@ -71,21 +159,33 @@ class StudentDashboard {
             const assignmentsContent = cards[1].querySelector('.card-content p');
             if (assignmentsContent) assignmentsContent.textContent = '3 pending';
 
-            // Grades card
+            // Grades card (show actual grade if available)
             const gradesContent = cards[2].querySelector('.card-content p');
-            if (gradesContent) gradesContent.textContent = `Math: 78%`;
+            let mathGrade = '';
+            if (this.gradesData && this.gradesData.length > 0) {
+                mathGrade = this.gradesData[0].maths ? `${this.gradesData[0].maths}%` : 'N/A';
+            } else {
+                mathGrade = 'N/A';
+            }
+            if (gradesContent) gradesContent.textContent = `Math: ${mathGrade}`;
         }
     }
 
     updateBigCards() {
         const bigCards = document.querySelectorAll('.big-cards .card.big');
-        
         if (bigCards.length >= 4) {
             // Academics card
             const academicsContent = bigCards[0].querySelector('.card-content p');
             const academicsProgress = bigCards[0].querySelector('.progress-fill');
-            if (academicsContent) academicsContent.textContent = `Average: ${this.studentData.averageGrade}%`;
-            if (academicsProgress) academicsProgress.style.width = `${this.studentData.averageGrade}%`;
+            let avg = 0;
+            if (this.gradesData && this.gradesData.length > 0) {
+                const g = this.gradesData[0];
+                // Calculate average from available subjects
+                const gradesArr = [g.maths, g.english].filter(x => typeof x === 'number');
+                avg = gradesArr.length ? (gradesArr.reduce((a, b) => a + b, 0) / gradesArr.length) : 0;
+            }
+            if (academicsContent) academicsContent.textContent = `Average: ${avg ? avg.toFixed(1) : 'N/A'}%`;
+            if (academicsProgress) academicsProgress.style.width = `${avg}%`;
 
             // Soft Skills card
             const skillsContent = bigCards[1].querySelector('.card-content p');

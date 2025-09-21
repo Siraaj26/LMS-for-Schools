@@ -23,7 +23,8 @@ document.getElementById('signinForm').addEventListener('submit', async function(
         
         const user = authResult.user;
         
-        localStorage.setItem('currentUserEmail', user.email);
+    localStorage.setItem('currentUserEmail', user.email);
+    localStorage.setItem('userEmail', user.email);
         
         // Redirect based on user type
         if (user.user_type === 'student') {
