@@ -9,10 +9,20 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// Initialize Gemini AI with error handling
+let genAI;
+try {
+    if (!process.env.GEMINI_API_KEY) {
+        throw new Error('GEMINI_API_KEY environment variable is required');
+    }
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    console.log('✅ Gemini AI initialized successfully');
+} catch (error) {
+    console.error('❌ Failed to initialize Gemini AI:', error.message);
+    process.exit(1);
+}
 
-// Middleware
+// Middleware with improved security
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -30,16 +40,18 @@ app.use(cors({
     credentials: true
 }));
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' })); // Reduced from 10mb to prevent memory issues
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-// Rate limiting
+// More aggressive rate limiting to prevent API quota exhaustion
 const chatLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
+    windowMs: 60 * 1000, // 1 minute
+    max: 10, // Reduced to 10 requests per minute per IP
     message: {
-        error: 'Too many chat requests, please try again later.'
-    }
+        error: 'Too many chat requests. Please wait a moment before trying again.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 
 // Serve static files
@@ -71,7 +83,10 @@ const languagePrompts = {
     es: "Reply in Spanish (Español)",
     fr: "Reply in French (Français)",
     de: "Reply in German (Deutsch)",
-    pt: "Reply in Portuguese (Português)"
+    pt: "Reply in Portuguese (Português)",
+    xh: "You MUST reply ONLY in Xhosa (isiXhosa). Do not use English or any other language in your response. Use proper Xhosa grammar, vocabulary, and sentence structure. If you don't know a specific Xhosa word, use simple Xhosa alternatives that students can understand. Your entire response must be in isiXhosa.",
+    zu: "You MUST reply ONLY in Zulu (isiZulu). Do not use English or any other language in your response. Use proper Zulu grammar, vocabulary, and sentence structure. If you don't know a specific Zulu word, use simple Zulu alternatives that students can understand. Your entire response must be in isiZulu.",
+    af: "You MUST reply ONLY in Afrikaans. Do not use English or any other language in your response. Use proper Afrikaans grammar, vocabulary, and sentence structure appropriate for South African students. Your entire response must be in Afrikaans."
 };
 
 // System prompt template
@@ -112,99 +127,140 @@ RESPONSE STYLE:
 - End with encouragement or a follow-up question to keep engagement going`;
 }
 
-// Chat endpoint
+// Chat endpoint with improved error handling and retry logic
 app.post('/api/chat', chatLimiter, async (req, res) => {
-    try {
-        const { message, persona = 'mentor', language = 'en', slang = false } = req.body;
+    let retryCount = 0;
+    const maxRetries = 2;
 
-        // Validate input
-        if (!message || typeof message !== 'string' || message.trim().length === 0) {
-            return res.status(400).json({
-                error: 'Message is required and must be a non-empty string'
+    const attemptChat = async () => {
+        try {
+            const { message, persona = 'mentor', language = 'en', slang = false } = req.body;
+
+            // Validate input
+            if (!message || typeof message !== 'string' || message.trim().length === 0) {
+                return res.status(400).json({
+                    error: 'Message is required and must be a non-empty string'
+                });
+            }
+
+            if (message.length > 500) {
+                return res.status(400).json({
+                    error: 'Message too long. Please keep it under 500 characters.'
+                });
+            }
+
+            // Validate persona
+            if (!personaPrompts[persona]) {
+                return res.status(400).json({
+                    error: 'Invalid persona. Must be: mentor, funny, calm, or energetic'
+                });
+            }
+
+            // Validate language
+            if (!languagePrompts[language]) {
+                return res.status(400).json({
+                    error: 'Invalid language. Must be: en, es, fr, de, pt, xh, zu, or af'
+                });
+            }
+
+            // Build system prompt
+            const systemPrompt = buildSystemPrompt(persona, language, slang);
+
+            // Get Gemini model with timeout
+            const model = genAI.getGenerativeModel({
+                model: "gemini-1.5-flash",
+                generationConfig: {
+                    temperature: 0.7,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 150, // Reduced to prevent timeouts
+                },
+            });
+
+            // Create full prompt
+            const fullPrompt = `${systemPrompt}\n\nStudent's message: "${message.trim()}"`;
+
+            // Generate response with timeout
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout')), 15000); // 15 second timeout
+            });
+
+            const result = await Promise.race([
+                model.generateContent(fullPrompt),
+                timeoutPromise
+            ]);
+
+            const response = await result.response;
+            let reply = response.text().trim();
+
+            // Clean up response
+            if (reply.startsWith('"') && reply.endsWith('"')) {
+                reply = reply.slice(1, -1);
+            }
+
+            // Ensure response isn't empty
+            if (!reply) {
+                const fallbackMessages = {
+                    en: "I'm here to help! Could you tell me more about what you'd like to know?",
+                    es: "¡Estoy aquí para ayudar! ¿Podrías contarme más sobre lo que te gustaría saber?",
+                    fr: "Je suis là pour vous aider! Pouvez-vous me dire plus sur ce que vous aimeriez savoir?",
+                    de: "Ich bin hier, um zu helfen! Können Sie mir mehr darüber erzählen, was Sie wissen möchten?",
+                    pt: "Estou aqui para ajudar! Você poderia me contar mais sobre o que gostaria de saber?",
+                    xh: "Ndilapha ukunceda! Ungandixelela ngakumbi ngento ofuna ukuyazi?",
+                    zu: "Ngilapha ukusiza! Ungangitshela kabanzi ngalokho ofuna ukukwazi?",
+                    af: "Ek is hier om te help! Kan jy my meer vertel oor wat jy wil weet?"
+                };
+                reply = fallbackMessages[language] || fallbackMessages.en;
+            }
+
+            // Log for monitoring
+            console.log(`✅ Chat success - Persona: ${persona}, Language: ${language}, Response: ${reply.length} chars`);
+
+            res.json({ reply });
+
+        } catch (error) {
+            console.error(`❌ Chat attempt ${retryCount + 1} failed:`, error.message);
+
+            // Retry logic for certain errors
+            if (retryCount < maxRetries && (
+                error.message?.includes('timeout') ||
+                error.message?.includes('network') ||
+                error.message?.includes('ECONNRESET') ||
+                error.message?.includes('503')
+            )) {
+                retryCount++;
+                console.log(`🔄 Retrying chat request (${retryCount}/${maxRetries})...`);
+                await new Promise(resolve => setTimeout(resolve, 1000 * retryCount)); // Exponential backoff
+                return attemptChat();
+            }
+
+            // Handle specific errors
+            if (error.message?.includes('API key')) {
+                return res.status(500).json({
+                    error: 'AI service configuration error. Please contact support.'
+                });
+            }
+
+            if (error.message?.includes('quota') || error.message?.includes('429')) {
+                return res.status(503).json({
+                    error: 'AI service is busy. Please try again in a few moments.'
+                });
+            }
+
+            if (error.message?.includes('timeout')) {
+                return res.status(504).json({
+                    error: 'Request timeout. Please try a shorter message.'
+                });
+            }
+
+            // Generic error response
+            res.status(500).json({
+                error: 'Something went wrong. Please try again in a moment.'
             });
         }
+    };
 
-        if (message.length > 500) {
-            return res.status(400).json({
-                error: 'Message too long. Please keep it under 500 characters.'
-            });
-        }
-
-        // Validate persona
-        if (!personaPrompts[persona]) {
-            return res.status(400).json({
-                error: 'Invalid persona. Must be: mentor, funny, calm, or energetic'
-            });
-        }
-
-        // Validate language
-        if (!languagePrompts[language]) {
-            return res.status(400).json({
-                error: 'Invalid language. Must be: en, es, fr, de, or pt'
-            });
-        }
-
-        // Build system prompt
-        const systemPrompt = buildSystemPrompt(persona, language, slang);
-
-        // Get Gemini model
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
-            generationConfig: {
-                temperature: 0.7,
-                topK: 40,
-                topP: 0.95,
-                maxOutputTokens: 200,
-            },
-        });
-
-        // Create full prompt
-        const fullPrompt = `${systemPrompt}\n\nStudent's message: "${message.trim()}"`;
-
-        // Generate response
-        const result = await model.generateContent(fullPrompt);
-        const response = await result.response;
-        let reply = response.text().trim();
-
-        // Clean up response (remove quotes if they wrap the entire response)
-        if (reply.startsWith('"') && reply.endsWith('"')) {
-            reply = reply.slice(1, -1);
-        }
-
-        // Ensure response isn't empty
-        if (!reply) {
-            reply = language === 'en'
-                ? "I'm here to help! Could you tell me more about what you'd like to know?"
-                : "¡Estoy aquí para ayudar! ¿Podrías contarme más sobre lo que te gustaría saber?";
-        }
-
-        // Log for monitoring (remove in production)
-        console.log(`Chat request - Persona: ${persona}, Language: ${language}, Slang: ${slang}`);
-        console.log(`Message length: ${message.length}, Response length: ${reply.length}`);
-
-        res.json({ reply });
-
-    } catch (error) {
-        console.error('Chat API error:', error);
-
-        // Handle specific Gemini API errors
-        if (error.message?.includes('API key')) {
-            return res.status(500).json({
-                error: 'AI service configuration error. Please contact support.'
-            });
-        }
-
-        if (error.message?.includes('quota')) {
-            return res.status(503).json({
-                error: 'AI service temporarily unavailable. Please try again later.'
-            });
-        }
-
-        // Generic error response
-        res.status(500).json({
-            error: 'Something went wrong. Please try again in a moment.'
-        });
-    }
+    await attemptChat();
 });
 
 // Health check endpoint
@@ -226,12 +282,16 @@ app.get('/askme', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'askme.html'));
 });
 
-// Error handling middleware
+// Enhanced error handling middleware
 app.use((error, req, res, next) => {
-    console.error('Unhandled error:', error);
-    res.status(500).json({
-        error: 'Internal server error'
-    });
+    console.error('🚨 Unhandled error:', error);
+
+    // Don't send error details in production
+    const errorResponse = process.env.NODE_ENV === 'production'
+        ? { error: 'Internal server error' }
+        : { error: error.message, stack: error.stack };
+
+    res.status(500).json(errorResponse);
 });
 
 // 404 handler
@@ -241,25 +301,54 @@ app.use((req, res) => {
     });
 });
 
-// Start server
-app.listen(PORT, () => {
+// Enhanced server startup with error handling
+const server = app.listen(PORT, () => {
     console.log(`🚀 AskMe! Server running on port ${PORT}`);
     console.log(`📱 Access the app at: http://localhost:${PORT}`);
     console.log(`🤖 AskMe! chatbot at: http://localhost:${PORT}/askme`);
+    console.log(`🔑 API Key status: ${process.env.GEMINI_API_KEY ? '✅ Configured' : '❌ Missing'}`);
+});
 
-    if (!process.env.GEMINI_API_KEY) {
-        console.warn('⚠️  Warning: GEMINI_API_KEY not found in environment variables');
-        console.log('   Please create a .env file with your Gemini API key');
+// Handle server errors
+server.on('error', (error) => {
+    console.error('🚨 Server error:', error);
+    if (error.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use. Try a different port.`);
+        process.exit(1);
     }
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-    console.log('🔄 SIGTERM received. Shutting down gracefully...');
-    process.exit(0);
+// Graceful shutdown with cleanup
+const gracefulShutdown = (signal) => {
+    console.log(`🔄 ${signal} received. Shutting down gracefully...`);
+
+    server.close((err) => {
+        if (err) {
+            console.error('❌ Error during server shutdown:', err);
+            process.exit(1);
+        }
+
+        console.log('✅ Server closed successfully');
+        process.exit(0);
+    });
+
+    // Force shutdown after 10 seconds
+    setTimeout(() => {
+        console.error('❌ Forced shutdown due to timeout');
+        process.exit(1);
+    }, 10000);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('🚨 Uncaught Exception:', error);
+    gracefulShutdown('UNCAUGHT_EXCEPTION');
 });
 
-process.on('SIGINT', () => {
-    console.log('🔄 SIGINT received. Shutting down gracefully...');
-    process.exit(0);
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🚨 Unhandled Rejection at:', promise, 'reason:', reason);
+    gracefulShutdown('UNHANDLED_REJECTION');
 });

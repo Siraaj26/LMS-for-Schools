@@ -3,12 +3,6 @@ class AskMeBot {
     constructor() {
         this.currentPersona = 'mentor';
         this.currentLanguage = 'en';
-        this.slangMode = false;
-        this.voiceEnabled = true;
-        this.voiceSpeed = 1.0;
-        this.isRecording = false;
-        this.recognition = null;
-        this.synthesis = window.speechSynthesis;
 
         this.personas = {
             mentor: {
@@ -42,7 +36,10 @@ class AskMeBot {
             es: 'Spanish',
             fr: 'French',
             de: 'German',
-            pt: 'Portuguese'
+            pt: 'Portuguese',
+            xh: 'Xhosa',
+            zu: 'Zulu',
+            af: 'Afrikaans'
         };
 
         this.init();
@@ -50,7 +47,6 @@ class AskMeBot {
 
     init() {
         this.setupEventListeners();
-        this.setupSpeechRecognition();
         this.updatePersonaDisplay();
         this.displayWelcomeMessage();
     }
@@ -59,7 +55,6 @@ class AskMeBot {
         // Input and send functionality
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
-        const micButton = document.getElementById('micButton');
 
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -69,7 +64,6 @@ class AskMeBot {
         });
 
         sendButton.addEventListener('click', () => this.sendMessage());
-        micButton.addEventListener('click', () => this.toggleVoiceInput());
 
         // Persona selector
         const personaSelect = document.getElementById('personaSelect');
@@ -82,29 +76,6 @@ class AskMeBot {
         const languageSelect = document.getElementById('languageSelect');
         languageSelect.addEventListener('change', (e) => {
             this.currentLanguage = e.target.value;
-            this.updateLanguageDisplay();
-        });
-
-        // Slang toggle
-        const slangToggle = document.getElementById('slangToggle');
-        slangToggle.addEventListener('change', (e) => {
-            this.slangMode = e.target.checked;
-        });
-
-        // Voice settings
-        const voiceToggle = document.getElementById('voiceToggle');
-        voiceToggle.addEventListener('change', (e) => {
-            this.voiceEnabled = e.target.checked;
-            if (!this.voiceEnabled && this.synthesis.speaking) {
-                this.synthesis.cancel();
-            }
-        });
-
-        const voiceSpeed = document.getElementById('voiceSpeed');
-        const speedValue = document.getElementById('speedValue');
-        voiceSpeed.addEventListener('input', (e) => {
-            this.voiceSpeed = parseFloat(e.target.value);
-            speedValue.textContent = this.voiceSpeed.toFixed(1) + 'x';
         });
 
         // Clear chat
@@ -112,86 +83,8 @@ class AskMeBot {
         clearChat.addEventListener('click', () => this.clearChat());
     }
 
-    setupSpeechRecognition() {
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            this.recognition = new SpeechRecognition();
-
-            this.recognition.continuous = false;
-            this.recognition.interimResults = false;
-            this.recognition.lang = this.getVoiceLanguage();
-
-            this.recognition.onstart = () => {
-                this.isRecording = true;
-                this.updateMicButton();
-                this.updateInputStatus('Listening...');
-            };
-
-            this.recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('messageInput').value = transcript;
-                this.updateInputStatus('Voice input received');
-                setTimeout(() => this.sendMessage(), 500);
-            };
-
-            this.recognition.onerror = (event) => {
-                this.isRecording = false;
-                this.updateMicButton();
-                this.updateInputStatus(`Voice input error: ${event.error}`);
-            };
-
-            this.recognition.onend = () => {
-                this.isRecording = false;
-                this.updateMicButton();
-                if (this.recognition.wasManuallyStarted) {
-                    this.updateInputStatus('');
-                }
-            };
-        } else {
-            // Hide mic button if speech recognition is not supported
-            document.getElementById('micButton').style.display = 'none';
-        }
-    }
-
-    getVoiceLanguage() {
-        const langMap = {
-            'en': 'en-US',
-            'es': 'es-ES',
-            'fr': 'fr-FR',
-            'de': 'de-DE',
-            'pt': 'pt-PT'
-        };
-        return langMap[this.currentLanguage] || 'en-US';
-    }
-
-    updateMicButton() {
-        const micButton = document.getElementById('micButton');
-        if (this.isRecording) {
-            micButton.classList.add('recording');
-            micButton.innerHTML = '<i class="fas fa-stop"></i>';
-        } else {
-            micButton.classList.remove('recording');
-            micButton.innerHTML = '<i class="fas fa-microphone"></i>';
-        }
-    }
-
     updateInputStatus(message) {
         document.getElementById('inputStatus').textContent = message;
-    }
-
-    toggleVoiceInput() {
-        if (!this.recognition) {
-            this.updateInputStatus('Voice input not supported');
-            return;
-        }
-
-        if (this.isRecording) {
-            this.recognition.stop();
-        } else {
-            this.recognition.lang = this.getVoiceLanguage();
-            this.recognition.wasManuallyStarted = true;
-            this.recognition.start();
-        }
     }
 
     updatePersonaDisplay() {
@@ -209,12 +102,6 @@ class AskMeBot {
 
         if (botAvatar) {
             botAvatar.src = persona.avatar;
-        }
-    }
-
-    updateLanguageDisplay() {
-        if (this.recognition) {
-            this.recognition.lang = this.getVoiceLanguage();
         }
     }
 
@@ -248,21 +135,12 @@ class AskMeBot {
             // Display bot response
             this.displayMessage(response.reply, 'bot');
 
-            // Speak response if voice is enabled
-            if (this.voiceEnabled) {
-                this.speakMessage(response.reply);
-            }
-
         } catch (error) {
             console.error('Chat API error:', error);
             this.hideTypingIndicator();
 
             const errorMessage = "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
             this.displayMessage(errorMessage, 'bot');
-
-            if (this.voiceEnabled) {
-                this.speakMessage(errorMessage);
-            }
         } finally {
             this.setInputDisabled(false);
         }
@@ -273,22 +151,86 @@ class AskMeBot {
             message: message,
             persona: this.currentPersona,
             language: this.currentLanguage,
-            slang: this.slangMode
+            slang: false // Always false since slang mode is removed
         };
 
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        let retryCount = 0;
+        const maxRetries = 3;
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const attemptRequest = async () => {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
 
-        return await response.json();
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+
+                    if (response.status === 429) {
+                        throw new Error('RATE_LIMIT: Please wait a moment before sending another message.');
+                    } else if (response.status === 503) {
+                        throw new Error('SERVICE_BUSY: The AI service is busy. Please try again in a few moments.');
+                    } else if (response.status === 504) {
+                        throw new Error('TIMEOUT: Request timeout. Please try a shorter message.');
+                    } else {
+                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                    }
+                }
+
+                return await response.json();
+
+            } catch (error) {
+                console.error(`Request attempt ${retryCount + 1} failed:`, error.message);
+
+                // Check if we should retry
+                if (retryCount < maxRetries && (
+                    error.name === 'AbortError' ||
+                    error.message.includes('fetch') ||
+                    error.message.includes('network') ||
+                    error.message.includes('TIMEOUT') ||
+                    error.message.includes('SERVICE_BUSY')
+                )) {
+                    retryCount++;
+                    this.updateInputStatus(`Retrying... (${retryCount}/${maxRetries})`);
+
+                    // Exponential backoff: wait 1s, then 2s, then 4s
+                    const delay = Math.pow(2, retryCount - 1) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+
+                    return attemptRequest();
+                }
+
+                // If it's a rate limit error, provide specific guidance
+                if (error.message.includes('RATE_LIMIT')) {
+                    throw new Error('You\'re sending messages too quickly. Please wait a moment before trying again.');
+                }
+
+                // If it's a service busy error, provide specific guidance
+                if (error.message.includes('SERVICE_BUSY')) {
+                    throw new Error('The AI service is currently busy. Please try again in a few moments.');
+                }
+
+                // If it's a timeout, provide specific guidance
+                if (error.message.includes('TIMEOUT') || error.name === 'AbortError') {
+                    throw new Error('The request timed out. Please try sending a shorter message.');
+                }
+
+                // Generic error for anything else
+                throw new Error('Unable to connect to the chat service. Please check your internet connection and try again.');
+            }
+        };
+
+        return attemptRequest();
     }
 
     displayMessage(message, sender) {
@@ -343,26 +285,6 @@ class AskMeBot {
         }
     }
 
-    speakMessage(message) {
-        if (!this.synthesis) return;
-
-        // Cancel any ongoing speech
-        this.synthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.rate = this.voiceSpeed;
-        utterance.lang = this.getVoiceLanguage();
-
-        // Find appropriate voice for the language
-        const voices = this.synthesis.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(this.currentLanguage)) || voices[0];
-        if (voice) {
-            utterance.voice = voice;
-        }
-
-        this.synthesis.speak(utterance);
-    }
-
     setInputDisabled(disabled) {
         const messageInput = document.getElementById('messageInput');
         const sendButton = document.getElementById('sendButton');
@@ -386,11 +308,6 @@ class AskMeBot {
         chatWindow.innerHTML = '';
         if (welcomeMessage) {
             chatWindow.appendChild(welcomeMessage);
-        }
-
-        // Cancel any ongoing speech
-        if (this.synthesis) {
-            this.synthesis.cancel();
         }
 
         // Clear input
@@ -420,11 +337,4 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         window.askMeBot = new AskMeBot();
     }, 100);
-});
-
-// Handle page visibility changes to manage speech synthesis
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-    }
 });
