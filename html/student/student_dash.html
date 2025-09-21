@@ -27,16 +27,100 @@
 
             <!-- Small cards -->
             <div class="small-cards">
-                <div class="card">Announcements</div>
-                <div class="card">Assignments Due: 3</div>
+                <div class="card small-card announcements">
+                    <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span> <!--fa icon for announcements-->
+                    <span class="small-card-number">4</span>
+                    <span class="small-card-label">Announcements</span>
+                </div>
+                <div class="card small-card assignments">
+                    <span class="small-card-icon"><i class="fa-solid fa-book"></i></span>
+                    <span class="small-card-number">3</span>
+                    <span class="small-card-label">Assignments Due</span>
+                </div>
             </div>
 
             <!-- Big cards (2x2 grid) -->
             <div class="big-cards">
-                <div class="card big">🎓 Academics</div>
-                <div class="card big">🗣️ Soft Skills</div>
-                <div class="card big">⚽ Extracurricular</div>
-                <div class="card big">🌍 Community</div>
+                <div class="card big">
+                    <div class="card-header">
+                        <span class="card-icon">🎓</span>
+                        <span class="card-title">Academics</span>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-block">
+                            <span class="stat-label">Avg Grade</span>
+                            <span class="stat-value">82%</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Subjects</span>
+                            <span class="stat-value">7</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Overdue</span>
+                            <span class="stat-value">2</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card big">
+                    <div class="card-header">
+                        <span class="card-icon">🗣️</span>
+                        <span class="card-title">Soft Skills</span>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-block">
+                            <span class="stat-label">Badges</span>
+                            <span class="stat-value">5</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Modules</span>
+                            <span class="stat-value">3/6</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Last Completed</span>
+                            <span class="stat-value">Teamwork</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card big">
+                    <div class="card-header">
+                        <span class="card-icon">⚽</span>
+                        <span class="card-title">Extracurricular</span>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-block">
+                            <span class="stat-label">Activities</span>
+                            <span class="stat-value">2</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Hours</span>
+                            <span class="stat-value">14</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Last</span>
+                            <span class="stat-value">Soccer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card big">
+                    <div class="card-header">
+                        <span class="card-icon">🌍</span>
+                        <span class="card-title">Community</span>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-block">
+                            <span class="stat-label">Events</span>
+                            <span class="stat-value">1</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Points</span>
+                            <span class="stat-value">120</span>
+                        </div>
+                        <div class="stat-block">
+                            <span class="stat-label">Next Event</span>
+                            <span class="stat-value">Cleanup</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -83,11 +167,18 @@
 
             <!-- To-Do List -->
             <div class="todo-list">
-                <h3>📝 To-Do</h3>
-                <ul>
-                    <li><input type="checkbox" id="task1"><label for="task1">Finish Maths Assignment</label></li>
-                    <li><input type="checkbox" id="task2"><label for="task2">Read Chapter 4</label></li>
+                <div class="todo-header">
+                    <h3>📝 To-Do</h3>
+                    <button class="add-task-btn" title="Add Task"><i class="fa fa-plus"></i></button>
+                </div>
+                <ul id="todo-items">
+                    <li><label class="custom-checkbox"><input type="checkbox"><span class="checkmark"></span></label><span class="todo-text">Finish Maths Assignment</span></li>
+                    <li><label class="custom-checkbox"><input type="checkbox"><span class="checkmark"></span></label><span class="todo-text">Read Chapter 4</span></li>
                 </ul>
+                <div class="add-task-row" style="display:none;">
+                    <input type="text" class="add-task-input" placeholder="New task...">
+                    <button class="save-task-btn"><i class="fa fa-check"></i></button>
+                </div>
             </div>
         </section>
     </main>

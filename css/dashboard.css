@@ -12,7 +12,7 @@ main.dashboard {
   gap: 2.5rem;
   width: 100vw;
   min-height: 90vh;
-  background: #e9ecee;
+  background: #f8f9fa;
   margin: 0;
   padding: 2.5rem 4vw 2.5rem 4vw;
   box-sizing: border-box;
@@ -36,22 +36,55 @@ main.dashboard {
 .small-cards {
   display: flex;
   gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.small-cards .card {
-  background: #fff;
-  color: #50778f;
-  border-radius: 14px;
-  box-shadow: none;
-  flex: 1;
-  width: 15vw;
+.small-card {
+  background: linear-gradient(135deg, #e9ecee 60%, #a3cae9 100%);
+  color: #23425c;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(80,119,143,0.10);
+  width: 130px;
+  height: 130px;
+  min-width: 120px;
   min-height: 120px;
+  max-width: 150px;
+  max-height: 150px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  border: 1.5px solid #a3cae9;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+
+.small-card:hover {
+  box-shadow: 0 6px 18px rgba(80,119,143,0.18);
+  transform: translateY(-4px) scale(1.04);
+}
+
+.small-card-icon {
+  font-size: 2.1rem;
+  color: #50778f;
+  margin-bottom: 0.3rem;
+}
+
+.small-card-number {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #23425c;
+  margin-bottom: 0.2rem;
+}
+
+.small-card-label {
+  font-size: 1.05rem;
+  color: #50778f;
   font-weight: 600;
-  border: 1px solid #a3cae9;
+  letter-spacing: 0.01em;
 }
 
 .big-cards {
@@ -62,19 +95,80 @@ main.dashboard {
 }
 
 .big-cards .card.big {
-  background: #f7fafd;
-  color: #50778f;
+  background: #fff;
+  color: #23425c;
   border-radius: 18px;
-  box-shadow: none;
-  min-height: 140px;
+  box-shadow: 0 2px 8px rgba(80,119,143,0.10);
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 1.5rem 1.2rem 1.2rem 1.5rem;
+  gap: 1rem;
+  border: 1.5px solid #e9ecee;
+  transition: box-shadow 0.2s;
+}
+
+.big-cards .card.big:hover {
+  box-shadow: 0 4px 16px rgba(80,119,143,0.18);
+}
+
+.card-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  font-size: 1.3rem;
-  font-weight: 600;
-  padding: 1.5rem;
-  gap: 1rem;
-  border: 1.5px solid #a3cae9;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.card-icon {
+  font-size: 1.7rem;
+  background: #a3cae9;
+  color: #23425c;
+  border-radius: 50%;
+  width: 2.3rem;
+  height: 2.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #50778f;
+}
+
+.card-stats {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #f7fafd;
+  border-radius: 10px;
+  padding: 0.5rem 0.9rem;
+  min-width: 80px;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 1px 4px rgba(80,119,143,0.06);
+}
+
+.stat-label {
+  font-size: 0.92rem;
+  color: #50778f;
+  margin-bottom: 0.2rem;
+}
+
+.stat-value {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #23425c;
 }
 
 .right-panel {
@@ -275,52 +369,220 @@ main.dashboard {
 }
 
 .todo-list {
-  background: #e9ecee;
-  border-radius: 14px;
-  box-shadow: none;
-  padding: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(80,119,143,0.10);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
   border: 1px solid #a3cae9;
+  margin-top: 1.5rem;
 }
 
-.todo-list h3 {
-  margin-top: 0;
+.todo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.add-task-btn {
+  background: #a3cae9;
   color: #23425c;
-  font-size: 1.1rem;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-task-btn:hover {
+  background: #50778f;
+  color: #fff;
 }
 
-.todo-list ul {
+#todo-items {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-    margin-bottom: 1rem;
-.todo-list li {
-  margin-bottom: 0.75rem;
+
+#todo-items li {
   display: flex;
   align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.2rem;
+  border-bottom: 1px solid #e9ecee;
+  font-size: 1.05rem;
+  transition: background 0.2s;
+}
+#todo-items li:last-child {
+  border-bottom: none;
 }
 
-.todo-list input[type="checkbox"] {
-  accent-color: #50778f;
-  margin-right: 0.5rem;
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+.custom-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  cursor: pointer;
+}
+.custom-checkbox .checkmark {
+  position: absolute;
+  top: 0; left: 0;
+  width: 22px; height: 22px;
+  background: #e9ecee;
+  border: 2px solid #a3cae9;
+  border-radius: 6px;
+  transition: background 0.2s, border 0.2s;
+}
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+  background: #50778f;
+  border-color: #50778f;
+}
+.custom-checkbox .checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+  display: block;
+}
+.custom-checkbox .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }
 
-@media (max-width: 1100px) {
-  main.dashboard {
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 2rem 2vw;
-  }
-  .left-side, .right-panel {
-    width: 100%;
-    flex: unset;
-  }
-  .big-cards {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
-  }
-  .small-cards {
-    flex-direction: column;
-  }
+.todo-text {
+  flex: 1;
+  transition: color 0.2s, text-decoration 0.2s;
 }
-  
+#todo-items li.completed .todo-text {
+  color: #a3cae9;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.add-task-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.add-task-input {
+  flex: 1;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #a3cae9;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.add-task-input:focus {
+  border: 1.5px solid #50778f;
+}
+.save-task-btn {
+  background: #50778f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.save-task-btn:hover {
+  background: #23425c;
+}
+
+/* Event Modal Styling */
+#eventModal .modal-content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(80,119,143,0.18);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  border: 1.5px solid #a3cae9;
+}
+#eventModal h3 {
+  color: #50778f;
+  margin-bottom: 1rem;
+}
+#eventModal .form-group {
+  margin-bottom: 1rem;
+}
+#eventModal .form-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #a3cae9;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+#eventModal .form-actions {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: flex-end;
+}
+#eventModal .btn-primary {
+  background: #50778f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#eventModal .btn-primary:hover {
+  background: #23425c;
+}
+#eventModal .btn-danger {
+  background: #e57373;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#eventModal .btn-danger:hover {
+  background: #c62828;
+}
+#eventModal .btn-secondary {
+  background: #e9ecee;
+  color: #50778f;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#eventModal .btn-secondary:hover {
+  background: #a3cae9;
+  color: #23425c;
+}
+#eventModal .close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.5rem;
+  color: #a3cae9;
+  cursor: pointer;
+}

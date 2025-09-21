@@ -47,8 +47,54 @@ function setupButtons() {
     }
 }
 
+// To-Do List Interactivity: strikethrough, add, and remove
+function setupTodoList() {
+  const todoList = document.getElementById('todo-items');
+  if (!todoList) return;
+
+  // Strikethrough on check
+  todoList.addEventListener('change', function(e) {
+    if (e.target.type === 'checkbox') {
+      const li = e.target.closest('li');
+      if (e.target.checked) {
+        li.classList.add('completed');
+      } else {
+        li.classList.remove('completed');
+      }
+    }
+  });
+
+  // Add task
+  const addBtn = document.querySelector('.add-task-btn');
+  const addRow = document.querySelector('.add-task-row');
+  const addInput = document.querySelector('.add-task-input');
+  const saveBtn = document.querySelector('.save-task-btn');
+
+  if (addBtn && addRow && addInput && saveBtn) {
+    addBtn.addEventListener('click', () => {
+      addRow.style.display = 'flex';
+      addInput.focus();
+    });
+    saveBtn.addEventListener('click', () => {
+      const val = addInput.value.trim();
+      if (val) {
+        const li = document.createElement('li');
+        li.innerHTML = `<label class="custom-checkbox"><input type="checkbox"><span class="checkmark"></span></label><span class="todo-text"></span>`;
+        li.querySelector('.todo-text').textContent = val;
+        todoList.appendChild(li);
+        addInput.value = '';
+        addRow.style.display = 'none';
+      }
+    });
+    addInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveBtn.click();
+    });
+  }
+}
+
 // When page loads
 document.addEventListener('DOMContentLoaded', function() {
     setupFAQ();
     setupButtons();
+    setupTodoList();
 });
