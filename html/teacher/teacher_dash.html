@@ -6,8 +6,10 @@
     <title>Teacher Dashboard - Empiras Vanguard</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboard-edit.css">
     <link rel="stylesheet" href="../../css/teacher.css">
     <script src="../../database.js"></script>
+    <script src="../../js/dashboard-numbers.js"></script>
     <script src="../../js/simple-teacher-dashboard.js"></script>
     <script src="../../js/admin-dashboard.js"></script>
     <script src="../../js/script.js" defer></script>
@@ -63,6 +65,7 @@
                             <div class="stat-item">
                                 <span class="stat-label">Students</span>
                                 <span class="stat-value">28</span>
+                                <button class="btn-edit" onclick="window.dashboardNumbers.updateClassNumbers('MATH8A', 'students', 30)">+</button>
                             </div>
                             <div class="stat-item">
                                 <span class="stat-label">Assignments</span>

@@ -1,0 +1,50 @@
+.btn-add, .btn-edit {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-add:hover, .btn-edit:hover {
+    background: #0056b3;
+}
+
+.btn-remove {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.btn-remove:hover {
+    background: #c82333;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.small-card {
+    position: relative;
+}
+
+.btn-add {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}

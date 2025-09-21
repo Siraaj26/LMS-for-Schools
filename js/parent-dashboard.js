@@ -30,38 +30,35 @@ class ParentDashboard {
     }
 
     loadChildData() {
-        // Load child data from localStorage or API
-        // For demo purposes, we'll use sample data
-        this.childData = {
-            id: this.childId,
-            name: this.childName,
-            grade: 10,
-            school: 'Johannesburg High School',
-            attendance: 95,
-            academicProgress: [
-                { subject: 'Mathematics', grade: 78, trend: '+5%', teacher: 'Ms. Johnson' },
-                { subject: 'Science', grade: 82, trend: '+3%', teacher: 'Mr. Smith' },
-                { subject: 'English', grade: 75, trend: '+2%', teacher: 'Ms. Brown' },
-                { subject: 'Geography', grade: 80, trend: '+4%', teacher: 'Mr. Davis' }
-            ],
-            skills: [
-                { name: 'Problem Solving', level: 85, status: 'Advanced' },
-                { name: 'Communication', level: 70, status: 'Intermediate' },
-                { name: 'Teamwork', level: 90, status: 'Advanced' },
-                { name: 'Critical Thinking', level: 75, status: 'Intermediate' }
-            ],
-            recentActivities: [
-                { icon: '📝', text: 'Math assignment submitted', time: '2 hours ago' },
-                { icon: '🏆', text: 'Earned "Problem Solver" badge', time: '1 day ago' },
-                { icon: '📊', text: 'Progress report updated', time: '3 days ago' },
-                { icon: '💬', text: 'Teacher message received', time: '1 week ago' }
-            ],
-            upcomingEvents: [
-                { date: '15', month: 'Mar', title: 'Parent-Teacher Meeting', time: '2:00 PM - 3:00 PM' },
-                { date: '20', month: 'Mar', title: 'Science Fair', time: '9:00 AM - 2:00 PM' },
-                { date: '25', month: 'Mar', title: 'Sports Day', time: '8:00 AM - 4:00 PM' }
-            ]
-        };
+        const student = window.authDB.getStudentByParentEmail(this.currentUser.email);
+        if (student) {
+            this.childData = {
+                id: student.id,
+                name: student.full_name,
+                grade: student.current_grade || 10,
+                school: 'Johannesburg High School',
+                attendance: student.attendance || 95,
+                academicProgress: (student.academic_grades || []).map(grade => ({
+                    subject: grade.subject,
+                    grade: grade.grade,
+                    trend: grade.trend || '+0%',
+                    teacher: grade.teacher || 'Teacher'
+                })),
+                skills: (student.skills || []).map(skill => ({
+                    name: skill.name,
+                    level: skill.level,
+                    status: skill.status
+                })),
+                payment_amount: student.payment_amount || 156.00,
+                payment_status: student.payment_status || 'pending',
+                recentActivities: student.activities || [],
+                upcomingEvents: [
+                    { date: '15', month: 'Mar', title: 'Parent-Teacher Meeting', time: '2:00 PM - 3:00 PM' },
+                    { date: '20', month: 'Mar', title: 'Science Fair', time: '9:00 AM - 2:00 PM' },
+                    { date: '25', month: 'Mar', title: 'Sports Day', time: '8:00 AM - 4:00 PM' }
+                ]
+            };
+        }
     }
 
     setupEventListeners() {
@@ -205,16 +202,16 @@ class ParentDashboard {
         const paymentAmount = document.querySelector('.payment-amount');
         const paymentDue = document.querySelector('.payment-due');
         const paymentStatusBadge = document.querySelector('.payment-status-badge');
-        const currentChildData = this.children[this.currentChild];
 
         if (paymentAmount) {
-            const amount = this.childData?.payment_amount || '156.00';
+            const amount = this.childData?.payment_amount || 156.00;
             paymentAmount.textContent = `R ${amount}`;
         }
         if (paymentDue) paymentDue.textContent = 'Due: 31 March 2024';
         if (paymentStatusBadge) {
-            paymentStatusBadge.textContent = currentChildData.paymentStatus.charAt(0).toUpperCase() + currentChildData.paymentStatus.slice(1);
-            paymentStatusBadge.className = `payment-status-badge ${currentChildData.paymentStatus}`;
+            const status = this.childData?.payment_status || 'pending';
+            paymentStatusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            paymentStatusBadge.className = `payment-status-badge ${status}`;
         }
     }
 
