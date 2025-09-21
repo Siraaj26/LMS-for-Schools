@@ -465,3 +465,5 @@ function viewPaymentDetails() {
 document.addEventListener('DOMContentLoaded', () => {
     window.officialPaymentSystem = new OfficialPaymentSystem();
 });
+
+

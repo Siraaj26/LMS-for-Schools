@@ -385,3 +385,5 @@ function setupAnnualSubscription() {
         window.termPaymentSystem.selectSubscription('annual', 'term3');
     }
 }
+
+
