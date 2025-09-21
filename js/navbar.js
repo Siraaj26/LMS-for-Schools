@@ -58,15 +58,15 @@ function initializeNavbar() {
     const navLinksElements = document.querySelectorAll('.nav-link');
 
     navLinksElements.forEach(link => {
-        // Special handling for student dashboard home link
-        if (link.id === 'homeLink' && currentPage.includes('student_dash.html')) {
-            link.classList.add('active');
-            link.style.background = 'rgba(255, 255, 255, 0.2)';
-            link.style.color = 'white';
-        } else if (link.getAttribute('href') && currentPage.includes(link.getAttribute('href').replace('../', ''))) {
-            link.classList.add('active');
-            link.style.background = 'rgba(255, 255, 255, 0.2)';
-            link.style.color = 'white';
+        const linkHref = link.getAttribute('href');
+        if (linkHref) {
+            // Check if current page matches the link
+            if (currentPage.includes(linkHref.replace('/html/', '')) || 
+                (link.id === 'homeLink' && currentPage.includes('student_dash.html'))) {
+                link.classList.add('active');
+                link.style.background = 'rgba(255, 255, 255, 0.2)';
+                link.style.color = 'white';
+            }
         }
     });
 
