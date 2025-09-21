@@ -3,250 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Empiras Vanguard</title>
+    <title>Parent Dashboard - Empiras Vanguard</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/dashboard.css">
-    <link rel="stylesheet" href="../../css/teacher.css">
+    <link rel="stylesheet" href="../../css/parent.css">
     <script src="../../database.js"></script>
-    <script src="../../js/simple-teacher-dashboard.js"></script>
-    <script src="../../js/admin-dashboard.js"></script>
+    <script src="../../js/simple-parent-dashboard.js"></script>
     <script src="../../js/script.js" defer></script>
 </head>
-<body data-role="teacher">  
+<body data-role="parent">
     <!-- Navbar -->
     <header id="navbar"></header>
 
-    <main class="teacher-dashboard">
-        <!-- Teacher Header -->
-        <div class="teacher-header">
-            <div class="teacher-info">
-                <div class="teacher-avatar">
-                    <img src="../../images/avatar.jpg" alt="Teacher Avatar">
+    <main class="parent-dashboard">
+        <!-- Parent Header -->
+        <div class="parent-header">
+            <div class="parent-info">
+                <div class="parent-avatar">
+                    <img src="../../images/avatar.jpg" alt="Parent Avatar">
                 </div>
-                <div class="teacher-details">
-                    <h1 id="teacher-welcome">Welcome, Teacher!</h1>
-                    <p>Mathematics Teacher • Grade 10-12</p>
-                    <div class="teacher-stats">
-                        <span class="stat">Classes: 3</span>
-                        <span class="stat">Students: 89</span>
-                        <span class="stat">Subjects: 2</span>
+                <div class="parent-details">
+                    <h1 id="parent-welcome">Welcome, Parent!</h1>
+                    <p>Parent of Thabo Mthembu (Grade 10)</p>
+                    <div class="parent-stats">
+                        <span class="stat">Children: 1</span>
+                        <span class="stat">School: Johannesburg High</span>
+                        <span class="stat">Last Login: Today</span>
                     </div>
                 </div>
             </div>
-            <div class="teacher-actions">
-                <button class="action-btn primary" onclick="createAssignment()">
-                    📝 New Assignment
+            <div class="parent-actions">
+                <button class="action-btn primary" onclick="makePayment()">
+                    💳 Make Payment
                 </button>
-                <button class="action-btn secondary" onclick="viewReports()">
-                    📊 Reports
+                <button class="action-btn secondary" onclick="contactTeacher()">
+                    💬 Contact Teacher
                 </button>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="teacher-content">
-            <!-- Left Side - Class Overview -->
-            <section class="class-overview">
-                <h2>Class Overview</h2>
+        <div class="parent-content">
+            <!-- Left Side - Child Overview -->
+            <section class="child-overview">
+                <h2>Thabo's Progress</h2>
                 
-                <!-- Class Cards -->
-                <div class="class-cards">
-                    <div class="class-card">
-                        <div class="class-header">
-                            <h3>Mathematics Grade 10A</h3>
-                            <span class="class-code">MATH10A</span>
+                <!-- Child Summary Card -->
+                <div class="child-summary">
+                    <div class="child-info">
+                        <div class="child-avatar">
+                            <img src="../../images/avatar.jpg" alt="Thabo Mthembu">
                         </div>
-                        <div class="class-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Students</span>
-                                <span class="stat-value">32</span>
+                        <div class="child-details">
+                            <h3>Thabo Mthembu</h3>
+                            <p>Grade 10 • Student ID: ST2024001</p>
+                            <div class="child-status">
+                                <span class="status-badge active">Active</span>
+                                <span class="attendance">Attendance: 95%</span>
                             </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Assignments</span>
-                                <span class="stat-value">5</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Avg Grade</span>
-                                <span class="stat-value">78%</span>
-                            </div>
-                        </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH10A')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH10A')">Grade</button>
                         </div>
                     </div>
-
-                    <div class="class-card">
-                        <div class="class-header">
-                            <h3>Mathematics Grade 11B</h3>
-                            <span class="class-code">MATH11B</span>
-                        </div>
-                        <div class="class-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Students</span>
-                                <span class="stat-value">28</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Assignments</span>
-                                <span class="stat-value">3</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Avg Grade</span>
-                                <span class="stat-value">82%</span>
-                            </div>
-                        </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH11B')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH11B')">Grade</button>
-                        </div>
+                    <div class="child-actions">
+                        <button class="btn-small" onclick="viewChildProfile()">View Profile</button>
+                        <button class="btn-small secondary" onclick="viewChildReports()">Reports</button>
                     </div>
+                </div>
 
-                    <div class="class-card">
-                        <div class="class-header">
-                            <h3>Advanced Mathematics 12</h3>
-                            <span class="class-code">MATH12A</span>
+                <!-- Academic Progress -->
+                <div class="academic-progress">
+                    <h3>Academic Progress</h3>
+                    <div class="subject-cards">
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-icon">📐</span>
+                                <span class="subject-name">Mathematics</span>
+                            </div>
+                            <div class="subject-grade">78%</div>
+                            <div class="subject-trend">↗ +5%</div>
+                            <div class="subject-teacher">Ms. Johnson</div>
                         </div>
-                        <div class="class-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Students</span>
-                                <span class="stat-value">29</span>
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-icon">🔬</span>
+                                <span class="subject-name">Science</span>
                             </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Assignments</span>
-                                <span class="stat-value">4</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Avg Grade</span>
-                                <span class="stat-value">85%</span>
-                            </div>
+                            <div class="subject-grade">82%</div>
+                            <div class="subject-trend">↗ +3%</div>
+                            <div class="subject-teacher">Mr. Smith</div>
                         </div>
-                        <div class="class-actions">
-                            <button class="btn-small" onclick="viewClass('MATH12A')">View Class</button>
-                            <button class="btn-small secondary" onclick="gradeAssignments('MATH12A')">Grade</button>
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-icon">📚</span>
+                                <span class="subject-name">English</span>
+                            </div>
+                            <div class="subject-grade">75%</div>
+                            <div class="subject-trend">↗ +2%</div>
+                            <div class="subject-teacher">Ms. Brown</div>
+                        </div>
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <span class="subject-icon">🌍</span>
+                                <span class="subject-name">Geography</span>
+                            </div>
+                            <div class="subject-grade">80%</div>
+                            <div class="subject-trend">↗ +4%</div>
+                            <div class="subject-teacher">Mr. Davis</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="recent-activity">
-                    <h3>Recent Activity</h3>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-icon">📝</div>
-                            <div class="activity-content">
-                                <p>Graded 15 assignments for MATH10A</p>
-                                <small>2 hours ago</small>
+                <!-- Skills Development -->
+                <div class="skills-development">
+                    <h3>Skills Development</h3>
+                    <div class="skills-grid">
+                        <div class="skill-card">
+                            <div class="skill-icon">🎯</div>
+                            <div class="skill-name">Problem Solving</div>
+                            <div class="skill-level">Advanced</div>
+                            <div class="skill-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                                <span class="progress-text">85%</span>
                             </div>
                         </div>
-                        <div class="activity-item">
-                            <div class="activity-icon">📊</div>
-                            <div class="activity-content">
-                                <p>Updated progress for Thabo Mthembu</p>
-                                <small>4 hours ago</small>
+                        <div class="skill-card">
+                            <div class="skill-icon">💬</div>
+                            <div class="skill-name">Communication</div>
+                            <div class="skill-level">Intermediate</div>
+                            <div class="skill-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-text">70%</span>
                             </div>
                         </div>
-                        <div class="activity-item">
-                            <div class="activity-icon">🎯</div>
-                            <div class="activity-content">
-                                <p>Created new skills assessment</p>
-                                <small>1 day ago</small>
+                        <div class="skill-card">
+                            <div class="skill-icon">🤝</div>
+                            <div class="skill-name">Teamwork</div>
+                            <div class="skill-level">Advanced</div>
+                            <div class="skill-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 90%"></div>
+                                </div>
+                                <span class="progress-text">90%</span>
+                            </div>
+                        </div>
+                        <div class="skill-card">
+                            <div class="skill-icon">💡</div>
+                            <div class="skill-name">Critical Thinking</div>
+                            <div class="skill-level">Intermediate</div>
+                            <div class="skill-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                                <span class="progress-text">75%</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Right Side - Student Progress & Tools -->
-            <section class="teacher-sidebar">
-                <!-- Student Progress -->
-                <div class="student-progress">
-                    <h3>Student Progress Overview</h3>
-                    <div class="progress-summary">
-                        <div class="progress-item">
-                            <span class="progress-label">On Track</span>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%"></div>
-                            </div>
-                            <span class="progress-value">67 students</span>
+            <!-- Right Side - Financial & Communication -->
+            <section class="parent-sidebar">
+                <!-- Payment Status -->
+                <div class="payment-status">
+                    <h3>Payment Status</h3>
+                    <div class="payment-card">
+                        <div class="payment-header">
+                            <span class="payment-icon">💰</span>
+                            <span class="payment-title">Current Balance</span>
                         </div>
-                        <div class="progress-item">
-                            <span class="progress-label">Needs Attention</span>
-                            <div class="progress-bar">
-                                <div class="progress-fill warning" style="width: 20%"></div>
+                        <div class="payment-amount">R 156.00</div>
+                        <div class="payment-due">Due: 31 March 2024</div>
+                        <div class="payment-status-badge pending">Pending</div>
+                        <button class="payment-btn" onclick="makePayment()">Make Payment</button>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="recent-activities">
+                    <h3>Recent Activities</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">📝</div>
+                            <div class="activity-content">
+                                <p>Math assignment submitted</p>
+                                <small>2 hours ago</small>
                             </div>
-                            <span class="progress-value">18 students</span>
                         </div>
-                        <div class="progress-item">
-                            <span class="progress-label">At Risk</span>
-                            <div class="progress-bar">
-                                <div class="progress-fill danger" style="width: 5%"></div>
+                        <div class="activity-item">
+                            <div class="activity-icon">🏆</div>
+                            <div class="activity-content">
+                                <p>Earned "Problem Solver" badge</p>
+                                <small>1 day ago</small>
                             </div>
-                            <span class="progress-value">4 students</span>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-content">
+                                <p>Progress report updated</p>
+                                <small>3 days ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">💬</div>
+                            <div class="activity-content">
+                                <p>Teacher message received</p>
+                                <small>1 week ago</small>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Skills Assessment -->
-                <!-- <div class="skills-assessment">
-                    <h3>Skills Assessment</h3>
-                    <div class="skills-list">
-                        <div class="skill-item">
-                            <span class="skill-name">Problem Solving</span>
-                            <div class="skill-progress">
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 80%"></div>
-                                </div>
-                                <span class="skill-value">80%</span>
+                <!-- Upcoming Events -->
+                <div class="upcoming-events">
+                    <h3>Upcoming Events</h3>
+                    <div class="event-list">
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Parent-Teacher Meeting</p>
+                                <small>2:00 PM - 3:00 PM</small>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Critical Thinking</span>
-                            <div class="skill-progress">
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 75%"></div>
-                                </div>
-                                <span class="skill-value">75%</span>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">20</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Science Fair</p>
+                                <small>9:00 AM - 2:00 PM</small>
                             </div>
                         </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Communication</span>
-                            <div class="skill-progress">
-                                <div class="skill-bar">
-                                    <div class="skill-fill" style="width: 70%"></div>
-                                </div>
-                                <span class="skill-value">70%</span>
+                        <div class="event-item">
+                            <div class="event-date">
+                                <span class="day">25</span>
+                                <span class="month">Mar</span>
+                            </div>
+                            <div class="event-details">
+                                <p>Sports Day</p>
+                                <small>8:00 AM - 4:00 PM</small>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
-                <!-- Quick Tools -->
-                <div class="quick-tools">
-                    <h3>Quick Tools</h3>
-                    <div class="tools-grid">
-                        <button class="tool-btn" onclick="createAssignment()">
-                            <span class="tool-icon">📝</span>
-                            <span class="tool-name">Assignment</span>
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-grid">
+                        <button class="action-btn-small" onclick="viewChildProfile()">
+                            <span class="btn-icon">👤</span>
+                            <span class="btn-text">Profile</span>
                         </button>
-                        <button class="tool-btn" onclick="gradeWork()">
-                            <span class="tool-icon">✅</span>
-                            <span class="tool-name">Grade</span>
+                        <button class="action-btn-small" onclick="viewChildReports()">
+                            <span class="btn-icon">📊</span>
+                            <span class="btn-text">Reports</span>
                         </button>
-                        <button class="tool-btn" onclick="trackSkills()">
-                            <span class="tool-icon">🎯</span>
-                            <span class="tool-name">Skills</span>
+                        <button class="action-btn-small" onclick="makePayment()">
+                            <span class="btn-icon">💰</span>
+                            <span class="btn-text">Payment</span>
                         </button>
-                        <button class="tool-btn" onclick="viewReports()">
-                            <span class="tool-icon">📊</span>
-                            <span class="tool-name">Reports</span>
+                        <button class="action-btn-small" onclick="contactTeacher()">
+                            <span class="btn-icon">💬</span>
+                            <span class="btn-text">Message</span>
                         </button>
-                        <button class="tool-btn" onclick="communicate()">
-                            <span class="tool-icon">💬</span>
-                            <span class="tool-name">Message</span>
+                        <button class="action-btn-small" onclick="viewCalendar()">
+                            <span class="btn-icon">📅</span>
+                            <span class="btn-text">Calendar</span>
                         </button>
-                        <button class="tool-btn" onclick="viewPayments()">
-                            <span class="tool-icon">💰</span>
-                            <span class="tool-name">Payments</span>
+                        <button class="action-btn-small" onclick="viewAssignments()">
+                            <span class="btn-icon">📝</span>
+                            <span class="btn-text">Assignments</span>
                         </button>
                     </div>
                 </div>
