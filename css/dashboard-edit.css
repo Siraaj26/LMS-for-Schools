@@ -104,14 +104,19 @@
     margin-top: 0;
 }
 
-.dashboard-content .small-cards {
+.quick-overview-section {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.overview-cards-container {
     display: flex !important;
     flex-direction: row !important;
-    gap: 20px !important;
+    gap: 10px !important;
     align-items: stretch !important;
     width: 100%;
     margin-top: 20px;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .dashboard-content .small-card {
@@ -122,9 +127,9 @@
     padding: 15px !important;
     height: 140px !important;
     justify-content: space-between !important;
-    flex: 1 !important;
-    min-width: 150px;
-    max-width: 200px;
+    flex: 1 1 30% !important;
+    min-width: 200px;
+    max-width: none;
     position: relative;
     border-radius: 12px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
@@ -174,14 +179,14 @@
         gap: 15px;
     }
     
-    .dashboard-content .small-cards {
+    .overview-cards-container {
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 8px;
     }
     
     .small-card {
-        flex: 1 1 calc(50% - 7.5px);
-        min-width: 140px;
+        flex: 1 1 calc(50% - 4px);
+        min-width: 180px;
         height: 120px;
         padding: 12px;
     }
@@ -192,9 +197,9 @@
         gap: 20px;
     }
     
-    .dashboard-content .small-cards {
+    .overview-cards-container {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
     
     .small-card {

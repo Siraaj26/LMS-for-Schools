@@ -50,9 +50,9 @@
             <!-- Main Dashboard Content -->
             <div class="dashboard-content">
                 <!-- Quick Overview -->
-                <div  >
+                <div class="quick-overview-section">
                     <h2>Quick Overview</h2>
-                    <div class="small-cards">
+                    <div class="overview-cards-container">
                         <div class="card small-card announcements">
                             <span class="small-card-icon"><i class="fa-solid fa-bullhorn"></i></span>
                             <span class="small-card-number">4</span>
@@ -67,7 +67,7 @@
                             <span class="small-card-icon"><i class="fa-solid fa-trophy"></i></span>
                             <span class="small-card-number">1000</span>
                             <span class="small-card-label">Reward Points</span>
-                            <p class="progress-text">1000 pts → Next Badge</p>
+                            <p class="progress-text">300 pts → Next Badge</p>
                         </div>
                     </div>
                 </div>
@@ -171,6 +171,25 @@
                     </div>
                 </div>
                 <div class="calendar" id="calendar-days"></div>
+            </div>
+            
+            <!-- Add Event Card -->
+            <div class="add-event-card">
+                <div class="event-header">
+                    <h3>Add Event</h3>
+                    <button class="close-event" onclick="this.parentElement.parentElement.style.display='none'">&times;</button>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="inlineEventTitle" placeholder="Event title" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="date" id="inlineEventDate" class="form-input">
+                </div>
+                <div class="form-actions">
+                    <button class="btn-save"><i class="fa fa-check"></i></button>
+                    <button class="btn-delete"><i class="fa fa-trash"></i></button>
+                    <button class="btn-cancel"><i class="fa fa-times"></i></button>
+                </div>
             </div>
             
             <!-- Event Modal -->

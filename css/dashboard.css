@@ -195,8 +195,14 @@ main.dashboard {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0;
   min-width: 0;
+  align-items: stretch;
+}
+
+.right-panel > * {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Calendar Styles */
@@ -208,6 +214,102 @@ main.dashboard {
   min-height: 180px;
   margin-bottom: 1rem;
   border: 1px solid #e9ecee;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Add Event Card */
+.add-event-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: none;
+  padding: 1.5rem;
+  border: 1px solid #e9ecee;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e9ecee;
+  padding-bottom: 0.5rem;
+}
+
+.event-header h3 {
+  margin: 0;
+  color: #50778f;
+  font-size: 1.2rem;
+}
+
+.close-event {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a3cae9;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-event:hover {
+  color: #50778f;
+}
+
+.add-event-card .form-group {
+  margin-bottom: 1rem;
+}
+
+.add-event-card .form-input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #a3cae9;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.add-event-card .form-actions {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: flex-end;
+}
+
+.add-event-card .btn-save,
+.add-event-card .btn-delete,
+.add-event-card .btn-cancel {
+  padding: 0.5rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.add-event-card .btn-save {
+  background: #00b894;
+  color: white;
+}
+
+.add-event-card .btn-delete {
+  background: #e17055;
+  color: white;
+}
+
+.add-event-card .btn-cancel {
+  background: #ddd;
+  color: #666;
 }
 
 .calendar {
@@ -390,11 +492,13 @@ main.dashboard {
 
 .todo-list {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(80,119,143,0.10);
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-  border: 1px solid #a3cae9;
-  margin-top: 1.5rem;
+  border-radius: 14px;
+  box-shadow: none;
+  padding: 1.5rem;
+  border: 1px solid #e9ecee;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .todo-header {
@@ -549,6 +653,28 @@ main.dashboard {
   cursor: pointer;
   margin-left: 1rem;
 }
+.modal {
+  display: none !important;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#eventModal {
+  display: none !important;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 #eventModal .modal-content {
   padding: 2rem 1.5rem 1.5rem 1.5rem;
   max-width: 400px;
@@ -558,6 +684,11 @@ main.dashboard {
   background: #fff;
   border: 1.5px solid #a3cae9;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #eventModal .form-group {
   margin-bottom: 1rem;

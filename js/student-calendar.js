@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteBtn = document.getElementById('deleteEvent');
     const eventTitle = document.getElementById('eventTitle');
     const eventDate = document.getElementById('eventDate');
+    
+    // Inline form elements
+    const inlineSaveBtn = document.querySelector('.btn-save');
+    const inlineDeleteBtn = document.querySelector('.btn-delete');
+    const inlineCancelBtn = document.querySelector('.btn-cancel');
+    const inlineEventTitle = document.getElementById('inlineEventTitle');
+    const inlineEventDate = document.getElementById('inlineEventDate');
+    const addEventCard = document.querySelector('.add-event-card');
 
     // State
     let currentDate = new Date();
@@ -137,10 +145,16 @@ document.addEventListener('DOMContentLoaded', function() {
             renderCalendar();
         });
 
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        saveBtn.addEventListener('click', saveEvent);
-        deleteBtn.addEventListener('click', deleteEvent);
+        // Modal event listeners
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+        if (saveBtn) saveBtn.addEventListener('click', saveEvent);
+        if (deleteBtn) deleteBtn.addEventListener('click', deleteEvent);
+        
+        // Inline form event listeners
+        if (inlineSaveBtn) inlineSaveBtn.addEventListener('click', saveInlineEvent);
+        if (inlineDeleteBtn) inlineDeleteBtn.addEventListener('click', deleteInlineEvent);
+        if (inlineCancelBtn) inlineCancelBtn.addEventListener('click', clearInlineForm);
         
         window.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -178,6 +192,82 @@ document.addEventListener('DOMContentLoaded', function() {
         saveEvents();
         renderCalendar();
         closeModal();
+    }
+
+    function saveInlineEvent() {
+        if (!inlineEventTitle.value.trim()) {
+            alert('Please enter a title for the event');
+            return;
+        }
+
+        if (!inlineEventDate.value) {
+            alert('Please select a date for the event');
+            return;
+        }
+
+        const event = {
+            id: Date.now(),
+            title: inlineEventTitle.value.trim(),
+            date: inlineEventDate.value
+        };
+
+        events.push(event);
+        saveEvents();
+        renderCalendar();
+        clearInlineForm();
+        
+        // Show success message
+        showNotification('Event added successfully!', 'success');
+    }
+
+    function deleteInlineEvent() {
+        if (confirm('Are you sure you want to clear the form?')) {
+            clearInlineForm();
+        }
+    }
+
+    function clearInlineForm() {
+        inlineEventTitle.value = '';
+        inlineEventDate.value = '';
+    }
+
+    function showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#00b894' : '#74b9ff'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
     }
 
     function deleteEvent() {
