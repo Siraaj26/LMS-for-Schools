@@ -5,7 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "supabase:link": "npx supabase link --project-ref iggyleprkjwrveimubex",
+    "supabase:status": "npx supabase status",
+    "supabase:db:pull": "npx supabase db pull",
+    "supabase:db:push": "npx supabase db push",
+    "supabase:migration:new": "npx supabase migration new",
+    "supabase:gen:types": "npx supabase gen types typescript --project-id iggyleprkjwrveimubex > types/supabase.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.15.0",

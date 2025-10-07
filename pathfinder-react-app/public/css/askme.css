@@ -1,0 +1,445 @@
+/* AskMe! Chatbot Styles - Updated to match Teacher Dashboard colors */
+.askme-container {
+    min-height: 100vh;
+    background: #f8f9fa; /* Same as teacher dashboard background */
+    padding: 2rem 0;
+}
+
+.askme-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.askme-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Chat Container */
+.chat-container {
+    background: white;
+    border-radius: 12px; /* Match teacher card border radius */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Match teacher card shadow */
+    border: 1px solid #e9ecef; /* Match teacher card border */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+    transition: all 0.3s ease;
+}
+
+.chat-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chat-window {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    background: #f8f9fa; /* Match overall background */
+    scroll-behavior: smooth;
+}
+
+.chat-window::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+    background: #6b8fa3; /* Use teacher secondary color */
+    border-radius: 10px;
+}
+
+.chat-window::-webkit-scrollbar-thumb:hover {
+    background: #50778f; /* Use teacher primary color */
+}
+
+/* Message Styles */
+.message {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.bot-message {
+    justify-content: flex-start;
+}
+
+.avatar-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 0.75rem;
+    flex-shrink: 0;
+    border: 2px solid rgba(80, 119, 143, 0.2); /* Teacher color with transparency */
+}
+
+.user-avatar, .bot-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 1rem 1.25rem;
+    border-radius: 18px;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, #50778f 0%, #6b8fa3 100%); /* Teacher header gradient */
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message .message-content {
+    background: white;
+    color: #333;
+    border: 1px solid #e9ecef;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-content p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #50778f; /* Teacher primary color */
+    animation: typingAnimation 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingAnimation {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Chat Controls */
+.chat-controls {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-size: 0.9rem;
+    font-weight: 600; /* Match teacher font weight */
+    color: #50778f; /* Teacher primary color */
+    white-space: nowrap;
+}
+
+.control-select {
+    padding: 0.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.9rem;
+    min-width: 120px;
+    color: #50778f; /* Teacher primary color */
+}
+
+.control-select:focus {
+    outline: none;
+    border-color: #50778f;
+    box-shadow: 0 0 0 2px rgba(80, 119, 143, 0.2);
+}
+
+/* Input Area */
+.input-area {
+    background: white;
+    padding: 1.5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.input-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.message-input {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e9ecef;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.message-input:focus {
+    border-color: #50778f; /* Teacher primary color */
+}
+
+.message-input:disabled {
+    background: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.send-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, #50778f 0%, #6b8fa3 100%); /* Teacher gradient */
+    color: white;
+}
+
+.send-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(80, 119, 143, 0.3); /* Teacher shadow */
+}
+
+.send-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.input-status {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #6b8fa3; /* Teacher secondary color */
+    min-height: 1.2rem;
+}
+
+/* Settings Panel */
+.settings-panel {
+    background: white;
+    border-radius: 12px; /* Match teacher card border radius */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Match teacher card shadow */
+    border: 1px solid #e9ecef; /* Match teacher card border */
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    transition: all 0.3s ease;
+}
+
+.settings-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.settings-panel h3 {
+    margin-top: 0;
+    color: #50778f; /* Teacher primary color */
+    font-size: 1.3rem;
+    font-weight: 600; /* Match teacher font weight */
+    border-bottom: 2px solid #50778f;
+    padding-bottom: 0.5rem;
+}
+
+.setting-item {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.clear-button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 100%;
+    justify-content: center;
+}
+
+.clear-button:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Persona Preview */
+.persona-preview {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+}
+
+.persona-preview h4 {
+    margin: 0 0 1rem 0;
+    color: #50778f; /* Teacher primary color */
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.persona-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa; /* Match overall background */
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.persona-card:hover {
+    border-color: #50778f;
+    background: rgba(80, 119, 143, 0.05);
+}
+
+.persona-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(80, 119, 143, 0.2);
+}
+
+.persona-info h5 {
+    margin: 0 0 0.25rem 0;
+    color: #50778f; /* Teacher primary color */
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.persona-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #6b8fa3; /* Teacher secondary color */
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .askme-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .settings-panel {
+        position: relative;
+        top: 0;
+    }
+
+    .chat-container {
+        height: 60vh;
+    }
+
+    .chat-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .control-group {
+        justify-content: space-between;
+    }
+
+    .message-content {
+        max-width: 85%;
+    }
+}
+
+@media (max-width: 480px) {
+    .askme-container {
+        padding: 1rem 0;
+    }
+
+    .askme-section {
+        padding: 0 1rem;
+    }
+
+    .chat-container {
+        height: 50vh;
+    }
+
+    .input-container {
+        gap: 0.5rem;
+    }
+
+    .send-button {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+
+    .message-content {
+        max-width: 90%;
+    }
+}
