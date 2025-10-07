@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 function Home() {
     const navigate = useNavigate();
@@ -37,8 +39,10 @@ function Home() {
     };
 
     return (
-        <main>
-            <section id="home" className="hero">
+        <>
+            <Navbar />
+            <main>
+                <section id="home" className="hero">
                 <div className="hero-container">
                     <div className="hero-left">
                         <div className="hero-content">
@@ -245,7 +249,8 @@ function Home() {
                     </div>
                 </div>
             </footer>
-        </main>
+            </main>
+        </>
     );
 }
 
