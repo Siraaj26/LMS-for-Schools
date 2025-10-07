@@ -1,22 +1,4 @@
-/* Import all CSS files */
-@import url('/css/style.css');
-@import url('/css/index.css');
-@import url('/css/signin.css');
-@import url('/css/signup.css');
-@import url('/css/dashboard.css');
-@import url('/css/dashboard-edit.css');
-@import url('/css/navbar.css');
-@import url('/css/footer.css');
-@import url('/css/academic.css');
-@import url('/css/teacher.css');
-@import url('/css/parent.css');
-@import url('/css/askme.css');
-@import url('/css/rewards.css');
-@import url('/css/inbox.css');
-@import url('/css/calender.css');
-@import url('/css/assignment-modal.css');
-@import url('/css/extra.css');
-@import url('/css/softskills.css');
+/* Base React styles - CSS files are loaded in public/index.html */
 
 body {
   margin: 0;
