@@ -24,6 +24,7 @@ function Footer() {
                             </a>
                         </div>
                     </div>
+                </div>
 
                 <div className="footer-bottom">
                     <p>&copy; 2025 Pathfinder Vanguard. All rights reserved.</p>
