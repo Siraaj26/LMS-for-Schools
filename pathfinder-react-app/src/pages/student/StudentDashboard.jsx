@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
 function StudentDashboard() {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
     const [todoItems, setTodoItems] = useState([
         { id: 1, text: 'Finish Maths Assignment', completed: false },
         { id: 2, text: 'Read Chapter 4', completed: false }
