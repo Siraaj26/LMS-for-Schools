@@ -18,8 +18,8 @@ function Navbar() {
             {/* Logo Section */}
             <div className="nav-logo">
                 <Link to="/">
-                    <img src="/images/Empiras_Logo-Blue.png" alt="Pathfinder Logo" className="logo" />
-                    <span className="brand-name">Pathfinder</span>
+                    <img src="/images/Empiras_Logo-Blue.png" alt="Horizon Logo" className="logo" />
+                    <span className="brand-name">Horizon</span>
                 </Link>
             </div>
 
@@ -32,7 +32,7 @@ function Navbar() {
 
             {/* Navigation Links */}
             <div className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/home" className="nav-link">Home</Link>
                 <Link to="/askme" className="nav-link">AskMe!</Link>
                 <Link to="/inbox" className="nav-link">Inbox</Link>
                 <Link to="/rewards" className="nav-link">🏆 Rewards</Link>

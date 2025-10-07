@@ -69,42 +69,46 @@ function SignIn() {
     };
 
     return (
-        <div className="signin-container">
-            <div className="signin-form">
-                <h1>Pathfinder Vanguard</h1>
-                <p className="subtitle">Welcome back! Please sign in to your account.</p>
+        <div className="apple-auth-container">
+            <div className="apple-auth-card">
+                <div className="auth-header">
+                    <h1 className="auth-title">Horizon</h1>
+                    <p className="auth-subtitle">Welcome back! Please sign in to your account.</p>
+                </div>
                 
-                <form id="signinForm" onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label htmlFor="email">Email Address</label>
+                <form className="apple-auth-form" onSubmit={handleSubmit}>
+                    <div className="apple-input-group">
                         <input 
                             type="email" 
                             id="email" 
                             name="email" 
-                            placeholder="Enter your email"
+                            placeholder="Email Address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            className="apple-input"
+                            required
                         />
                     </div>
                     
-                    <div className="input-group">
-                        <label htmlFor="password">Password</label>
+                    <div className="apple-input-group">
                         <input 
                             type="password" 
                             id="password" 
                             name="password" 
-                            placeholder="Enter your password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            className="apple-input"
+                            required
                         />
                     </div>
                     
-                    <button type="submit" disabled={loading}>
+                    <button type="submit" className="apple-button primary full-width" disabled={loading}>
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
                     
-                    <div className="form-footer">
-                        <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+                    <div className="auth-footer">
+                        <p>Don't have an account? <a href="/signup" className="auth-link">Sign up here</a></p>
                     </div>
                 </form>
             </div>

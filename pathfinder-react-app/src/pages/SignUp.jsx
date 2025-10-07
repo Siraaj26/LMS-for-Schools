@@ -105,153 +105,166 @@ function SignUp() {
     };
 
     return (
-        <div className="signup-container">
-            <div className="signup-form">
-                <h1>Pathfinder Vanguard</h1>
-                <p className="subtitle">Please provide your information to create your student account.</p>
+        <div className="apple-auth-container">
+            <div className="apple-auth-card large">
+                <div className="auth-header">
+                    <h1 className="auth-title">Horizon</h1>
+                    <p className="auth-subtitle">Please provide your information to create your student account.</p>
+                </div>
                 
-                <form id="signupForm" onSubmit={handleSubmit}>
+                <form className="apple-auth-form" onSubmit={handleSubmit}>
                     <div className="form-section">
-                        <h2>Student Information</h2>
+                        <h2 className="section-title">Student Information</h2>
                         
-                        <div className="form-group">
-                            <label htmlFor="studentFullName">Full Name *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="text" 
                                 id="studentFullName" 
                                 name="studentFullName" 
-                                placeholder="Enter your full name."
+                                placeholder="Full Name *"
                                 value={formData.studentFullName}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="studentEmail">Email *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="email" 
                                 id="studentEmail" 
                                 name="studentEmail" 
-                                placeholder="lungile@pathfinderglobalacademy.com"
+                                placeholder="Email Address *"
                                 value={formData.studentEmail}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="studentPassword">Password *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="password" 
                                 id="studentPassword" 
                                 name="studentPassword" 
-                                placeholder="Enter your password."
+                                placeholder="Password *"
                                 value={formData.studentPassword}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">Confirm Password *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="password" 
                                 id="confirmPassword" 
                                 name="confirmPassword" 
-                                placeholder="Confirm your password."
+                                placeholder="Confirm Password *"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="currentGrade">Current Grade *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="text" 
                                 id="currentGrade" 
                                 name="currentGrade" 
-                                placeholder="e.g., Grade 11"
+                                placeholder="Current Grade (e.g., Grade 11) *"
                                 value={formData.currentGrade}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="phoneNumber">Phone Number *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="tel" 
                                 id="phoneNumber" 
                                 name="phoneNumber" 
-                                placeholder="(555) 123-4567"
+                                placeholder="Phone Number *"
                                 value={formData.phoneNumber}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="location">Location *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="text" 
                                 id="location" 
                                 name="location" 
-                                placeholder="City, Country"
+                                placeholder="City, Country *"
                                 value={formData.location}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="targetUniversity">Target University/School *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="text" 
                                 id="targetUniversity" 
                                 name="targetUniversity" 
-                                placeholder="e.g., Stanford University"
+                                placeholder="Target University/School *"
                                 value={formData.targetUniversity}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                     </div>
                     
                     <div className="form-section">
-                        <h2>Parent/Guardian Information</h2>
+                        <h2 className="section-title">Parent/Guardian Information</h2>
                         
-                        <div className="form-group">
-                            <label htmlFor="parentFullName">Parent/Guardian Full Name *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="text" 
                                 id="parentFullName" 
                                 name="parentFullName" 
-                                placeholder="Enter parent/guardian full name."
+                                placeholder="Parent/Guardian Full Name *"
                                 value={formData.parentFullName}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="parentEmail">Parent/Guardian Email *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="email" 
                                 id="parentEmail" 
                                 name="parentEmail" 
-                                placeholder="parent.email@example.com"
+                                placeholder="Parent/Guardian Email *"
                                 value={formData.parentEmail}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                         
-                        <div className="form-group">
-                            <label htmlFor="parentPhoneNumber">Parent/Guardian Phone Number *</label>
+                        <div className="apple-input-group">
                             <input 
                                 type="tel" 
                                 id="parentPhoneNumber" 
                                 name="parentPhoneNumber" 
-                                placeholder="(555) 123-4567"
+                                placeholder="Parent/Guardian Phone Number *"
                                 value={formData.parentPhoneNumber}
                                 onChange={handleChange}
+                                className="apple-input"
+                                required
                             />
                         </div>
                     </div>
                     
-                    <button type="submit" className="submit-btn" disabled={loading}>
+                    <button type="submit" className="apple-button primary full-width" disabled={loading}>
                         {loading ? 'Creating Account...' : 'Create Account'}
                     </button>
                 </form>

@@ -7,8 +7,8 @@ function Footer() {
             <div className="footer-container">
                 <div className="footer-content">
                     <div className="footer-section">
-                        <h3>Pathfinder Vanguard</h3>
-                        <p>Empowering students worldwide with personalized learning paths and global community support.</p>
+                        <h3>Horizon</h3>
+                        <p>Leading students to discovery, progress, and direction through personalized learning journeys.</p>
                         <div className="footer-links">
                             <a href="https://www.instagram.com/empirasglobalacademy/?hl=en" target="_blank" rel="noopener noreferrer">
                                 <i className="fab fa-instagram"></i>
@@ -27,7 +27,7 @@ function Footer() {
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; 2025 Pathfinder Vanguard. All rights reserved.</p>
+                    <p>&copy; 2025 Horizon. All rights reserved.</p>
                 </div>
             </div>
         </footer>
