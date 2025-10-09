@@ -80,39 +80,32 @@ function Navbar() {
                 {user ? (
                     // Signed-in user actions
                     <div className="signed-in-actions">
-                        <button 
-                            className="navbar-icon-btn dashboard-btn"
-                            onClick={() => navigate('/student/dashboard')}
-                            title="Go to Student Dashboard"
+                        <div 
+                            className="profile-dropdown-container"
+                            onMouseEnter={() => setIsProfileDropdownOpen(true)}
+                            onMouseLeave={() => setIsProfileDropdownOpen(false)}
                         >
-                            <span className="icon">📊</span>
-                            <span className="btn-text">Dashboard</span>
-                        </button>
-                        <button 
-                            className="navbar-icon-btn profile-btn"
-                            onClick={toggleProfileDropdown}
-                            title="Profile Menu"
-                        >
-                            <span className="icon">👤</span>
-                            <span className="btn-text">Profile</span>
-                        </button>
-                        {isProfileDropdownOpen && (
+                            <button 
+                                className="navbar-icon-btn profile-btn"
+                                title="Profile Menu"
+                            >
+                                <span className="btn-text">Profile</span>
+                            </button>
+                            {isProfileDropdownOpen && (
                             <div className="navbar-dropdown">
-                                <button onClick={() => navigate('/student/dashboard')} className="dropdown-item">
-                                    📊 Student Dashboard
-                                </button>
                                 <button onClick={() => navigate('/student/academics')} className="dropdown-item">
-                                    📚 Academics
+                                    Academics
                                 </button>
                                 <button onClick={() => navigate('/rewards')} className="dropdown-item">
-                                    🏆 Rewards
+                                    Rewards
                                 </button>
                                 <div className="dropdown-divider"></div>
                                 <button onClick={handleSignOut} className="dropdown-item signout">
-                                    🚪 Sign Out
+                                    Sign Out
                                 </button>
                             </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 ) : (
                     // Non-signed-in user actions
