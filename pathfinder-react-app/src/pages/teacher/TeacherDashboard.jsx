@@ -1,299 +1,362 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import '../../styles/teacher-dashboard.css';
 
 function TeacherDashboard() {
-    const [showAssignmentModal, setShowAssignmentModal] = useState(false);
-    const [assignmentData, setAssignmentData] = useState({
-        title: '',
-        class: '',
-        dueDate: '',
-        points: ''
+    const navigate = useNavigate();
+    
+    // Mock data for teacher dashboard
+    const [teacherData] = useState({
+        name: "Ms. Sarah Smith",
+        email: "teacher@test.com",
+        subject: "Mathematics",
+        school: "Horizon Academy",
+        avatar: "/images/teacher-avatar.jpg"
     });
 
-    const handleAssignmentChange = (e) => {
-        setAssignmentData({
-            ...assignmentData,
-            [e.target.name]: e.target.value
-        });
+    const [classStats] = useState({
+        totalStudents: 24,
+        activeStudents: 22,
+        averageGrade: 85,
+        assignmentsGraded: 18,
+        pendingGrading: 6
+    });
+
+    const [students] = useState([
+        { id: 1, name: "Alex Johnson", grade: 87, attendance: 95, lastActive: "2 hours ago", status: "active" },
+        { id: 2, name: "Emma Wilson", grade: 92, attendance: 98, lastActive: "1 hour ago", status: "active" },
+        { id: 3, name: "Michael Brown", grade: 78, attendance: 90, lastActive: "3 hours ago", status: "needs_attention" },
+        { id: 4, name: "Sarah Davis", grade: 89, attendance: 96, lastActive: "30 minutes ago", status: "active" },
+        { id: 5, name: "David Lee", grade: 83, attendance: 94, lastActive: "1 hour ago", status: "active" }
+    ]);
+
+    const [recentAssignments] = useState([
+        { id: 1, title: "Calculus Integration Problems", subject: "Math", dueDate: "Dec 15", submissions: 18, total: 24, status: "active" },
+        { id: 2, title: "Algebra Quiz", subject: "Math", dueDate: "Dec 12", submissions: 24, total: 24, status: "completed" },
+        { id: 3, title: "Trigonometry Review", subject: "Math", dueDate: "Dec 20", submissions: 5, total: 24, status: "active" }
+    ]);
+
+    const [pendingApprovals] = useState([
+        { id: 1, student: "Alex Johnson", request: "Assignment Extension", subject: "Calculus", reason: "Family emergency", date: "Dec 10" },
+        { id: 2, student: "Emma Wilson", request: "Extra Credit", subject: "Algebra", reason: "Missed class due to illness", date: "Dec 9" }
+    ]);
+
+    const [parentCommunications] = useState([
+        { id: 1, parent: "Sarah Johnson", student: "Alex Johnson", subject: "Progress Update", message: "Alex is showing excellent progress in calculus.", date: "Dec 10", type: "positive" },
+        { id: 2, parent: "Michael Brown", student: "Emma Wilson", subject: "Concern", message: "Emma seems to be struggling with the latest assignment.", date: "Dec 8", type: "concern" }
+    ]);
+
+    const getGradeColor = (grade) => {
+        if (grade >= 90) return '#10b981';
+        if (grade >= 80) return '#f59e0b';
+        if (grade >= 70) return '#f97316';
+        return '#ef4444';
     };
 
-    const createAssignment = () => {
-        setShowAssignmentModal(true);
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'active': return '#10b981';
+            case 'needs_attention': return '#f59e0b';
+            case 'inactive': return '#6b7280';
+            default: return '#6b7280';
+        }
     };
 
-    const saveAssignment = () => {
-        console.log('Saving assignment:', assignmentData);
-        setShowAssignmentModal(false);
-        setAssignmentData({ title: '', class: '', dueDate: '', points: '' });
+    const getAssignmentStatus = (submissions, total) => {
+        const percentage = (submissions / total) * 100;
+        if (percentage === 100) return 'completed';
+        if (percentage >= 75) return 'good';
+        if (percentage >= 50) return 'moderate';
+        return 'low';
     };
 
     return (
-        <div data-role="teacher">
+        <div className="teacher-dashboard">
             <Navbar />
             
-            <main className="teacher-dashboard">
-                {/* Teacher Header */}
-                <div className="teacher-header">
-                    <div className="teacher-info">
-                        <div className="teacher-avatar">
-                            <img src="/images/avatar.jpg" alt="Teacher Avatar" />
-                        </div>
-                        <div className="teacher-details">
-                            <h1>Welcome, Ms. Sarah Johnson</h1>
-                            <p>Mathematics & English Teacher • Grade 10-12</p>
-                            <div className="teacher-stats">
-                                <span className="stat">Classes: 7</span>
-                                <span className="stat">Students: 201</span>
-                                <span className="stat">Subjects: 2</span>
+            <main className="dashboard-main">
+                {/* Welcome Header */}
+                <section className="welcome-hero">
+                    <div className="welcome-container">
+                        <div className="welcome-content">
+                            <div className="welcome-text">
+                                <h1 className="welcome-title">
+                                    Welcome back, <span className="highlight">{teacherData.name}</span>
+                                </h1>
+                                <p className="welcome-subtitle">
+                                    {teacherData.subject} • {teacherData.school}
+                                </p>
+                                <div className="teacher-stats">
+                                    <div className="stat-item">
+                                        <span className="stat-number">{classStats.totalStudents}</span>
+                                        <span className="stat-label">Total Students</span>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span className="stat-number">{classStats.averageGrade}%</span>
+                                        <span className="stat-label">Average Grade</span>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span className="stat-number">{classStats.assignmentsGraded}</span>
+                                        <span className="stat-label">Graded</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="teacher-avatar-section">
+                                <div className="avatar-container">
+                                    <div className="teacher-avatar">
+                                        <span className="avatar-icon">👩‍🏫</span>
+                                    </div>
+                                    <div className="status-badge">
+                                        <span className="status-dot"></span>
+                                        <span className="status-text">Online</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="teacher-actions">
-                        <button className="action-btn primary" onClick={createAssignment}>
-                            📝 New Assignment
-                        </button>
-                        <button className="action-btn secondary">
-                            📋 View Assignments
-                        </button>
-                        <button className="action-btn secondary">
-                            📅 Calendar
-                        </button>
-                    </div>
-                </div>
+                </section>
 
-                {/* Main Content */}
-                <div className="teacher-content">
-                    {/* Left Side - Class Overview */}
-                    <section className="class-overview">
-                        <h2>Class Overview</h2>
-                        
-                        {/* Class Cards */}
-                        <div className="class-cards">
-                            {[
-                                { name: 'Mathematics Grade 8A', code: 'MATH8A', icon: '🔢', students: 28, assignments: 6, avgGrade: 72 },
-                                { name: 'Mathematics Grade 9B', code: 'MATH9B', icon: '📐', students: 31, assignments: 5, avgGrade: 75 },
-                                { name: 'Mathematics Grade 10A', code: 'MATH10A', icon: '📊', students: 32, assignments: 4, avgGrade: 78 },
-                                { name: 'Mathematics Grade 11B', code: 'MATH11B', icon: '🧮', students: 29, assignments: 3, avgGrade: 82 },
-                                { name: 'Advanced Mathematics 12', code: 'MATH12A', icon: '🎯', students: 22, assignments: 4, avgGrade: 85 },
-                                { name: 'English Grade 10A', code: 'ENG10A', icon: '📚', students: 30, assignments: 3, avgGrade: 76 },
-                                { name: 'English Literature 11B', code: 'ENG11B', icon: '✍️', students: 28, assignments: 2, avgGrade: 79 }
-                            ].map((classItem, index) => (
-                                <div key={index} className="class-card">
-                                    <div className="class-header">
-                                        <div className="class-icon">{classItem.icon}</div>
-                                        <div className="class-info">
-                                            <h3>{classItem.name}</h3>
-                                            <span className="class-code">{classItem.code}</span>
+                {/* Class Overview */}
+                <section className="class-overview">
+                    <div className="overview-container">
+                        <h2 className="section-title">Class Overview</h2>
+                        <div className="overview-grid">
+                            <div className="overview-card">
+                                <div className="card-header">
+                                    <h3 className="card-title">Student Performance</h3>
+                                    <div className="performance-indicator">
+                                        <span className="indicator-dot excellent"></span>
+                                        <span className="indicator-text">Excellent</span>
+                                    </div>
+                                </div>
+                                <div className="performance-chart">
+                                    <div className="chart-container">
+                                        <div className="chart-bar">
+                                            <div className="bar-segment excellent" style={{width: '40%'}}></div>
+                                            <div className="bar-segment good" style={{width: '35%'}}></div>
+                                            <div className="bar-segment average" style={{width: '20%'}}></div>
+                                            <div className="bar-segment needs-improvement" style={{width: '5%'}}></div>
+                                        </div>
+                                        <div className="chart-legend">
+                                            <div className="legend-item">
+                                                <span className="legend-dot excellent"></span>
+                                                <span>90-100%</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <span className="legend-dot good"></span>
+                                                <span>80-89%</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <span className="legend-dot average"></span>
+                                                <span>70-79%</span>
+                                            </div>
+                                            <div className="legend-item">
+                                                <span className="legend-dot needs-improvement"></span>
+                                                <span>Below 70%</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="class-stats">
-                                        <div className="stat-item">
-                                            <span className="stat-label">Students</span>
-                                            <span className="stat-value">{classItem.students}</span>
-                                        </div>
-                                        <div className="stat-item">
-                                            <span className="stat-label">Assignments</span>
-                                            <span className="stat-value">{classItem.assignments}</span>
-                                        </div>
-                                        <div className="stat-item">
-                                            <span className="stat-label">Avg Grade</span>
-                                            <span className="stat-value">{classItem.avgGrade}%</span>
+                                </div>
+                            </div>
+
+                            <div className="overview-card">
+                                <div className="card-header">
+                                    <h3 className="card-title">Assignment Status</h3>
+                                    <div className="assignment-summary">
+                                        <span className="graded">{classStats.assignmentsGraded} Graded</span>
+                                        <span className="pending">{classStats.pendingGrading} Pending</span>
+                                    </div>
+                                </div>
+                                <div className="assignment-progress">
+                                    <div className="progress-ring">
+                                        <div className="ring-fill" style={{'--progress': `${(classStats.assignmentsGraded / (classStats.assignmentsGraded + classStats.pendingGrading)) * 100}%`}}></div>
+                                        <div className="ring-text">
+                                            {Math.round((classStats.assignmentsGraded / (classStats.assignmentsGraded + classStats.pendingGrading)) * 100)}%
                                         </div>
                                     </div>
-                                    <div className="class-progress">
-                                        <div className="progress-bar">
-                                            <div className="progress-fill" style={{width: `${classItem.avgGrade}%`}}></div>
+                                </div>
+                            </div>
+
+                            <div className="overview-card">
+                                <div className="card-header">
+                                    <h3 className="card-title">Attendance</h3>
+                                    <div className="attendance-rate">94%</div>
+                                </div>
+                                <div className="attendance-chart">
+                                    <div className="attendance-bars">
+                                        {Array.from({length: 7}, (_, i) => (
+                                            <div key={i} className="attendance-bar" style={{height: `${85 + Math.random() * 15}%`}}></div>
+                                        ))}
+                                    </div>
+                                    <div className="attendance-labels">
+                                        <span>Mon</span>
+                                        <span>Tue</span>
+                                        <span>Wed</span>
+                                        <span>Thu</span>
+                                        <span>Fri</span>
+                                        <span>Sat</span>
+                                        <span>Sun</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Student List */}
+                <section className="student-list">
+                    <div className="students-container">
+                        <div className="section-header">
+                            <h2 className="section-title">Students</h2>
+                            <div className="student-filters">
+                                <button className="filter-btn active">All</button>
+                                <button className="filter-btn">Needs Attention</button>
+                                <button className="filter-btn">Top Performers</button>
+                            </div>
+                        </div>
+                        <div className="students-grid">
+                            {students.map((student) => (
+                                <div key={student.id} className={`student-card ${student.status}`}>
+                                    <div className="student-header">
+                                        <div className="student-info">
+                                            <h4 className="student-name">{student.name}</h4>
+                                            <p className="student-grade">Grade: {student.grade}%</p>
                                         </div>
-                                        <span className="progress-text">Class Progress: {classItem.avgGrade}%</span>
+                                        <div className="student-status">
+                                            <span className="status-dot" style={{backgroundColor: getStatusColor(student.status)}}></span>
+                                            <span className="status-text">{student.status.replace('_', ' ')}</span>
+                                        </div>
+                                    </div>
+                                    <div className="student-metrics">
+                                        <div className="metric">
+                                            <span className="metric-label">Attendance</span>
+                                            <span className="metric-value">{student.attendance}%</span>
+                                        </div>
+                                        <div className="metric">
+                                            <span className="metric-label">Last Active</span>
+                                            <span className="metric-value">{student.lastActive}</span>
+                                        </div>
+                                    </div>
+                                    <div className="student-actions">
+                                        <button className="action-btn primary">View Progress</button>
+                                        <button className="action-btn secondary">Message</button>
                                     </div>
                                 </div>
                             ))}
                         </div>
+                    </div>
+                </section>
 
-                        {/* Recent Activity */}
-                        <div className="recent-activity">
-                            <h3>Recent Activity</h3>
-                            <div className="activity-list">
-                                <div className="activity-item">
-                                    <div className="activity-icon">📝</div>
-                                    <div className="activity-content">
-                                        <p>Graded 15 assignments for MATH10A</p>
-                                        <small>2 hours ago</small>
-                                    </div>
-                                </div>
-                                <div className="activity-item">
-                                    <div className="activity-icon">📊</div>
-                                    <div className="activity-content">
-                                        <p>Updated progress for Thabo Mthembu</p>
-                                        <small>4 hours ago</small>
-                                    </div>
-                                </div>
-                                <div className="activity-item">
-                                    <div className="activity-icon">🎯</div>
-                                    <div className="activity-content">
-                                        <p>Created new skills assessment</p>
-                                        <small>1 day ago</small>
-                                    </div>
-                                </div>
-                            </div>
+                {/* Recent Assignments */}
+                <section className="recent-assignments">
+                    <div className="assignments-container">
+                        <div className="section-header">
+                            <h2 className="section-title">Recent Assignments</h2>
+                            <button className="create-assignment-btn">Create Assignment</button>
                         </div>
-                    </section>
-
-                    {/* Right Side - Student Progress & Tools */}
-                    <section className="teacher-sidebar">
-                        {/* Student Progress */}
-                        <div className="student-progress">
-                            <h3>Student Progress Overview</h3>
-                            <div className="progress-summary">
-                                <div className="progress-item">
-                                    <span className="progress-label">On Track</span>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill" style={{width: '75%'}}></div>
-                                    </div>
-                                    <span className="progress-value">67 students</span>
-                                </div>
-                                <div className="progress-item">
-                                    <span className="progress-label">Needs Attention</span>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill warning" style={{width: '20%'}}></div>
-                                    </div>
-                                    <span className="progress-value">18 students</span>
-                                </div>
-                                <div className="progress-item">
-                                    <span className="progress-label">At Risk</span>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill danger" style={{width: '5%'}}></div>
-                                    </div>
-                                    <span className="progress-value">4 students</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Calendar */}
-                        <div className="calendar-section">
-                            <h3>📅 Upcoming Events</h3>
-                            <div className="calendar-events">
-                                {[
-                                    { day: '15', month: 'Mar', title: 'Grade 8 Math Test', time: '9:00 AM - 10:30 AM' },
-                                    { day: '18', month: 'Mar', title: 'Parent-Teacher Meeting', time: '2:00 PM - 4:00 PM' },
-                                    { day: '22', month: 'Mar', title: 'Grade 12 Assignment Due', time: 'All Day' },
-                                    { day: '25', month: 'Mar', title: 'Math Department Meeting', time: '3:00 PM - 4:30 PM' }
-                                ].map((event, index) => (
-                                    <div key={index} className="event-item">
-                                        <div className="event-date">
-                                            <span className="day">{event.day}</span>
-                                            <span className="month">{event.month}</span>
-                                        </div>
-                                        <div className="event-details">
-                                            <p>{event.title}</p>
-                                            <small>{event.time}</small>
+                        <div className="assignments-list">
+                            {recentAssignments.map((assignment) => (
+                                <div key={assignment.id} className="assignment-card">
+                                    <div className="assignment-header">
+                                        <h4 className="assignment-title">{assignment.title}</h4>
+                                        <div className="assignment-status">
+                                            <span className={`status-badge ${getAssignmentStatus(assignment.submissions, assignment.total)}`}>
+                                                {assignment.status}
+                                            </span>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Quick Tools */}
-                        <div className="quick-tools">
-                            <h3>Quick Tools</h3>
-                            <div className="tools-grid">
-                                <button className="tool-btn" onClick={createAssignment}>
-                                    <span className="tool-icon">📝</span>
-                                    <span className="tool-name">Assignment</span>
-                                </button>
-                                <button className="tool-btn">
-                                    <span className="tool-icon">✅</span>
-                                    <span className="tool-name">Grade</span>
-                                </button>
-                                <button className="tool-btn">
-                                    <span className="tool-icon">🎯</span>
-                                    <span className="tool-name">Skills</span>
-                                </button>
-                                <button className="tool-btn">
-                                    <span className="tool-icon">📊</span>
-                                    <span className="tool-name">Reports</span>
-                                </button>
-                                <button className="tool-btn">
-                                    <span className="tool-icon">💬</span>
-                                    <span className="tool-name">Message</span>
-                                </button>
-                                <button className="tool-btn">
-                                    <span className="tool-icon">📅</span>
-                                    <span className="tool-name">Calendar</span>
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </main>
-
-            {/* Assignment Creation Modal */}
-            {showAssignmentModal && (
-                <div id="assignmentModal" className="modal" style={{display: 'block'}}>
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h3>Create Assignment & Subject</h3>
-                            <button className="close" onClick={() => setShowAssignmentModal(false)}>&times;</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="form-group">
-                                <label>Assignment Title:</label>
-                                <input 
-                                    type="text" 
-                                    name="title"
-                                    value={assignmentData.title}
-                                    onChange={handleAssignmentChange}
-                                    placeholder="Enter assignment title" 
-                                />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Subject/Class:</label>
-                                <input 
-                                    type="text" 
-                                    name="class"
-                                    value={assignmentData.class}
-                                    onChange={handleAssignmentChange}
-                                    placeholder="e.g., Science Grade 9, History 11, Art 10" 
-                                />
-                                <small style={{color: '#666', fontSize: '0.8rem'}}>Type a new subject or class name</small>
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Due Date:</label>
-                                <input 
-                                    type="date" 
-                                    name="dueDate"
-                                    value={assignmentData.dueDate}
-                                    onChange={handleAssignmentChange}
-                                />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label>Points:</label>
-                                <input 
-                                    type="number" 
-                                    name="points"
-                                    value={assignmentData.points}
-                                    onChange={handleAssignmentChange}
-                                    placeholder="100" 
-                                />
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button onClick={() => setShowAssignmentModal(false)}>Cancel</button>
-                            <button onClick={saveAssignment}>Create</button>
+                                    <div className="assignment-details">
+                                        <p className="assignment-subject">{assignment.subject}</p>
+                                        <p className="due-date">Due: {assignment.dueDate}</p>
+                                    </div>
+                                    <div className="assignment-progress">
+                                        <div className="progress-info">
+                                            <span className="submissions">{assignment.submissions}/{assignment.total} submitted</span>
+                                            <span className="percentage">{Math.round((assignment.submissions / assignment.total) * 100)}%</span>
+                                        </div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{width: `${(assignment.submissions / assignment.total) * 100}%`}}></div>
+                                        </div>
+                                    </div>
+                                    <div className="assignment-actions">
+                                        <button className="action-btn primary">Grade</button>
+                                        <button className="action-btn secondary">View</button>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                </div>
-            )}
+                </section>
 
+                {/* Pending Approvals */}
+                <section className="pending-approvals">
+                    <div className="approvals-container">
+                        <div className="section-header">
+                            <h2 className="section-title">Pending Approvals</h2>
+                            <span className="approval-count">{pendingApprovals.length} requests</span>
+                        </div>
+                        <div className="approvals-list">
+                            {pendingApprovals.map((approval) => (
+                                <div key={approval.id} className="approval-card">
+                                    <div className="approval-header">
+                                        <div className="student-info">
+                                            <h4 className="student-name">{approval.student}</h4>
+                                            <p className="request-type">{approval.request}</p>
+                                        </div>
+                                        <span className="approval-date">{approval.date}</span>
+                                    </div>
+                                    <div className="approval-details">
+                                        <p className="subject">{approval.subject}</p>
+                                        <p className="reason">{approval.reason}</p>
+                                    </div>
+                                    <div className="approval-actions">
+                                        <button className="approve-btn">Approve</button>
+                                        <button className="deny-btn">Deny</button>
+                                        <button className="message-btn">Message</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* Parent Communications */}
+                <section className="parent-communications">
+                    <div className="communications-container">
+                        <div className="section-header">
+                            <h2 className="section-title">Parent Communications</h2>
+                            <button className="compose-btn">Compose Message</button>
+                        </div>
+                        <div className="communications-list">
+                            {parentCommunications.map((comm) => (
+                                <div key={comm.id} className={`communication-card ${comm.type}`}>
+                                    <div className="comm-header">
+                                        <div className="parent-info">
+                                            <h4 className="parent-name">{comm.parent}</h4>
+                                            <p className="student-name">Student: {comm.student}</p>
+                                        </div>
+                                        <span className="comm-date">{comm.date}</span>
+                                    </div>
+                                    <div className="comm-content">
+                                        <h5 className="comm-subject">{comm.subject}</h5>
+                                        <p className="comm-message">{comm.message}</p>
+                                    </div>
+                                    <div className="comm-actions">
+                                        <button className="reply-btn">Reply</button>
+                                        <button className="schedule-btn">Schedule Meeting</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
             <Footer />
         </div>
     );
 }
 
 export default TeacherDashboard;
-
-

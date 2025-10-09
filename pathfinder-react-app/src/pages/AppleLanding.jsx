@@ -4,8 +4,8 @@ import { supabaseClient } from '../config/supabaseConfig';
 import '../styles/apple-landing.css';
 
 function AppleLanding() {
-    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -40,10 +40,19 @@ function AppleLanding() {
 
     const checkUser = async () => {
         try {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            setUser(user);
+            const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+            
+            // Don't auto-redirect authenticated users from landing page
+            // Let them stay on landing page if they want to
+            if (user && session && !userError && !sessionError) {
+                console.log('User is authenticated, showing landing page with user context');
+                setUser(user);
+                setLoading(false);
+                return;
+            }
         } catch (error) {
-            console.log('No user session');
+            console.log('Error checking user session:', error);
         } finally {
             setLoading(false);
         }
@@ -57,11 +66,6 @@ function AppleLanding() {
         navigate('/signin');
     };
 
-    const handleGoToDashboard = () => {
-        if (user) {
-            navigate('/dashboard');
-        }
-    };
 
     if (loading) {
         return (
@@ -90,68 +94,98 @@ function AppleLanding() {
                         <a href="#pricing" className="nav-link">Pricing</a>
                     </div>
                     <div className="navbar-actions">
-                        <button 
-                            className="apple-button secondary small"
-                            onClick={handleSignIn}
-                        >
-                            Sign In
-                        </button>
-                        <button 
-                            className="apple-button primary small"
-                            onClick={handleGetStarted}
-                        >
-                            Get Started
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            {user ? (
-                // Signed-in User Experience
-                <div className="hero-section signed-in">
-                    <div className="hero-content">
-                        <div className="welcome-icon">✨</div>
-                        <h1 className="hero-title">Welcome back</h1>
-                        <p className="hero-subtitle">
-                            You're already signed in. Ready to continue your journey of discovery?
-                        </p>
-                        <div className="hero-actions">
-                            <button 
-                                className="apple-button primary"
-                                onClick={handleGoToDashboard}
-                            >
-                                Continue Journey
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <>
-                    {/* Main Hero Section */}
-                    <section className="hero-section" id="hero">
-                        <div className="hero-content">
-                            <h1 className="hero-title">Horizon</h1>
-                            <p className="hero-subtitle">
-                                Leading students to discovery, progress, and direction.<br />
-                                Your educational journey begins here.
-                            </p>
-                            <div className="hero-actions">
+                        {user ? (
+                            // Authenticated user actions
+                            <>
                                 <button 
-                                    className="apple-button primary"
-                                    onClick={handleGetStarted}
+                                    className="apple-button secondary small"
+                                    onClick={() => navigate('/student/dashboard')}
                                 >
-                                    Begin Journey
-                                    <svg className="button-arrow" viewBox="0 0 24 24" fill="none">
-                                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    </svg>
+                                    📊 Dashboard
                                 </button>
                                 <button 
-                                    className="apple-button secondary"
+                                    className="apple-button primary small"
+                                    onClick={() => navigate('/student/academics')}
+                                >
+                                    📚 Academics
+                                </button>
+                            </>
+                        ) : (
+                            // Non-authenticated user actions
+                            <>
+                                <button 
+                                    className="apple-button secondary small"
                                     onClick={handleSignIn}
                                 >
                                     Sign In
                                 </button>
-                            </div>
+                                <button 
+                                    className="apple-button primary small"
+                                    onClick={handleGetStarted}
+                                >
+                                    Get Started
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </nav>
+
+            {/* Main Landing Page Content */}
+            <>
+                    {/* Main Hero Section */}
+                    <section className="hero-section" id="hero">
+                        <div className="hero-content">
+                            <h1 className="hero-title">Horizon</h1>
+                            {user ? (
+                                <>
+                                    <p className="hero-subtitle">
+                                        Welcome back, {user.email?.split('@')[0]}!<br />
+                                        Ready to continue your educational journey?
+                                    </p>
+                                    <div className="hero-actions">
+                                        <button 
+                                            className="apple-button primary"
+                                            onClick={() => navigate('/student/dashboard')}
+                                        >
+                                            📊 Go to Dashboard
+                                            <svg className="button-arrow" viewBox="0 0 24 24" fill="none">
+                                                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button 
+                                            className="apple-button secondary"
+                                            onClick={() => navigate('/student/academics')}
+                                        >
+                                            📚 View Academics
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="hero-subtitle">
+                                        Leading students to discovery, progress, and direction.<br />
+                                        Your educational journey begins here.
+                                    </p>
+                                    <div className="hero-actions">
+                                        <button 
+                                            className="apple-button primary"
+                                            onClick={handleGetStarted}
+                                        >
+                                            Begin Journey
+                                            <svg className="button-arrow" viewBox="0 0 24 24" fill="none">
+                                                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <button 
+                                            className="apple-button secondary"
+                                            onClick={handleSignIn}
+                                        >
+                                            Sign In
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </section>
 
@@ -426,8 +460,7 @@ function AppleLanding() {
                             </div>
                         </div>
                     </section>
-                </>
-            )}
+            </>
         </div>
     );
 }

@@ -272,14 +272,26 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Serve the main application
+// API health check
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'index.html'));
+    res.json({
+        status: 'online',
+        message: 'Horizon AI Server - API is running',
+        endpoints: {
+            chat: '/chat',
+            askme: '/askme',
+            health: '/'
+        },
+        note: 'Access the Horizon app at http://localhost:3000'
+    });
 });
 
-// Serve AskMe page
 app.get('/askme', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'askme.html'));
+    res.json({
+        status: 'online',
+        message: 'AskMe! API endpoint',
+        note: 'Use POST /chat to interact with the AI assistant'
+    });
 });
 
 // Enhanced error handling middleware

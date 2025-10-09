@@ -17,6 +17,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<AppleLanding />} />
+        <Route path="/landing" element={<AppleLanding />} />
         <Route path="/home" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />

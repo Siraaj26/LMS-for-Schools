@@ -34,19 +34,64 @@ function SignIn() {
             localStorage.setItem('currentUserEmail', email);
             localStorage.setItem('userEmail', email);
             
-            // Get user profile from database to determine role
-            const { data: profile, error: profileError } = await supabaseClient
+            // Try to find user in all login tables
+            let profile = null;
+            let profileError = null;
+            
+            // First try student_login
+            const { data: studentProfile, error: studentError } = await supabaseClient
                 .from('student_login')
-                .select('user_type, id')
+                .select('user_type, id, full_name, current_grade, location')
                 .eq('email', email)
                 .single();
 
-            console.log('📊 User profile:', profile);
+            if (studentProfile && !studentError) {
+                profile = studentProfile;
+                console.log('✅ Found in student_login:', profile);
+            } else {
+                // Try parent_login
+                const { data: parentProfile, error: parentError } = await supabaseClient
+                    .from('parent_login')
+                    .select('user_type, id, full_name')
+                    .eq('parent_email', email)
+                    .single();
+
+                if (parentProfile && !parentError) {
+                    profile = parentProfile;
+                    console.log('✅ Found in parent_login:', profile);
+                } else {
+                    // Try admin_login (teachers)
+                    const { data: adminProfile, error: adminError } = await supabaseClient
+                        .from('admin_login')
+                        .select('user_type, id, full_name')
+                        .eq('email', email)
+                        .single();
+
+                    if (adminProfile && !adminError) {
+                        profile = adminProfile;
+                        console.log('✅ Found in admin_login:', profile);
+                    } else {
+                        console.log('⚠️ User not found in any login table');
+                        profileError = adminError;
+                    }
+                }
+            }
 
             // Redirect based on user type
             if (profile && !profileError) {
                 localStorage.setItem('userId', profile.id);
                 localStorage.setItem('userType', profile.user_type);
+                
+                // Store additional user info for dashboard display
+                if (profile.full_name) {
+                    localStorage.setItem('userFullName', profile.full_name);
+                }
+                if (profile.current_grade) {
+                    localStorage.setItem('userGrade', profile.current_grade);
+                }
+                if (profile.location) {
+                    localStorage.setItem('userLocation', profile.location);
+                }
                 
                 if (profile.user_type === 'teacher') {
                     navigate('/teacher/dashboard');
@@ -56,8 +101,11 @@ function SignIn() {
                     navigate('/student/dashboard');
                 }
             } else {
-                // Default to student dashboard if no profile found
+                // If no profile found, still allow login as student
                 console.warn('⚠️ No profile found, defaulting to student dashboard');
+                localStorage.setItem('userId', authData.user.id);
+                localStorage.setItem('userType', 'student');
+                localStorage.setItem('userFullName', email.split('@')[0]);
                 navigate('/student/dashboard');
             }
         } catch (error) {

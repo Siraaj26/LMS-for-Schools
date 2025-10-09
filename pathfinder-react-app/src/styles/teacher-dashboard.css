@@ -1,0 +1,1005 @@
+/* Teacher Dashboard Styles - Apple-like Clean Design */
+
+.teacher-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Welcome Hero Section */
+.welcome-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.welcome-container {
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.welcome-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.highlight {
+  color: #fbbf24;
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin: 0 0 2rem 0;
+}
+
+.teacher-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+.teacher-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-container {
+  position: relative;
+}
+
+.teacher-avatar {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.status-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Section Styling */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Class Overview */
+.class-overview {
+  margin-bottom: 3rem;
+}
+
+.overview-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.overview-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.performance-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.indicator-dot.excellent {
+  background: #10b981;
+}
+
+.indicator-text {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.performance-chart {
+  margin-top: 1rem;
+}
+
+.chart-container {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.chart-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.bar-segment {
+  height: 100%;
+}
+
+.bar-segment.excellent {
+  background: #10b981;
+}
+
+.bar-segment.good {
+  background: #3b82f6;
+}
+
+.bar-segment.average {
+  background: #f59e0b;
+}
+
+.bar-segment.needs-improvement {
+  background: #ef4444;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.legend-dot.excellent {
+  background: #10b981;
+}
+
+.legend-dot.good {
+  background: #3b82f6;
+}
+
+.legend-dot.average {
+  background: #f59e0b;
+}
+
+.legend-dot.needs-improvement {
+  background: #ef4444;
+}
+
+.assignment-summary {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.graded {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.pending {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.assignment-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.progress-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: conic-gradient(#e5e7eb 0deg, #e5e7eb 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#3b82f6 0deg, #3b82f6 calc(var(--progress) * 3.6deg), #e5e7eb calc(var(--progress) * 3.6deg));
+}
+
+.ring-text {
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+  color: #374151;
+}
+
+.attendance-rate {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.attendance-chart {
+  margin-top: 1rem;
+}
+
+.attendance-bars {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  height: 60px;
+  margin-bottom: 0.5rem;
+}
+
+.attendance-bar {
+  flex: 1;
+  background: linear-gradient(to top, #3b82f6, #60a5fa);
+  border-radius: 2px;
+  min-height: 20px;
+}
+
+.attendance-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Student List */
+.student-list {
+  margin-bottom: 3rem;
+}
+
+.students-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.student-filters {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: #f3f4f6;
+}
+
+.filter-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.student-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.student-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.student-card.needs_attention {
+  border-left: 4px solid #f59e0b;
+}
+
+.student-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.student-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.student-grade {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.student-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-text {
+  text-transform: capitalize;
+}
+
+.student-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: #374151;
+}
+
+.student-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.action-btn.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background: #2563eb;
+}
+
+.action-btn.secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.action-btn.secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Recent Assignments */
+.recent-assignments {
+  margin-bottom: 3rem;
+}
+
+.assignments-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.create-assignment-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.create-assignment-btn:hover {
+  background: #059669;
+}
+
+.assignments-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.assignment-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.assignment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.assignment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.assignment-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.assignment-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.active {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.assignment-details {
+  margin-bottom: 1rem;
+}
+
+.assignment-subject {
+  margin: 0 0 0.5rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.due-date {
+  margin: 0;
+  color: #374151;
+  font-weight: 500;
+}
+
+.assignment-progress {
+  margin-bottom: 1rem;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.submissions {
+  color: #6b7280;
+}
+
+.percentage {
+  color: #374151;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.assignment-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Pending Approvals */
+.pending-approvals {
+  margin-bottom: 3rem;
+}
+
+.approvals-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.approval-count {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.approvals-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.approval-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #f59e0b;
+}
+
+.approval-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.student-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.request-type {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.approval-date {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.approval-details {
+  margin-bottom: 1rem;
+}
+
+.subject {
+  margin: 0 0 0.5rem 0;
+  color: #374151;
+  font-weight: 500;
+}
+
+.reason {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approve-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.approve-btn:hover {
+  background: #059669;
+}
+
+.deny-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deny-btn:hover {
+  background: #dc2626;
+}
+
+.message-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.message-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Parent Communications */
+.parent-communications {
+  margin-bottom: 3rem;
+}
+
+.communications-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.compose-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.compose-btn:hover {
+  background: #2563eb;
+}
+
+.communications-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.communication-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.communication-card.positive {
+  border-left: 4px solid #10b981;
+}
+
+.communication-card.concern {
+  border-left: 4px solid #f59e0b;
+}
+
+.communication-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.comm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.parent-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.student-name {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.comm-date {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.comm-content {
+  margin-bottom: 1rem;
+}
+
+.comm-subject {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.comm-message {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.comm-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reply-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reply-btn:hover {
+  background: #2563eb;
+}
+
+.schedule-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.schedule-btn:hover {
+  background: #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 1rem;
+  }
+  
+  .welcome-hero {
+    padding: 2rem;
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+  }
+  
+  .welcome-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .teacher-stats {
+    justify-content: center;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .students-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .student-actions,
+  .assignment-actions,
+  .approval-actions,
+  .comm-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn,
+  .approve-btn,
+  .deny-btn,
+  .message-btn,
+  .reply-btn,
+  .schedule-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-hero {
+    padding: 1.5rem;
+  }
+  
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+  
+  .teacher-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .overview-container,
+  .students-container,
+  .assignments-container,
+  .approvals-container,
+  .communications-container {
+    padding: 1rem;
+  }
+}
