@@ -98,16 +98,10 @@ function AppleLanding() {
                             // Authenticated user actions
                             <>
                                 <button 
-                                    className="apple-button secondary small"
+                                    className="apple-button primary small"
                                     onClick={() => navigate('/student/dashboard')}
                                 >
-                                    📊 Dashboard
-                                </button>
-                                <button 
-                                    className="apple-button primary small"
-                                    onClick={() => navigate('/student/academics')}
-                                >
-                                    📚 Academics
+                                    Dashboard
                                 </button>
                             </>
                         ) : (
@@ -148,16 +142,13 @@ function AppleLanding() {
                                             className="apple-button primary"
                                             onClick={() => navigate('/student/dashboard')}
                                         >
-                                            📊 Go to Dashboard
-                                            <svg className="button-arrow" viewBox="0 0 24 24" fill="none">
-                                                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                            </svg>
+                                            Go to Dashboard
                                         </button>
                                         <button 
                                             className="apple-button secondary"
                                             onClick={() => navigate('/student/academics')}
                                         >
-                                            📚 View Academics
+                                            View Academics
                                         </button>
                                     </div>
                                 </>
