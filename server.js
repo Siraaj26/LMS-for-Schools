@@ -168,7 +168,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
 
             // Get Gemini model with timeout
             const model = genAI.getGenerativeModel({
-                model: "gemini-1.5-flash",
+                model: "gemini-pro",
                 generationConfig: {
                     temperature: 0.7,
                     topK: 40,

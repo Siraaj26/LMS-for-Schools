@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import '../styles/rewards.css';
 
 function Rewards() {
     const [totalPoints, setTotalPoints] = useState(1000);
@@ -39,10 +40,10 @@ function Rewards() {
     };
 
     return (
-        <div data-role="student">
+        <div className="rewards-container">
             <Navbar />
             
-            <main className="rewards-container">
+            <main>
                 <div className="rewards-header">
                     <h1>🏆 Rewards Store</h1>
                     <div className="points-display">

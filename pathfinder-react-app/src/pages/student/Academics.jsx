@@ -1,13 +1,14 @@
 import React from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import '../../styles/academics.css';
 
 function Academics() {
     return (
-        <div data-role="academic">
+        <div className="academic-dashboard">
             <Navbar />
             
-            <main className="academic-dashboard">
+            <main>
                 <div className="academic-header">
                     <div className="academic-info">
                         <h1>Academics</h1>

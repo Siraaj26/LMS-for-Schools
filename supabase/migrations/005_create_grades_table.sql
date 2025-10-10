@@ -20,3 +20,5 @@ VALUES
     (1, 'Science', 90, 85, 92, 88, 'Term 1'),
     (1, 'History', 82, 79, 88, 85, 'Term 1');
 
+
+

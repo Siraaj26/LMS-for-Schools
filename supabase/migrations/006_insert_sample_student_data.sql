@@ -178,3 +178,5 @@ VALUES
     ('Library Extended Hours', 'Library will be open until 8 PM during exam week to support your studies.', 'normal', CURRENT_DATE + INTERVAL '45 days'),
     ('New Online Resources Available', 'Check out the new study materials and video tutorials added to your subjects.', 'normal', CURRENT_DATE + INTERVAL '60 days');
 
+
+

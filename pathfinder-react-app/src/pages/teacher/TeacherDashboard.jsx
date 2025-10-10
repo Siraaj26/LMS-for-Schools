@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import '../../styles/teacher-dashboard.css';
 
 function TeacherDashboard() {
-    const navigate = useNavigate();
-    
     // Mock data for teacher dashboard
     const [teacherData] = useState({
         name: "Ms. Sarah Smith",
@@ -47,13 +44,6 @@ function TeacherDashboard() {
         { id: 1, parent: "Sarah Johnson", student: "Alex Johnson", subject: "Progress Update", message: "Alex is showing excellent progress in calculus.", date: "Dec 10", type: "positive" },
         { id: 2, parent: "Michael Brown", student: "Emma Wilson", subject: "Concern", message: "Emma seems to be struggling with the latest assignment.", date: "Dec 8", type: "concern" }
     ]);
-
-    const getGradeColor = (grade) => {
-        if (grade >= 90) return '#10b981';
-        if (grade >= 80) return '#f59e0b';
-        if (grade >= 70) return '#f97316';
-        return '#ef4444';
-    };
 
     const getStatusColor = (status) => {
         switch (status) {

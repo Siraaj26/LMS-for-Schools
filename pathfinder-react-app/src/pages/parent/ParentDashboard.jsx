@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import '../../styles/parent-dashboard.css';
 
 function ParentDashboard() {
-    const navigate = useNavigate();
-    
     // Mock data for parent dashboard
     const [parentData] = useState({
         name: "Sarah Johnson",

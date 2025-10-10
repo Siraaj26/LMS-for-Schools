@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import '../../styles/student-dashboard.css';
 
 function StudentDashboard() {
-    const navigate = useNavigate();
-    
     // Mock data for a teen-friendly dashboard
     const [studentData] = useState({
         name: "Alex Johnson",
@@ -41,12 +38,6 @@ function StudentDashboard() {
         { title: "English Essay", subject: "English", dueDate: "Dec 20", priority: "high", points: 100 }
     ]);
 
-    const [achievements] = useState([
-        { title: "Study Streak Master", description: "12 days in a row", icon: "🔥", earned: true, points: 500 },
-        { title: "Math Wizard", description: "90+ in 3 math tests", icon: "🧮", earned: true, points: 300 },
-        { title: "Early Bird", description: "Complete 5 assignments early", icon: "⏰", earned: false, points: 200 },
-        { title: "Quiz Champion", description: "Perfect score on 3 quizzes", icon: "🏆", earned: false, points: 400 }
-    ]);
 
     const [todoItems, setTodoItems] = useState([
         { id: 1, text: 'Complete calculus homework', completed: false, priority: 'high', points: 50 },
@@ -68,13 +59,13 @@ function StudentDashboard() {
     ]);
     
     // Gamification state
-    const [dailyQuests, setDailyQuests] = useState([
+    const [dailyQuests] = useState([
         { id: 1, title: "Complete 3 assignments", progress: 2, target: 3, points: 100, completed: false },
         { id: 2, title: "Study for 2 hours", progress: 1.5, target: 2, points: 75, completed: false },
         { id: 3, title: "Get 90%+ on a quiz", progress: 0, target: 1, points: 150, completed: false }
     ]);
     
-    const [leaderboard, setLeaderboard] = useState([
+    const [leaderboard] = useState([
         { rank: 1, name: "Emma Wilson", points: 3200, avatar: "👩‍🎓", streak: 15 },
         { rank: 2, name: "Alex Johnson", points: 2450, avatar: "👨‍🎓", streak: 12 },
         { rank: 3, name: "Michael Brown", points: 2100, avatar: "👨‍🎓", streak: 8 },

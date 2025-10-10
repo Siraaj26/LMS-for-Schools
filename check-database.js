@@ -105,3 +105,5 @@ async function checkDatabase() {
 
 checkDatabase().catch(console.error);
 
+
+

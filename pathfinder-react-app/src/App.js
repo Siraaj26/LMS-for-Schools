@@ -6,10 +6,10 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import StudentDashboard from './pages/student/StudentDashboard';
 import Academics from './pages/student/Academics';
+import AskMe from './pages/student/AskMe';
+import Rewards from './pages/student/Rewards';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
 import ParentDashboard from './pages/parent/ParentDashboard';
-import AskMe from './pages/AskMe';
-import Rewards from './pages/Rewards';
 import PaymentForm from './pages/PaymentForm';
 
 function App() {

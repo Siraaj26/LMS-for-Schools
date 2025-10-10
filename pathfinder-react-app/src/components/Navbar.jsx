@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabaseClient } from '../config/supabaseConfig';
 
 function Navbar() {
@@ -7,6 +7,7 @@ function Navbar() {
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         checkUser();
@@ -29,10 +30,6 @@ function Navbar() {
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
-    };
-
-    const toggleProfileDropdown = () => {
-        setIsProfileDropdownOpen(!isProfileDropdownOpen);
     };
 
     const handleSignOut = async () => {
@@ -68,11 +65,36 @@ function Navbar() {
 
             {/* Navigation Links */}
             <div className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-                <Link to="/home" className="nav-link">Home</Link>
-                <Link to="/askme" className="nav-link">🤖 AskMe! AI</Link>
-                <Link to="/student/academics" className="nav-link">📚 Academics</Link>
-                <Link to="/rewards" className="nav-link">🏆 Rewards</Link>
-                <Link to="/inbox" className="nav-link">📬 Inbox</Link>
+                <Link 
+                    to={user ? "/student/dashboard" : "/"} 
+                    className={`nav-link ${(location.pathname === '/' || location.pathname === '/student/dashboard') ? 'active' : ''}`}
+                >
+                    Home
+                </Link>
+                <Link 
+                    to="/askme" 
+                    className={`nav-link ${location.pathname === '/askme' ? 'active' : ''}`}
+                >
+                    🤖 AskMe! AI
+                </Link>
+                <Link 
+                    to="/student/academics" 
+                    className={`nav-link ${location.pathname === '/student/academics' ? 'active' : ''}`}
+                >
+                    📚 Academics
+                </Link>
+                <Link 
+                    to="/rewards" 
+                    className={`nav-link ${location.pathname === '/rewards' ? 'active' : ''}`}
+                >
+                    🏆 Rewards
+                </Link>
+                <Link 
+                    to="/inbox" 
+                    className={`nav-link ${location.pathname === '/inbox' ? 'active' : ''}`}
+                >
+                    📬 Inbox
+                </Link>
             </div>
 
             {/* User Actions */}
