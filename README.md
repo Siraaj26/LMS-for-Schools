@@ -190,10 +190,6 @@ We welcome contributions to improve Horizon LMS! Here's how you can help:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-Developed with ❤️ for the Africa Connect Hackathon.
-
 ## 🙏 Acknowledgments
 
 - Africa Connect Hackathon organizers and judges
