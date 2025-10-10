@@ -1,5 +1,5 @@
 {
-  "name": "empiras-askme-server",
+  "name": "horizon-askme-server",
   "version": "1.0.0",
   "description": "Backend server for AskMe! chatbot",
   "main": "server.js",
@@ -25,7 +25,7 @@
     "nodemon": "^3.0.1"
   },
   "keywords": ["chatbot", "ai", "education", "gemini"],
-  "author": "Empiras Vanguard",
+  "author": "Horizon Academy Team",
   "license": "MIT"
 }
 

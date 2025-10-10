@@ -1,10 +1,10 @@
-# Pathfinder LMS - Learning Management System for Schools
+# Horizon LMS - Learning Management System for Schools
 
 🏆 **Second Prize Winner - Africa Connect Hackathon**
 
 ## Overview
 
-Pathfinder LMS is a comprehensive Learning Management System designed to revolutionize education by enabling students, teachers, and parents to collaboratively track both curriculum and non-curriculum activities. Our platform creates a transparent, connected learning ecosystem where academic progress and extracurricular development are equally valued and monitored.
+Horizon LMS is a comprehensive Learning Management System designed to revolutionize education by enabling students, teachers, and parents to collaboratively track both curriculum and non-curriculum activities. Our platform creates a transparent, connected learning ecosystem where academic progress and extracurricular development are equally valued and monitored.
 
 ## 🎉 Hackathon Achievement
 
@@ -78,7 +78,7 @@ We believe that education extends beyond the classroom, and our platform reflect
 
 ```
 LMS-for-Schools/
-├── pathfinder-react-app/       # React application
+├── horizon-react-app/          # React application
 │   ├── src/
 │   │   ├── components/         # Reusable React components
 │   │   ├── pages/              # Page components (Student, Teacher, Parent dashboards)
@@ -116,7 +116,7 @@ LMS-for-Schools/
 
 3. **Install React app dependencies**
    ```bash
-   cd pathfinder-react-app
+   cd horizon-react-app
    npm install
    cd ..
    ```
@@ -127,7 +127,7 @@ LMS-for-Schools/
 
 5. **Start the development server**
    ```bash
-   cd pathfinder-react-app
+   cd horizon-react-app
    npm start
    ```
 
@@ -167,7 +167,7 @@ The project uses Supabase (PostgreSQL) with the following main tables:
 
 ## 🤝 Contributing
 
-We welcome contributions to improve Pathfinder LMS! Here's how you can help:
+We welcome contributions to improve Horizon LMS! Here's how you can help:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -190,16 +190,14 @@ We welcome contributions to improve Pathfinder LMS! Here's how you can help:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team - Empiras Vanguard
+## 👥 Team
 
-Developed with ❤️ by the Empiras Vanguard team for the Africa Connect Hackathon.
+Developed with ❤️ for the Africa Connect Hackathon.
 
 ## 🙏 Acknowledgments
 
 - Africa Connect Hackathon organizers and judges
-- All educators who provided feedback and insights
 - The open-source community for amazing tools and libraries
-- Students, teachers, and parents who tested our platform
 
 ## 📧 Contact
 

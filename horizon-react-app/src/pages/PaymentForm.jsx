@@ -4,7 +4,7 @@ function PaymentForm() {
     const [formData, setFormData] = useState({
         studentName: 'Thabo Mthembu',
         studentId: 'ST2024001',
-        email: 'thabo.mthembu@student.pathfinder-vanguard.co.za',
+        email: 'thabo.mthembu@student.horizon-academy.co.za',
         phone: '+27 82 123 4567',
         term: 'term3',
         amount: 1750,

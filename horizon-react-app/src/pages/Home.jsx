@@ -46,7 +46,7 @@ function Home() {
                 <div className="hero-container">
                     <div className="hero-left">
                         <div className="hero-content">
-                            <h1 className="hero-title">Pathfinder Vanguard</h1>
+                            <h1 className="hero-title">Horizon Academy</h1>
                             <p className="hero-subtitle">
                                 Empowering students worldwide with personalized learning paths, progress tracking, and global community support. 
                                 Your international academic journey starts here!
@@ -67,15 +67,15 @@ function Home() {
 
             <section id="about" className="about">
                 <div className="container">
-                    <h2 className="section-title">About Pathfinder Vanguard</h2>
+                    <h2 className="section-title">About Horizon Academy</h2>
                     <div className="about-content">
                         <div className="about-text">
                             <p className="lead">
-                                Pathfinder Vanguard is a comprehensive international academic platform designed to revolutionize the way students learn, 
+                                Horizon Academy is a comprehensive international academic platform designed to revolutionize the way students learn, 
                                 track progress, and connect with their global educational community.
                             </p>
                             <p>
-                                Pathfinder Vanguard platform provides a complete 360° view of academic progress, attendance, and communication—all 
+                                Horizon Academy platform provides a complete 360° view of academic progress, attendance, and communication—all 
                                 in one intuitive interface. We empower students to take control of their learning journey while 
                                 keeping parents informed globally and supporting teachers with real-time insights across continents.
                             </p>
@@ -134,20 +134,20 @@ function Home() {
                     <div className="faq-list">
                         <div className="faq-item">
                             <button className="faq-question" data-faq="1">
-                                <span>What is Pathfinder Vanguard and how does it work?</span>
+                                <span>What is Horizon Academy and how does it work?</span>
                                 <span className="faq-icon">+</span>
                             </button>
                             <div className="faq-answer" data-answer="1">
-                                <p>Pathfinder Vanguard is a comprehensive international academic platform that helps students worldwide track their progress, connect with global mentors, and engage with their international learning community. It provides tools for grade tracking, assignment management, and personalized learning recommendations.</p>
+                                <p>Horizon Academy is a comprehensive international academic platform that helps students worldwide track their progress, connect with global mentors, and engage with their international learning community. It provides tools for grade tracking, assignment management, and personalized learning recommendations.</p>
                             </div>
                         </div>
                         <div className="faq-item">
                             <button className="faq-question" data-faq="2">
-                                <span>Is Pathfinder Vanguard free to use?</span>
+                                <span>Is Horizon Academy free to use?</span>
                                 <span className="faq-icon">+</span>
                             </button>
                             <div className="faq-answer" data-answer="2">
-                                <p>Yes! Pathfinder Vanguard offers a free tier with essential features for all students worldwide. We also offer premium plans with advanced analytics and additional international mentorship opportunities.</p>
+                                <p>Yes! Horizon Academy offers a free tier with essential features for all students worldwide. We also offer premium plans with advanced analytics and additional international mentorship opportunities.</p>
                             </div>
                         </div>
                         <div className="faq-item">
@@ -170,11 +170,11 @@ function Home() {
                         </div>
                         <div className="faq-item">
                             <button className="faq-question" data-faq="5">
-                                <span>What devices can I use Pathfinder Vanguard on?</span>
+                                <span>What devices can I use Horizon Academy on?</span>
                                 <span className="faq-icon">+</span>
                             </button>
                             <div className="faq-answer" data-answer="5">
-                                <p>Pathfinder Vanguard is a web-based platform that works on any device with an internet connection - desktop, laptop, tablet, or smartphone. We're also developing mobile apps for iOS and Android with multi-language support.</p>
+                                <p>Horizon Academy is a web-based platform that works on any device with an internet connection - desktop, laptop, tablet, or smartphone. We're also developing mobile apps for iOS and Android with multi-language support.</p>
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,7 @@ function Home() {
                             <h3>Our Vision</h3>
                             <p>
                                 We envision a world where every student globally has access to personalized, data-driven education 
-                                that adapts to their unique learning style and pace. Pathfinder Global Academy is building the foundation 
+                                that adapts to their unique learning style and pace. Horizon Academy is building the foundation 
                                 for this international educational future.
                             </p>
                         </div>
@@ -217,7 +217,7 @@ function Home() {
                     </div>
                     <div className="future-cta">
                         <p className="cta-text">Ready to be part of the global future of education?</p>
-                        <button className="btn btn-primary btn-large" id="futureSignUpBtn" onClick={handleSignUp}>Join Pathfinder Global Academy</button>
+                        <button className="btn btn-primary btn-large" id="futureSignUpBtn" onClick={handleSignUp}>Join Horizon Academy</button>
                     </div>
                 </div>
             </section>

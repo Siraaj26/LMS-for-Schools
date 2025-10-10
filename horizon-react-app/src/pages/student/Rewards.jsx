@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import '../styles/rewards.css';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import '../../styles/rewards.css';
 
 function Rewards() {
     const [totalPoints, setTotalPoints] = useState(1000);

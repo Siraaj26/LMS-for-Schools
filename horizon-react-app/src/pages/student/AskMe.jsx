@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import '../styles/askme.css';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import '../../styles/askme.css';
 
 function AskMe() {
     const [persona, setPersona] = useState('mentor');
