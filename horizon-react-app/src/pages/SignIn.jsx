@@ -20,97 +20,114 @@ function SignIn() {
         setLoading(true);
         
         try {
-            // Sign in with Supabase Auth
-            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (authError) throw authError;
-
-            console.log('✅ Signed in successfully:', authData);
-
-            // Store user info
-            localStorage.setItem('currentUserEmail', email);
-            localStorage.setItem('userEmail', email);
-            
-            // Try to find user in all login tables
+            // Find user in custom login tables (not Supabase Auth)
             let profile = null;
             let profileError = null;
+            
+            console.log('🔍 Searching for user in custom tables...');
             
             // First try student_login
             const { data: studentProfile, error: studentError } = await supabaseClient
                 .from('student_login')
-                .select('user_type, id, full_name, current_grade, location')
+                .select('user_type, id, full_name, current_grade, location, email, password')
                 .eq('email', email)
                 .single();
 
             if (studentProfile && !studentError) {
-                profile = studentProfile;
-                console.log('✅ Found in student_login:', profile);
+                // Verify password
+                if (studentProfile.password === password) {
+                    profile = studentProfile;
+                    profile.user_type = 'student';
+                    console.log('✅ Found and verified student:', profile);
+                } else {
+                    throw new Error('Invalid password');
+                }
             } else {
                 // Try parent_login
                 const { data: parentProfile, error: parentError } = await supabaseClient
                     .from('parent_login')
-                    .select('user_type, id, full_name')
+                    .select('full_name, parent_email, password')
                     .eq('parent_email', email)
                     .single();
 
                 if (parentProfile && !parentError) {
-                    profile = parentProfile;
-                    console.log('✅ Found in parent_login:', profile);
+                    // Verify password
+                    if (parentProfile.password === password) {
+                        profile = {
+                            ...parentProfile,
+                            user_type: 'parent',
+                            id: parentProfile.parent_email, // Use email as ID for parents
+                            email: parentProfile.parent_email
+                        };
+                        console.log('✅ Found and verified parent:', profile);
+                    } else {
+                        throw new Error('Invalid password');
+                    }
                 } else {
                     // Try admin_login (teachers)
                     const { data: adminProfile, error: adminError } = await supabaseClient
                         .from('admin_login')
-                        .select('user_type, id, full_name')
+                        .select('user_type, id, full_name, email, password')
                         .eq('email', email)
                         .single();
 
                     if (adminProfile && !adminError) {
-                        profile = adminProfile;
-                        console.log('✅ Found in admin_login:', profile);
+                        // Verify password
+                        if (adminProfile.password === password) {
+                            profile = {
+                                ...adminProfile,
+                                user_type: 'teacher'
+                            };
+                            console.log('✅ Found and verified teacher:', profile);
+                        } else {
+                            throw new Error('Invalid password');
+                        }
                     } else {
-                        console.log('⚠️ User not found in any login table');
-                        profileError = adminError;
+                        throw new Error('User not found. Please check your email or sign up.');
                     }
                 }
             }
 
+            // Store user info
+            localStorage.setItem('currentUserEmail', email);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userId', profile.id);
+            localStorage.setItem('userType', profile.user_type);
+            
+            // Store additional user info for dashboard display
+            if (profile.full_name) {
+                localStorage.setItem('userFullName', profile.full_name);
+            }
+            if (profile.current_grade) {
+                localStorage.setItem('userGrade', profile.current_grade);
+            }
+            if (profile.location) {
+                localStorage.setItem('userLocation', profile.location);
+            }
+            
+            console.log('✅ Authentication successful, redirecting...');
+            
             // Redirect based on user type
-            if (profile && !profileError) {
-                localStorage.setItem('userId', profile.id);
-                localStorage.setItem('userType', profile.user_type);
-                
-                // Store additional user info for dashboard display
-                if (profile.full_name) {
-                    localStorage.setItem('userFullName', profile.full_name);
-                }
-                if (profile.current_grade) {
-                    localStorage.setItem('userGrade', profile.current_grade);
-                }
-                if (profile.location) {
-                    localStorage.setItem('userLocation', profile.location);
-                }
-                
-                if (profile.user_type === 'teacher') {
-                    navigate('/teacher/dashboard');
-                } else if (profile.user_type === 'parent') {
-                    navigate('/parent/dashboard');
-                } else {
-                    navigate('/student/dashboard');
-                }
+            if (profile.user_type === 'teacher') {
+                navigate('/teacher/dashboard');
+            } else if (profile.user_type === 'parent') {
+                navigate('/parent/dashboard');
             } else {
-                // If no profile found, still allow login as student
-                console.warn('⚠️ No profile found, defaulting to student dashboard');
-                localStorage.setItem('userId', authData.user.id);
-                localStorage.setItem('userType', 'student');
-                localStorage.setItem('userFullName', email.split('@')[0]);
                 navigate('/student/dashboard');
             }
         } catch (error) {
             console.error('❌ Sign in error:', error);
-            alert(error.message || 'Invalid email or password. Please try again.');
+            
+            // Provide more specific error messages
+            if (error.message?.includes('Invalid API key')) {
+                alert('❌ Database connection error. Please contact support or try again later.');
+            } else if (error.message?.includes('Invalid login credentials')) {
+                alert('❌ Invalid email or password. Please check your credentials and try again.');
+            } else if (error.message?.includes('Email not confirmed')) {
+                alert('❌ Please check your email and confirm your account before signing in.');
+            } else {
+                alert(`❌ Sign in failed: ${error.message || 'Please try again later.'}`);
+            }
         } finally {
             setLoading(false);
         }

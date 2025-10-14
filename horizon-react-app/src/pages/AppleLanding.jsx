@@ -40,19 +40,23 @@ function AppleLanding() {
 
     const checkUser = async () => {
         try {
-            const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+            // Check if user is logged in via localStorage (custom auth)
+            const userEmail = localStorage.getItem('userEmail');
+            const userType = localStorage.getItem('userType');
             
-            // Don't auto-redirect authenticated users from landing page
-            // Let them stay on landing page if they want to
-            if (user && session && !userError && !sessionError) {
+            if (userEmail && userType) {
                 console.log('User is authenticated, showing landing page with user context');
-                setUser(user);
-                setLoading(false);
-                return;
+                setUser({ 
+                    email: userEmail, 
+                    user_type: userType,
+                    id: localStorage.getItem('userId')
+                });
+            } else {
+                setUser(null);
             }
         } catch (error) {
             console.log('Error checking user session:', error);
+            setUser(null);
         } finally {
             setLoading(false);
         }

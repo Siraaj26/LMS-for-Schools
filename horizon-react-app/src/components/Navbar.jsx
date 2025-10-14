@@ -15,11 +15,16 @@ function Navbar() {
 
     const checkUser = async () => {
         try {
-            const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+            // Check if user is logged in via localStorage (custom auth)
+            const userEmail = localStorage.getItem('userEmail');
+            const userType = localStorage.getItem('userType');
             
-            if (user && session && !userError && !sessionError) {
-                setUser(user);
+            if (userEmail && userType) {
+                setUser({ 
+                    email: userEmail, 
+                    user_type: userType,
+                    id: localStorage.getItem('userId')
+                });
             } else {
                 setUser(null);
             }
@@ -34,12 +39,16 @@ function Navbar() {
 
     const handleSignOut = async () => {
         try {
-            await supabaseClient.auth.signOut();
-            // Clear local storage
+            // Clear local storage (custom auth)
             localStorage.removeItem('userEmail');
             localStorage.removeItem('currentUserEmail');
             localStorage.removeItem('userId');
             localStorage.removeItem('userType');
+            localStorage.removeItem('userFullName');
+            localStorage.removeItem('userGrade');
+            localStorage.removeItem('userLocation');
+            
+            setUser(null);
             // Redirect to landing page
             navigate('/');
         } catch (error) {
